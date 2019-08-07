@@ -6,12 +6,12 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <link rel="dns-prefetch" href="http://xuxiancheng.xyz">
-  <title>xuxiancheng的个人博客</title>
+  <title>Tag: java | xuxiancheng的个人博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="xuxiancheng的个人博客">
 <meta property="og:type" content="website">
 <meta property="og:title" content="xuxiancheng的个人博客">
-<meta property="og:url" content="http://xuxiancheng.xyz/index.html">
+<meta property="og:url" content="http://xuxiancheng.xyz/tags/java/index.html">
 <meta property="og:site_name" content="xuxiancheng的个人博客">
 <meta property="og:description" content="xuxiancheng的个人博客">
 <meta property="og:locale" content="chinese">
@@ -155,36 +155,34 @@
           <div id="js-content" class="content-ll">
             
   
-    <article id="post-适配器模式" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
+  
     
-      <header class="article-header">
-        
+    
+      
+      
+      <section class="archives-wrap">
+        <div class="archive-year-wrap">
+          <a href="/archives/2019" class="archive-year">2019</a>
+        </div>
+        <div class="archives">
+    
+    <article class="archive-article archive-type-post">
+  <div class="archive-article-inner">
+    <header class="archive-article-header">
+      	<div class="article-meta">
+	      	<a href="/2019/08/07/适配器模式/" class="archive-article-date">
+  	<time datetime="2019-08-07T02:06:39.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-08-07</time>
+</a>
+        </div>
+    	 
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2019/08/07/适配器模式/">适配器模式</a>
+      <a class="archive-article-title" href="/2019/08/07/适配器模式/">适配器模式</a>
     </h1>
   
 
-        
-        <a href="/2019/08/07/适配器模式/" class="archive-article-date">
-  	<time datetime="2019-08-07T02:06:39.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-08-07</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>模式动机</p>
-<p>在软件开发中采用类似于电源适配器的设计和编码技巧被称为适配器模式。<br>通常情况下，客户端可以通过目标类的接口访问它所提供的服务。<br>有时，现有的类可以满足客户类的功能需要，<br>但是它所提供的接口不一定是客户类所期望的，<br>这可能是因为现有类中方法名与目标类中定义的方法名不一致等原因所导致的。<br>在这种情况下，现有的接口需要转化为客户类期望的接口，<br>这样保证了对现有类的重用。如果不进行这样的转化，客户类就不能利用现有类所提供的功能，适配器模式可以完成这样的转化。<br>在适配器模式中可以定义一个包装类，包装不兼容接口的对象，<br>这个包装类指的就是适配器(Adapter)，它所包装的对象就是适配者(Adaptee)，<br>即被适配的类。<br>适配器提供客户类需要的接口，<br>适配器的实现就是把客户类的请求转化为对适配者的相应接口的调用。<br>也就是说：当客户类调用适配器的方法时，在适配器类的内部将调用适配者类的方法，<br>而这个过程对客户类是透明的，客户类并不直接访问适配者类。<br>因此，适配器可以使由于接口不兼容而不能交互的类可以一起工作。这就是适配器模式的模式动机。</p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
+        <div class="article-info info-on-right">
+          
 	<div class="article-tag tagcloud">
 		<i class="icon-price-tags icon"></i>
 		<ul class="article-tag-list">
@@ -200,41 +198,19 @@
 		</ul>
 	</div>
 
-      
+          
 
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/08/07/适配器模式/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
+        </div>
+        <div class="clearfix"></div>
+    </header>
   </div>
 </article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
   
   
+    </div></section>
+  
+
+    
 
 
           </div>
@@ -256,10 +232,10 @@
     <script>
 	var yiliaConfig = {
 		mathjax: false,
-		isHome: true,
+		isHome: false,
 		isPost: false,
 		isArchive: false,
-		isTag: false,
+		isTag: true,
 		isCategory: false,
 		open_in_new: false,
 		toc_hide_index: true,
