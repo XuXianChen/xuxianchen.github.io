@@ -8,18 +8,18 @@
   <link rel="dns-prefetch" href="http://www.xuxiancheng.xyz">
   <title>设计模式的六大原则 | 恶龙咆哮的博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="前言: 设计模式是前人（The Gang of Four）总结的一套软件开发的经验，对应程序员而言，合理的使用设计模式可以提高代码的可扩展性，可重用性以及和可读性，还可以读懂一些大量使用了设计模式的框架的源码，比如spring/mybatis等。但是设计模式最大的忌讳就是生搬硬套，强行使用设计模式，这样写出来代码不仅难以理解，而且出现BUG还比较难以排除，我之前接手的一个系统中大量的使用了观察者模">
+  <meta name="description" content="前言: 设计模式是前人（The Gang of Four）总结的一套软件开发的经验，对应程序员而言，合理的使用设计模式可以提高代码的可扩展性，可重用性以及和可读性，还可以读懂一些大量使用了设计模式的框架的源码，比如spring/mybatis等。但是设计模式最大的忌讳就是生搬硬套，强行使用设计模式，这样写出来代码不仅难以理解，而且出现BUG还比较难以排除，我之前接">
 <meta name="keywords" content="设计模式">
 <meta property="og:type" content="article">
 <meta property="og:title" content="设计模式的六大原则">
 <meta property="og:url" content="http://www.xuxiancheng.xyz/2019/08/07/设计模式原则/index.html">
 <meta property="og:site_name" content="恶龙咆哮的博客">
-<meta property="og:description" content="前言: 设计模式是前人（The Gang of Four）总结的一套软件开发的经验，对应程序员而言，合理的使用设计模式可以提高代码的可扩展性，可重用性以及和可读性，还可以读懂一些大量使用了设计模式的框架的源码，比如spring/mybatis等。但是设计模式最大的忌讳就是生搬硬套，强行使用设计模式，这样写出来代码不仅难以理解，而且出现BUG还比较难以排除，我之前接手的一个系统中大量的使用了观察者模">
+<meta property="og:description" content="前言: 设计模式是前人（The Gang of Four）总结的一套软件开发的经验，对应程序员而言，合理的使用设计模式可以提高代码的可扩展性，可重用性以及和可读性，还可以读懂一些大量使用了设计模式的框架的源码，比如spring/mybatis等。但是设计模式最大的忌讳就是生搬硬套，强行使用设计模式，这样写出来代码不仅难以理解，而且出现BUG还比较难以排除，我之前接">
 <meta property="og:locale" content="chinese">
-<meta property="og:updated_time" content="2019-09-17T07:02:27.621Z">
+<meta property="og:updated_time" content="2019-09-17T07:07:53.140Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="设计模式的六大原则">
-<meta name="twitter:description" content="前言: 设计模式是前人（The Gang of Four）总结的一套软件开发的经验，对应程序员而言，合理的使用设计模式可以提高代码的可扩展性，可重用性以及和可读性，还可以读懂一些大量使用了设计模式的框架的源码，比如spring/mybatis等。但是设计模式最大的忌讳就是生搬硬套，强行使用设计模式，这样写出来代码不仅难以理解，而且出现BUG还比较难以排除，我之前接手的一个系统中大量的使用了观察者模">
+<meta name="twitter:description" content="前言: 设计模式是前人（The Gang of Four）总结的一套软件开发的经验，对应程序员而言，合理的使用设计模式可以提高代码的可扩展性，可重用性以及和可读性，还可以读懂一些大量使用了设计模式的框架的源码，比如spring/mybatis等。但是设计模式最大的忌讳就是生搬硬套，强行使用设计模式，这样写出来代码不仅难以理解，而且出现BUG还比较难以排除，我之前接">
   
     <link rel="alternative" href="/atom.xml" title="恶龙咆哮的博客" type="application/atom+xml">
   
@@ -179,9 +179,9 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>前言: 设计模式是前人（The Gang of Four）总结的一套软件开发的经验，对应程序员而言，合理的使用设计模式可以提高代码的可扩展性，可重用性以及和<br>可读性，还可以读懂一些大量使用了设计模式的框架的源码，比如spring/mybatis等。但是设计模式最大的忌讳就是生搬硬套，强行使用设计模式，这样写出来<br>代码不仅难以理解，而且出现BUG还比较难以排除，我之前接手的一个系统中大量的使用了观察者模式，当系统出现问题的时候，我就很难找到出现问题的地方，<br>说出来都是泪呀。而学习设计模式之前首先要先了解一下设计模式的六大原则，设计模式都是基于这些原则被设计出来的，了解了他们有利于我们更好的理解具体的<br>设计模式，下面我将简单的介绍一些设计模式的六大原则：</p>
+        <p>前言: 设计模式是前人（The Gang of Four）总结的一套软件开发的经验，对应程序员而言，合理的使用设计模式可以提高代<br>码的可扩展性，可重用性以及和可读性，还可以读懂一些大量使用了设计模式的框架的源码，比如spring/mybatis等。但是<br>设计模式最大的忌讳就是生搬硬套，强行使用设计模式，这样写出来代码不仅难以理解，而且出现BUG还比较难以排除，我之前接</p>
 <a id="more"></a>
-
+<p>手的一个系统中大量的使用了观察者模式，当系统出现问题的时候，我就很难找到出现问题的地方，说出来都是泪呀。而学习设计<br>模式之前首先要先了解一下设计模式的六大原则，设计模式都是基于这些原则被设计出来的，了解了他们有利于我们更好的理解具<br>体的设计模式，下面我将简单的介绍一些设计模式的六大原则：</p>
 <ul>
 <li><p>单一职责原则<br> 应该有且仅有一个原因引起类的变更，或者更加直白一点的说法就是一个类，一个函数应该只做一件事，不能让一个函数承担过度的功能，尽量让类和函数的<br> 功能单一。不过我们开发的过程中，很难做到理论上的单一职责原则，因为划分指责的边界很难进行划分。</p>
 </li>
