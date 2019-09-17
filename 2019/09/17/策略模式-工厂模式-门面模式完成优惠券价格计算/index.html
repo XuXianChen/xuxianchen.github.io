@@ -6,19 +6,22 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <link rel="dns-prefetch" href="http://www.xuxiancheng.xyz">
-  <title>恶龙咆哮的博客</title>
+  <title>策略模式+工厂模式+门面模式完成优惠券价格计算 | 恶龙咆哮的博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="一个快乐肥仔">
-<meta name="keywords" content="后端, JAVA, java, Spring, 设计模式, mybatis, mysql, Mysql, oracle, springcloud, springboot">
-<meta property="og:type" content="website">
-<meta property="og:title" content="恶龙咆哮的博客">
-<meta property="og:url" content="http://www.xuxiancheng.xyz/index.html">
+  <meta name="description" content="最近在做一个电商平台的后台开发, 我主要负责的是支付系统和营销系统的开发, 目前是v1.0, 营销系统只有优惠券，在网上搜索了优惠券相关的设计，发现优惠券玩法特别的多，很难对其进行控制，所以我们设计之初就需要充分的考虑扩展性的问题，这里只简单谈一谈优惠券的价格计算的设计。 据了解，市面上的电商系统，优惠券的价格计算基本上包括：满减、满折、立减、折扣，关于不同的价格计算我立马就想到了使用策略模式，下">
+<meta name="keywords" content="设计模式">
+<meta property="og:type" content="article">
+<meta property="og:title" content="策略模式+工厂模式+门面模式完成优惠券价格计算">
+<meta property="og:url" content="http://www.xuxiancheng.xyz/2019/09/17/策略模式-工厂模式-门面模式完成优惠券价格计算/index.html">
 <meta property="og:site_name" content="恶龙咆哮的博客">
-<meta property="og:description" content="一个快乐肥仔">
+<meta property="og:description" content="最近在做一个电商平台的后台开发, 我主要负责的是支付系统和营销系统的开发, 目前是v1.0, 营销系统只有优惠券，在网上搜索了优惠券相关的设计，发现优惠券玩法特别的多，很难对其进行控制，所以我们设计之初就需要充分的考虑扩展性的问题，这里只简单谈一谈优惠券的价格计算的设计。 据了解，市面上的电商系统，优惠券的价格计算基本上包括：满减、满折、立减、折扣，关于不同的价格计算我立马就想到了使用策略模式，下">
 <meta property="og:locale" content="chinese">
+<meta property="og:image" content="http://www.xuxiancheng.xyz/2019/09/17/策略模式-工厂模式-门面模式完成优惠券价格计算/img/2.png">
+<meta property="og:updated_time" content="2019-09-17T08:01:38.585Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="恶龙咆哮的博客">
-<meta name="twitter:description" content="一个快乐肥仔">
+<meta name="twitter:title" content="策略模式+工厂模式+门面模式完成优惠券价格计算">
+<meta name="twitter:description" content="最近在做一个电商平台的后台开发, 我主要负责的是支付系统和营销系统的开发, 目前是v1.0, 营销系统只有优惠券，在网上搜索了优惠券相关的设计，发现优惠券玩法特别的多，很难对其进行控制，所以我们设计之初就需要充分的考虑扩展性的问题，这里只简单谈一谈优惠券的价格计算的设计。 据了解，市面上的电商系统，优惠券的价格计算基本上包括：满减、满折、立减、折扣，关于不同的价格计算我立马就想到了使用策略模式，下">
+<meta name="twitter:image" content="http://www.xuxiancheng.xyz/2019/09/17/策略模式-工厂模式-门面模式完成优惠券价格计算/img/2.png">
   
     <link rel="alternative" href="/atom.xml" title="恶龙咆哮的博客" type="application/atom+xml">
   
@@ -158,16 +161,14 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
-  
-    <article id="post-策略模式-工厂模式-门面模式完成优惠券价格计算" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+            <article id="post-策略模式-工厂模式-门面模式完成优惠券价格计算" class="article article-type-post " itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/09/17/策略模式-工厂模式-门面模式完成优惠券价格计算/">策略模式+工厂模式+门面模式完成优惠券价格计算</a>
+    <h1 class="article-title" itemprop="name">
+      策略模式+工厂模式+门面模式完成优惠券价格计算
     </h1>
   
 
@@ -186,81 +187,26 @@
       
 
       
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">设计模式</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/09/17/策略模式-工厂模式-门面模式完成优惠券价格计算/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
+        <div class="page-reward">
+          <a href="javascript:;" class="page-reward-btn tooltip-top">
+            <div class="tooltip tooltip-east">
+            <span class="tooltip-item">
+              赏
+            </span>
+            <span class="tooltip-content">
+              <span class="tooltip-text">
+                <span class="tooltip-inner">
+                  <p class="reward-p"><i class="icon icon-quo-left"></i>谢谢你请我吃糖果<i class="icon icon-quo-right"></i></p>
+                  <div class="reward-box">
+                    
+                    
+                  </div>
+                </span>
+              </span>
+            </span>
+          </div>
+          </a>
         </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-设计模式原则" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/08/07/设计模式原则/">设计模式的六大原则</a>
-    </h1>
-  
-
-        
-        <a href="/2019/08/07/设计模式原则/" class="archive-article-date">
-  	<time datetime="2019-08-07T02:06:39.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-08-07</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>前言: 设计模式是前人（The Gang of Four）总结的一套软件开发的经验，对应程序员而言，合理的使用设计模式可以提高代<br>码的可扩展性，可重用性以及和可读性，还可以读懂一些大量使用了设计模式的框架的源码，比如spring/mybatis等。但是<br>设计模式最大的忌讳就是生搬硬套，强行使用设计模式，这样写出来代码不仅难以理解，而且出现BUG还比较难以排除，我之前接</p>
-        
-          <a class="article-more-a" href="/2019/08/07/设计模式原则/#more">more >></a>
-        
-      
-
       
     </div>
     <div class="article-info article-info-index">
@@ -280,16 +226,75 @@
       
 
       
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/08/07/设计模式原则/">展开全文 >></a>
-        </p>
-      
 
+      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
+        </div>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//pan.baidu.com/share/qrcode?url=http://www.xuxiancheng.xyz/2019/09/17/策略模式-工厂模式-门面模式完成优惠券价格计算/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
       
       <div class="clearfix"></div>
     </div>
   </div>
 </article>
+
+  
+<nav id="article-nav">
+  
+  
+    <a href="/2019/08/07/设计模式原则/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">设计模式的六大原则</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
 
 <aside class="wrap-side-operation">
     <div class="mod-side-operation">
@@ -309,8 +314,14 @@
 
 
 
+  
+  
+  
 
   
+
+  
+
   
 
 
@@ -333,8 +344,8 @@
     <script>
 	var yiliaConfig = {
 		mathjax: false,
-		isHome: true,
-		isPost: false,
+		isHome: false,
+		isPost: true,
 		isArchive: false,
 		isTag: false,
 		isCategory: false,
