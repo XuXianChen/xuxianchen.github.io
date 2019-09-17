@@ -8,18 +8,18 @@
   <link rel="dns-prefetch" href="http://www.xuxiancheng.xyz">
   <title>设计模式的六大原则 | 恶龙咆哮的博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="前言: 设计模式是一套被反复使用、多数人知晓的、经过分类编目的、代码设计经验的总结。合理的使用设计模式可以提高代码可复用性、可读性和可扩展性等。设计模式使代码编制真正工程化，设计模式是软件工程的基石，如同大厦的一块块砖石一样。只有精通了设计模式，才敢说真正理解软件工程。可以说，设计模式是每一个架构师所必备的技能之一。理解设计模式前提，必须要先搞清楚设计模式的六大原则。">
-<meta name="keywords" content="设计模式,design pattern">
+  <meta name="description" content="前言: 设计模式是前人（The Gang of Four）总结的一套软件开发的经验，对应程序员而言，合理的使用设计模式可以提高代码的可扩展性，可重用性以及和可读性，还可以读懂一些大量使用了设计模式的框架的源码，比如spring/mybatis等。但是设计模式最大的忌讳就是生搬硬套，强行使用设计模式，这样写出来代码不仅难以理解，而且出现BUG还比较难以排除，我之前接手的一个系统中大量的使用了观察者模">
+<meta name="keywords" content="设计模式">
 <meta property="og:type" content="article">
 <meta property="og:title" content="设计模式的六大原则">
 <meta property="og:url" content="http://www.xuxiancheng.xyz/2019/08/07/设计模式原则/index.html">
 <meta property="og:site_name" content="恶龙咆哮的博客">
-<meta property="og:description" content="前言: 设计模式是一套被反复使用、多数人知晓的、经过分类编目的、代码设计经验的总结。合理的使用设计模式可以提高代码可复用性、可读性和可扩展性等。设计模式使代码编制真正工程化，设计模式是软件工程的基石，如同大厦的一块块砖石一样。只有精通了设计模式，才敢说真正理解软件工程。可以说，设计模式是每一个架构师所必备的技能之一。理解设计模式前提，必须要先搞清楚设计模式的六大原则。">
+<meta property="og:description" content="前言: 设计模式是前人（The Gang of Four）总结的一套软件开发的经验，对应程序员而言，合理的使用设计模式可以提高代码的可扩展性，可重用性以及和可读性，还可以读懂一些大量使用了设计模式的框架的源码，比如spring/mybatis等。但是设计模式最大的忌讳就是生搬硬套，强行使用设计模式，这样写出来代码不仅难以理解，而且出现BUG还比较难以排除，我之前接手的一个系统中大量的使用了观察者模">
 <meta property="og:locale" content="chinese">
-<meta property="og:updated_time" content="2019-08-21T00:55:12.000Z">
+<meta property="og:updated_time" content="2019-09-17T07:02:27.621Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="设计模式的六大原则">
-<meta name="twitter:description" content="前言: 设计模式是一套被反复使用、多数人知晓的、经过分类编目的、代码设计经验的总结。合理的使用设计模式可以提高代码可复用性、可读性和可扩展性等。设计模式使代码编制真正工程化，设计模式是软件工程的基石，如同大厦的一块块砖石一样。只有精通了设计模式，才敢说真正理解软件工程。可以说，设计模式是每一个架构师所必备的技能之一。理解设计模式前提，必须要先搞清楚设计模式的六大原则。">
+<meta name="twitter:description" content="前言: 设计模式是前人（The Gang of Four）总结的一套软件开发的经验，对应程序员而言，合理的使用设计模式可以提高代码的可扩展性，可重用性以及和可读性，还可以读懂一些大量使用了设计模式的框架的源码，比如spring/mybatis等。但是设计模式最大的忌讳就是生搬硬套，强行使用设计模式，这样写出来代码不仅难以理解，而且出现BUG还比较难以排除，我之前接手的一个系统中大量的使用了观察者模">
   
     <link rel="alternative" href="/atom.xml" title="恶龙咆哮的博客" type="application/atom+xml">
   
@@ -179,26 +179,30 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>前言: 设计模式是一套被反复使用、多数人知晓的、经过分类编目的、代码设计经验的总结。合理的使用设计模式可以提高代码可复用性、可读性和可扩展性等。<br>设计模式使代码编制真正工程化，设计模式是软件工程的基石，如同大厦的一块块砖石一样。只有精通了设计模式，才敢说真正理解软件工程。可以说，设计模式<br>是每一个架构师所必备的技能之一。理解设计模式前提，必须要先搞清楚设计模式的六大原则。</p>
+        <p>前言: 设计模式是前人（The Gang of Four）总结的一套软件开发的经验，对应程序员而言，合理的使用设计模式可以提高代码的可扩展性，可重用性以及和<br>可读性，还可以读懂一些大量使用了设计模式的框架的源码，比如spring/mybatis等。但是设计模式最大的忌讳就是生搬硬套，强行使用设计模式，这样写出来<br>代码不仅难以理解，而且出现BUG还比较难以排除，我之前接手的一个系统中大量的使用了观察者模式，当系统出现问题的时候，我就很难找到出现问题的地方，<br>说出来都是泪呀。而学习设计模式之前首先要先了解一下设计模式的六大原则，设计模式都是基于这些原则被设计出来的，了解了他们有利于我们更好的理解具体的<br>设计模式，下面我将简单的介绍一些设计模式的六大原则：</p>
 <a id="more"></a>
 
-<p>1.单一职责原则<br>    应该有且仅有一个原因引起类的变更(There should never be more than one reason for a class to change)<br>    优点：</p>
-<pre><code>● 类的复杂性降低，实现什么职责都有清晰明确的定义
-● 可读性提高，复杂性降低，那当然可读性提高了
-● 可维护性提高，可读性提高，那当然更容易维护了  
-● 变更引起的风险降低，变更是必不可少的，如果接口的单一职责做得好，一个接口修改只对相应的实现类有影响，对其他的接口无影响，这对系统的扩展性、
-维护性都有非常大的帮助</code></pre><p>2.里氏替换原则<br>    任意时刻子类都可以代替父类出现，反之则不行<br>    遵循的原则:</p>
-<pre><code>● 子类必须完全实现父类的方法
-● 子类可以有自己独特的行为和特征
-● 覆写或实现父类的方法时参数可以被放大
-● 覆写或实现父类的方法时输出结果可以被缩小</code></pre><p>3.依赖倒置原则: 面向接口编程</p>
-<pre><code>● 模块间的依赖通过抽象发生，实现类之间不发生直接的依赖关系，其依赖关系是通过接口或抽象类产生的；
-● 接口或抽象类不依赖于实现类；
-● 实现类依赖接口或抽象类。</code></pre><p>4.迪米特原则: 最少知识原则</p>
-<pre><code>● 一个对象应该对其他对象有最少的了解。通俗地讲，一个类应该对自己需要耦合或调用的类知道得最少，你（被耦合或调用的类）的内部是如何复杂都和我
-没关系，那是你的事情，我就知道你提供的这么多public方法，我就调用这么多，其他的我一概不关心</code></pre><p>5.接口隔离原则</p>
-<pre><code>● 建立单一接口，不要建立臃肿庞大的接口。再通俗一点讲：接口尽量细化，同时接口中的方法尽量少</code></pre><p>6.开闭原则</p>
-<pre><code>● 对修改闭合, 对新增开放, 这是所有的原则里面的总纲, 当其他的原则很好的被遵循时， 自然就遵循了开闭原则</code></pre>
+<ul>
+<li><p>单一职责原则<br> 应该有且仅有一个原因引起类的变更，或者更加直白一点的说法就是一个类，一个函数应该只做一件事，不能让一个函数承担过度的功能，尽量让类和函数的<br> 功能单一。不过我们开发的过程中，很难做到理论上的单一职责原则，因为划分指责的边界很难进行划分。</p>
+</li>
+<li><p>里氏替换原则<br> 任意时刻子类都可以代替父类出现，反之则不行。判断一个类和方法是不是遵循里氏替换原则可以参考下面的4个特性 </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">1.子类必须完全实现父类的方法</span><br><span class="line">2.子类可以有自己独特的行为和特征</span><br><span class="line">3.覆写或实现父类的方法时参数可以被放大</span><br><span class="line">4.覆写或实现父类的方法时输出结果可以被缩小</span><br></pre></td></tr></table></figure>
+
+
+</li>
+</ul>
+<ul>
+<li><p>依赖倒置原则:<br> 依赖倒置原则最简单的理解就是：面向接口编程。比较常见的就是我们开发controller时，依赖的是service的接口而不是具体的实现类，还有就是方法中<br> 参数的类型一般都尽量的使用抽象类和接口，总结来说就是依赖的过程中尽量使用接口或者抽象类的，便于扩展。</p>
+</li>
+<li><p>迪米特原则:<br> 迪米特原则又叫最少知识原则，通俗地讲，一个类应该对自己需要耦合或调用的类知道得最少，你（被耦合或调用的类）的内部是如何复杂都和我没关系，那<br> 是你的事情，我就知道你提供的这么多public方法，我就调用这么多，其他的我一概不关心</p>
+</li>
+<li><p>接口隔离原则<br> 建立单一接口，不要建立臃肿庞大的接口。再通俗一点讲：接口尽量细化，同时接口中的方法尽量少</p>
+</li>
+<li><p>开闭原则<br> 开闭原则很好理解，即对修改闭合, 对新增开放, 但是真正要实现这一原则就特别难，设计模式基本都是为了实现这一原则而被创建的，包括一些软件架构想要<br> 做到遵循开闭原则也是一个相当有技术含量的。</p>
+</li>
+</ul>
+<p>总结: 合理的使用设计模式可以提高代码可维护性、可重用行、健壮性的。一定要明白设计模式的适用场景，同时灵活的运用设计模式，通常设计模式都是混用的。</p>
+
       
 
       
@@ -233,10 +237,6 @@
 			 
         		<li class="article-tag-list-item">
         			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">设计模式</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">design pattern</a>
         		</li>
       		
 		</ul>
@@ -425,10 +425,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">设计模式</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">design pattern</a>
               </li>
             
             <div class="clearfix"></div>
