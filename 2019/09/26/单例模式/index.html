@@ -6,20 +6,20 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <link rel="dns-prefetch" href="http://www.xuxiancheng.xyz">
-  <title>单例模式 | 恶龙咆哮的博客</title>
+  <title>恶龙咆哮的博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="前言单例模式是一种很常见的设计模式，在日常的编程中经常都会遇到，如一个系统中的线程池，数据源，配置信息等。单例模式看似简单，但其实有非常多实现方式，掌握不同的写法有利于我们更好的使用和理解单例模式。下面我将对其进行简单的介绍">
+  <meta name="description" content="单例模式前言单例模式是一种很常见的设计模式，在日常的编程中经常都会遇到，如一个系统中的线程池，数据源，配置信息等。单例模式看似简单，但其实有非常多实现方式，掌握不同的写法有利于我们更好的使用和理解单例模式。下面我将对其进行简单的介绍">
 <meta name="keywords" content="设计模式 单例模式 singleton">
 <meta property="og:type" content="article">
-<meta property="og:title" content="单例模式">
+<meta property="og:title" content="恶龙咆哮的博客">
 <meta property="og:url" content="http://www.xuxiancheng.xyz/2019/09/26/单例模式/index.html">
 <meta property="og:site_name" content="恶龙咆哮的博客">
-<meta property="og:description" content="前言单例模式是一种很常见的设计模式，在日常的编程中经常都会遇到，如一个系统中的线程池，数据源，配置信息等。单例模式看似简单，但其实有非常多实现方式，掌握不同的写法有利于我们更好的使用和理解单例模式。下面我将对其进行简单的介绍">
+<meta property="og:description" content="单例模式前言单例模式是一种很常见的设计模式，在日常的编程中经常都会遇到，如一个系统中的线程池，数据源，配置信息等。单例模式看似简单，但其实有非常多实现方式，掌握不同的写法有利于我们更好的使用和理解单例模式。下面我将对其进行简单的介绍">
 <meta property="og:locale" content="chinese">
-<meta property="og:updated_time" content="2019-09-26T06:58:45.492Z">
+<meta property="og:updated_time" content="2019-09-26T07:01:22.379Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="单例模式">
-<meta name="twitter:description" content="前言单例模式是一种很常见的设计模式，在日常的编程中经常都会遇到，如一个系统中的线程池，数据源，配置信息等。单例模式看似简单，但其实有非常多实现方式，掌握不同的写法有利于我们更好的使用和理解单例模式。下面我将对其进行简单的介绍">
+<meta name="twitter:title" content="恶龙咆哮的博客">
+<meta name="twitter:description" content="单例模式前言单例模式是一种很常见的设计模式，在日常的编程中经常都会遇到，如一个系统中的线程池，数据源，配置信息等。单例模式看似简单，但其实有非常多实现方式，掌握不同的写法有利于我们更好的使用和理解单例模式。下面我将对其进行简单的介绍">
   
     <link rel="alternative" href="/atom.xml" title="恶龙咆哮的博客" type="application/atom+xml">
   
@@ -162,24 +162,9 @@
             <article id="post-单例模式" class="article article-type-post " itemscope itemprop="blogPost">
   <div class="article-inner">
     
-      <header class="article-header">
-        
-  
-    <h1 class="article-title" itemprop="name">
-      单例模式
-    </h1>
-  
-
-        
-        <a href="/2019/09/26/单例模式/" class="archive-article-date">
-  	<time datetime="2019-09-26T03:14:40.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-09-26</time>
-</a>
-        
-      </header>
-    
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>单例模式是一种很常见的设计模式，在日常的编程中经常都会遇到，如一个系统中的线程池，数据源，配置信息等。单例模式看似简单，但其实有非常多实现方式，掌握不同的写法有利于我们更好的使用和理解单例模式。下面我将对其进行简单的介绍</p>
+        <h1 id="单例模式"><a href="#单例模式" class="headerlink" title="单例模式"></a>单例模式</h1><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>单例模式是一种很常见的设计模式，在日常的编程中经常都会遇到，如一个系统中的线程池，数据源，配置信息等。单例模式看似简单，但其实有非常多实现方式，掌握不同的写法有利于我们更好的使用和理解单例模式。下面我将对其进行简单的介绍</p>
 <a id="more"></a>
 <h2 id="饿汉式单例"><a href="#饿汉式单例" class="headerlink" title="饿汉式单例"></a>饿汉式单例</h2><p>饿汉式单例是线程安全的，当类被加载的时候，对象就会被创建出来，但是如果系统中有大量的饿汉式单例，内存占用会比较高，实现方式如下:</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">HungrySingleton</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> HungrySingleton instance = <span class="keyword">new</span> HungrySingleton();</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="title">HungrySingleton</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> RuntimeException(<span class="string">"小样，还想通过反射来初始化对象？"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> HungrySingleton <span class="title">getInstance</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> instance;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
