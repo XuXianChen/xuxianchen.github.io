@@ -16,7 +16,7 @@
 <meta property="og:description" content="策略模式简介">
 <meta property="og:locale" content="chinese">
 <meta property="og:image" content="https://github.com/XuXianChen/my_resources/blob/master/uml/strategy_uml.png?raw=true">
-<meta property="og:updated_time" content="2019-09-28T06:53:01.102Z">
+<meta property="og:updated_time" content="2019-09-28T07:24:28.150Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="策略模式">
 <meta name="twitter:description" content="策略模式简介">
@@ -94,12 +94,27 @@
     <div class="article-entry" itemprop="articleBody">
       
         <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>在面向对象的思想中，多态让我们的设计变得更加的灵活，而策略模式就是巧妙的利用了多态来进行设计的。策略模式将不同的策略通过子类的方式进行定义，抽象类/接口定义抽象的策略，当需求变更的时候可以很方便的对策略进行扩展而不用修改以前的代码，满足开闭原则。</p>
+<a id="more"></a>
 <h2 id="通用的类图如下"><a href="#通用的类图如下" class="headerlink" title="通用的类图如下:"></a>通用的类图如下:</h2><p><img src="https://github.com/XuXianChen/my_resources/blob/master/uml/strategy_uml.png?raw=true" alt="image"></p>
+<h2 id="策略模式中角色分析"><a href="#策略模式中角色分析" class="headerlink" title="策略模式中角色分析"></a>策略模式中角色分析</h2><p>Context：策略的上下文，封装策略，提供统一的访问入口。之前一直不理解为什么要有个context，没有context我2行代码搞定，有了context我还得写三行代码，这不是没事找事吗。后面经过一些学习后，我尝试从面向对象的思想去考虑这个context发现还是很有必要的，一个策略其实可以看成是一种算法和行为，这个策略没有具体的属性等特征，基本上算是一个贫血的对象了，而通过context对其进行了封装，我们对外可以提供一个真正在现实世界中可以对应起来的对象了。<br>Strategy：策略的抽象<br>ConcreteStrategy: 具体的策略</p>
+<h2 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h2><p>策略抽象类：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Strategy</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">calculate</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>具体的策略：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ConcreteStrategyA</span> <span class="keyword">implements</span> <span class="title">Strategy</span></span>&#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">calculate</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"算法A"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ConcreteStrategyB</span> <span class="keyword">implements</span> <span class="title">Strategy</span></span>&#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">calculate</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"算法B"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>上下文：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Context</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> Strategy strategy;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Context</span><span class="params">(Strategy strategy)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.strategy = strategy;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">calculate</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.strategy.calculate();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>客户端</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Client</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        Strategy strategy = <span class="keyword">new</span> ConcreteStrategyA();</span><br><span class="line">        Context context = <span class="keyword">new</span> Context(strategy);</span><br><span class="line">        context.calculate();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>策略模式关键在于多态，扩展很方便，但是客户端使用时需要与直接的策略交互，解决办法就是和工厂模式进行混用，客户端无需关心具体的策略了，只需传入一个参数即可。</p>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://www.xuxiancheng.xyz/2019/09/28/策略模式/" data-id="ck1378wco00036pcg74mi21st" class="article-share-link">Share</a>
+      <a data-url="http://www.xuxiancheng.xyz/2019/09/28/策略模式/" data-id="ck138fok50001krcgo0fsgj6z" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/设计模式/">设计模式</a></li></ul>
