@@ -7,18 +7,18 @@
   
   <title>设计模式的六大原则 | 恶龙咆哮的博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="前言: 设计模式是前人（The Gang of Four）总结的一套软件开发的经验，对应程序员而言，合理的使用设计模式可以提高代码的可扩展性，可重用性以及和可读性，还可以读懂一些大量使用了设计模式的框架的源码，比如spring/mybatis等。但是设计模式最大的忌讳就是生搬硬套，强行使用设计模式，这样写出来代码不仅难以理解，而且出现BUG还比较难以排除，我之前接手的一个系统中大量的使用了观察者模">
+  <meta name="description" content="前言设计模式是前人（The Gang of Four）总结的一套软件开发的经验，对应程序员而言，合理的使用设计模式可以提高代码的可扩展性，可重用性以及和可读性，还可以读懂一些大量使用了设计模式的框架的源码，比如spring/mybatis等。但是设计模式最大的忌讳就是生搬硬套，强行使用设计模式，这样写出来代码不仅难以理解，而且出现BUG还比较难以排除，我之前接手的一个系统中大量的使用了观察者模式，">
 <meta name="keywords" content="设计模式">
 <meta property="og:type" content="article">
 <meta property="og:title" content="设计模式的六大原则">
 <meta property="og:url" content="http://www.xuxiancheng.xyz/2019/08/07/设计模式原则/index.html">
 <meta property="og:site_name" content="恶龙咆哮的博客">
-<meta property="og:description" content="前言: 设计模式是前人（The Gang of Four）总结的一套软件开发的经验，对应程序员而言，合理的使用设计模式可以提高代码的可扩展性，可重用性以及和可读性，还可以读懂一些大量使用了设计模式的框架的源码，比如spring/mybatis等。但是设计模式最大的忌讳就是生搬硬套，强行使用设计模式，这样写出来代码不仅难以理解，而且出现BUG还比较难以排除，我之前接手的一个系统中大量的使用了观察者模">
+<meta property="og:description" content="前言设计模式是前人（The Gang of Four）总结的一套软件开发的经验，对应程序员而言，合理的使用设计模式可以提高代码的可扩展性，可重用性以及和可读性，还可以读懂一些大量使用了设计模式的框架的源码，比如spring/mybatis等。但是设计模式最大的忌讳就是生搬硬套，强行使用设计模式，这样写出来代码不仅难以理解，而且出现BUG还比较难以排除，我之前接手的一个系统中大量的使用了观察者模式，">
 <meta property="og:locale" content="chinese">
-<meta property="og:updated_time" content="2019-09-28T07:42:28.333Z">
+<meta property="og:updated_time" content="2019-09-28T07:46:14.581Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="设计模式的六大原则">
-<meta name="twitter:description" content="前言: 设计模式是前人（The Gang of Four）总结的一套软件开发的经验，对应程序员而言，合理的使用设计模式可以提高代码的可扩展性，可重用性以及和可读性，还可以读懂一些大量使用了设计模式的框架的源码，比如spring/mybatis等。但是设计模式最大的忌讳就是生搬硬套，强行使用设计模式，这样写出来代码不仅难以理解，而且出现BUG还比较难以排除，我之前接手的一个系统中大量的使用了观察者模">
+<meta name="twitter:description" content="前言设计模式是前人（The Gang of Four）总结的一套软件开发的经验，对应程序员而言，合理的使用设计模式可以提高代码的可扩展性，可重用性以及和可读性，还可以读懂一些大量使用了设计模式的框架的源码，比如spring/mybatis等。但是设计模式最大的忌讳就是生搬硬套，强行使用设计模式，这样写出来代码不仅难以理解，而且出现BUG还比较难以排除，我之前接手的一个系统中大量的使用了观察者模式，">
   
     <link rel="alternate" href="/atom.xml" title="恶龙咆哮的博客" type="application/atom+xml">
   
@@ -91,9 +91,9 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>前言: 设计模式是前人（The Gang of Four）总结的一套软件开发的经验，对应程序员而言，合理的使用设计模式可以提高代码的可扩展性，可重用性以及和可读性，还可以读懂一些大量使用了设计模式的框架的源码，比如spring/mybatis等。但是设计模式最大的忌讳就是生搬硬套，强行使用设计模式，这样写出来代码不仅难以理解，而且出现BUG还比较难以排除，我之前接<br>手的一个系统中大量的使用了观察者模式，当系统出现问题的时候，我就很难找到出现问题的地方，说出来都是泪呀。而学习设计模式之前首先要先了解一下设计模式的六大原则，设计模式都是基于这些原则被设计出来的，了解了他们有利于我们更好的理解具体的设计模式，下面我将简单的介绍一些设计模式的六大原则：</p>
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>设计模式是前人（The Gang of Four）总结的一套软件开发的经验，对应程序员而言，合理的使用设计模式可以提高代码的可扩展性，可重用性以及和可读性，还可以读懂一些大量使用了设计模式的框架的源码，比如spring/mybatis等。但是设计模式最大的忌讳就是生搬硬套，强行使用设计模式，这样写出来代码不仅难以理解，而且出现BUG还比较难以排除，我之前接手的一个系统中大量的使用了观察者模式，当系统出现问题的时候，我就很难找到出现问题的地方，说出来都是泪呀。而学习设计模式之前首先要先了解一下设计模式的六大原则，设计模式都是基于这些原则被设计出来的，了解了他们有利于我们更好的理解具体的设计模式，下面我将简单的介绍一些设计模式的六大原则：</p>
 <a id="more"></a>
-<ul>
+<h2 id="具体的原则"><a href="#具体的原则" class="headerlink" title="具体的原则"></a>具体的原则</h2><ul>
 <li><p>单一职责原则<br> 应该有且仅有一个原因引起类的变更，或者更加直白一点的说法就是一个类，一个函数应该只做一件事，不能让一个函数承担过度的功能，尽量让类和函数的功能单一。不过我们开发的过程中，很难做到理论上的单一职责原则，因为划分指责的边界很难进行划分。</p>
 </li>
 <li><p>里氏替换原则<br> 任意时刻子类都可以代替父类出现，反之则不行。判断一个类和方法是不是遵循里氏替换原则可以参考下面的4个特性 </p>
@@ -112,12 +112,12 @@
 <li><p>开闭原则<br> 开闭原则很好理解，即对修改闭合, 对新增开放, 但是真正要实现这一原则就特别难，设计模式基本都是为了实现这一原则而被创建的，包括一些软件架构想要做到遵循开闭原则也是一个相当有技术含量的。</p>
 </li>
 </ul>
-<p>总结: 合理的使用设计模式可以提高代码可维护性、可重用行、健壮性的。一定要明白设计模式的适用场景，同时灵活的运用设计模式，通常设计模式都是混用的。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>合理的使用设计模式可以提高代码可维护性、可重用行、健壮性的。一定要明白设计模式的适用场景，同时灵活的运用设计模式，通常设计模式都是混用的。</p>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://www.xuxiancheng.xyz/2019/08/07/设计模式原则/" data-id="ck138zonk0001dlcg8xu8q1zt" class="article-share-link">Share</a>
+      <a data-url="http://www.xuxiancheng.xyz/2019/08/07/设计模式原则/" data-id="ck1394f7v0000y0cgx9sevch6" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/设计模式/">设计模式</a></li></ul>
