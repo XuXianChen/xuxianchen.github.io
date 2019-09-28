@@ -5,22 +5,22 @@
   
 
   
-  <title>策略模式+工厂模式+门面模式完成优惠券价格计算 | 恶龙咆哮的博客</title>
+  <title>策略模式 | 恶龙咆哮的博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="最近在做一个电商平台的后台开发, 我主要负责的是支付系统和营销系统的开发, 目前是v1.0, 营销系统只有优惠券，在网上搜索了优惠券相关的设计，发现优惠券玩法特别的多，很难对其进行控制，所以我们设计之初就需要充分的考虑扩展性的问题，这里只简单谈一谈优惠券的价格计算的设计。 据了解，市面上的电商系统，优惠券的价格计算基本上包括：满减、满折、立减、折扣，关于不同的价格计算我立马就想到了使用策略模式，下">
+  <meta name="description" content="策略模式简介">
 <meta name="keywords" content="设计模式">
 <meta property="og:type" content="article">
-<meta property="og:title" content="策略模式+工厂模式+门面模式完成优惠券价格计算">
-<meta property="og:url" content="http://www.xuxiancheng.xyz/2019/09/17/策略模式-工厂模式-门面模式完成优惠券价格计算/index.html">
+<meta property="og:title" content="策略模式">
+<meta property="og:url" content="http://www.xuxiancheng.xyz/2019/09/28/策略模式/index.html">
 <meta property="og:site_name" content="恶龙咆哮的博客">
-<meta property="og:description" content="最近在做一个电商平台的后台开发, 我主要负责的是支付系统和营销系统的开发, 目前是v1.0, 营销系统只有优惠券，在网上搜索了优惠券相关的设计，发现优惠券玩法特别的多，很难对其进行控制，所以我们设计之初就需要充分的考虑扩展性的问题，这里只简单谈一谈优惠券的价格计算的设计。 据了解，市面上的电商系统，优惠券的价格计算基本上包括：满减、满折、立减、折扣，关于不同的价格计算我立马就想到了使用策略模式，下">
+<meta property="og:description" content="策略模式简介">
 <meta property="og:locale" content="chinese">
-<meta property="og:image" content="http://www.xuxiancheng.xyz/2019/09/17/策略模式-工厂模式-门面模式完成优惠券价格计算/img/2.png">
-<meta property="og:updated_time" content="2019-09-17T08:01:38.585Z">
+<meta property="og:image" content="https://github.com/XuXianChen/my_resources/blob/master/uml/strategy_uml.png">
+<meta property="og:updated_time" content="2019-09-28T06:48:52.341Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="策略模式+工厂模式+门面模式完成优惠券价格计算">
-<meta name="twitter:description" content="最近在做一个电商平台的后台开发, 我主要负责的是支付系统和营销系统的开发, 目前是v1.0, 营销系统只有优惠券，在网上搜索了优惠券相关的设计，发现优惠券玩法特别的多，很难对其进行控制，所以我们设计之初就需要充分的考虑扩展性的问题，这里只简单谈一谈优惠券的价格计算的设计。 据了解，市面上的电商系统，优惠券的价格计算基本上包括：满减、满折、立减、折扣，关于不同的价格计算我立马就想到了使用策略模式，下">
-<meta name="twitter:image" content="http://www.xuxiancheng.xyz/2019/09/17/策略模式-工厂模式-门面模式完成优惠券价格计算/img/2.png">
+<meta name="twitter:title" content="策略模式">
+<meta name="twitter:description" content="策略模式简介">
+<meta name="twitter:image" content="https://github.com/XuXianChen/my_resources/blob/master/uml/strategy_uml.png">
   
     <link rel="alternate" href="/atom.xml" title="恶龙咆哮的博客" type="application/atom+xml">
   
@@ -71,10 +71,10 @@
   </div>
 </header>
       <div class="outer">
-        <section id="main"><article id="post-策略模式-工厂模式-门面模式完成优惠券价格计算" class="article article-type-post" itemscope itemprop="blogPost">
+        <section id="main"><article id="post-策略模式" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2019/09/17/策略模式-工厂模式-门面模式完成优惠券价格计算/" class="article-date">
-  <time datetime="2019-09-17T07:16:41.000Z" itemprop="datePublished">2019-09-17</time>
+    <a href="/2019/09/28/策略模式/" class="article-date">
+  <time datetime="2019-09-28T06:14:57.000Z" itemprop="datePublished">2019-09-28</time>
 </a>
     
   </div>
@@ -85,7 +85,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      策略模式+工厂模式+门面模式完成优惠券价格计算
+      策略模式
     </h1>
   
 
@@ -93,13 +93,13 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>最近在做一个电商平台的后台开发, 我主要负责的是支付系统和营销系统的开发, 目前是v1.0, 营销系统<br>只有优惠券，在网上搜索了优惠券相关的设计，发现优惠券玩法特别的多，很难对其进行控制，所以我们设计<br>之初就需要充分的考虑扩展性的问题，这里只简单谈一谈优惠券的价格计算的设计。</p>
-<p>据了解，市面上的电商系统，优惠券的价格计算基本上包括：满减、满折、立减、折扣，关于不同的价格计算<br>我立马就想到了使用策略模式，下面是关于策略模式的类图：<br><img src="./img/2.png" alt></p>
+        <p>##前言<br>在面向对象的思想中，多态让我们的设计变得更加的灵活，而策略模式就是巧妙的利用了多态来进行设计的。策略模式将不同的策略通过子类的方式进行定义，抽象类/接口定义抽象的策略，当需求变更的时候可以很方便的对策略进行扩展而不用修改以前的代码，满足开闭原则。</p>
+<p>##通用的类图如下:<br><img src="https://github.com/XuXianChen/my_resources/blob/master/uml/strategy_uml.png" alt="image"></p>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://www.xuxiancheng.xyz/2019/09/17/策略模式-工厂模式-门面模式完成优惠券价格计算/" data-id="ck10dk8q10000p5cgjwpnu7xf" class="article-share-link">Share</a>
+      <a data-url="http://www.xuxiancheng.xyz/2019/09/28/策略模式/" data-id="ck1372o4g00003bcgvkvka7u4" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/设计模式/">设计模式</a></li></ul>
@@ -110,19 +110,10 @@
     
 <nav id="article-nav">
   
-    <a href="/2019/09/26/单例模式/" id="article-nav-newer" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">Newer</strong>
-      <div class="article-nav-title">
-        
-          单例模式
-        
-      </div>
-    </a>
   
-  
-    <a href="/2019/08/07/设计模式原则/" id="article-nav-older" class="article-nav-link-wrap">
+    <a href="/2019/09/26/单例模式/" id="article-nav-older" class="article-nav-link-wrap">
       <strong class="article-nav-caption">Older</strong>
-      <div class="article-nav-title">设计模式的六大原则</div>
+      <div class="article-nav-title">单例模式</div>
     </a>
   
 </nav>
@@ -173,11 +164,11 @@
       <ul>
         
           <li>
-            <a href="/2019/09/26/单例模式/">单例模式</a>
+            <a href="/2019/09/28/策略模式/">策略模式</a>
           </li>
         
           <li>
-            <a href="/2019/09/17/策略模式-工厂模式-门面模式完成优惠券价格计算/">策略模式+工厂模式+门面模式完成优惠券价格计算</a>
+            <a href="/2019/09/26/单例模式/">单例模式</a>
           </li>
         
           <li>
