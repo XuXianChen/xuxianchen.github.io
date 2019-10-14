@@ -7,19 +7,19 @@
   
   <title>责任链模式 | 恶龙咆哮的博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="定义使多个对象都有机会处理请求，从而避免了请求的发送者和接受者之间的耦合关系。将这些对象连成一条链，并沿着这条链传递该请求，直到有对象处理它为止。即将一个请求交给一个链，然后由这里链的内部决定是谁对请求进行处理，然后返回结果给客户端。 UML 示例代码抽象的handler，有点类似于模版方法的抽象类 12345678910111213141516171819202122public abstrac">
+  <meta name="description" content="定义使多个对象都有机会处理请求，从而避免了请求的发送者和接受者之间的耦合关系。将这些对象连成一条链，并沿着这条链传递该请求，直到有对象处理它为止。即将一个请求交给一个链，然后由这里链的内部决定是谁对请求进行处理，然后返回结果给客户端。">
 <meta name="keywords" content="后端, JAVA, java, Spring, 设计模式, mybatis, mysql, Mysql, oracle, springcloud, springboot">
 <meta property="og:type" content="article">
 <meta property="og:title" content="责任链模式">
 <meta property="og:url" content="http://www.xuxiancheng.xyz/2019/10/14/责任链模式/index.html">
 <meta property="og:site_name" content="恶龙咆哮的博客">
-<meta property="og:description" content="定义使多个对象都有机会处理请求，从而避免了请求的发送者和接受者之间的耦合关系。将这些对象连成一条链，并沿着这条链传递该请求，直到有对象处理它为止。即将一个请求交给一个链，然后由这里链的内部决定是谁对请求进行处理，然后返回结果给客户端。 UML 示例代码抽象的handler，有点类似于模版方法的抽象类 12345678910111213141516171819202122public abstrac">
+<meta property="og:description" content="定义使多个对象都有机会处理请求，从而避免了请求的发送者和接受者之间的耦合关系。将这些对象连成一条链，并沿着这条链传递该请求，直到有对象处理它为止。即将一个请求交给一个链，然后由这里链的内部决定是谁对请求进行处理，然后返回结果给客户端。">
 <meta property="og:locale" content="chinese">
 <meta property="og:image" content="https://github.com/XuXianChen/my_resources/blob/master/uml/handler_uml.png?raw=true">
-<meta property="og:updated_time" content="2019-10-14T02:14:00.737Z">
+<meta property="og:updated_time" content="2019-10-14T02:16:53.426Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="责任链模式">
-<meta name="twitter:description" content="定义使多个对象都有机会处理请求，从而避免了请求的发送者和接受者之间的耦合关系。将这些对象连成一条链，并沿着这条链传递该请求，直到有对象处理它为止。即将一个请求交给一个链，然后由这里链的内部决定是谁对请求进行处理，然后返回结果给客户端。 UML 示例代码抽象的handler，有点类似于模版方法的抽象类 12345678910111213141516171819202122public abstrac">
+<meta name="twitter:description" content="定义使多个对象都有机会处理请求，从而避免了请求的发送者和接受者之间的耦合关系。将这些对象连成一条链，并沿着这条链传递该请求，直到有对象处理它为止。即将一个请求交给一个链，然后由这里链的内部决定是谁对请求进行处理，然后返回结果给客户端。">
 <meta name="twitter:image" content="https://github.com/XuXianChen/my_resources/blob/master/uml/handler_uml.png?raw=true">
   
     <link rel="alternate" href="/atom.xml" title="恶龙咆哮的博客" type="application/atom+xml">
@@ -94,6 +94,7 @@
     <div class="article-entry" itemprop="articleBody">
       
         <h2 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h2><p>使多个对象都有机会处理请求，从而避免了请求的发送者和接受者之间的耦合关系。将这些对象连成一条链，并沿着这条链传递该请求，直到有对象处理它为止。即将一个请求交给一个链，然后由这里链的内部决定是谁对请求进行处理，然后返回结果给客户端。</p>
+<a id="more"></a>
 <h2 id="UML"><a href="#UML" class="headerlink" title="UML"></a>UML</h2><p><img src="https://github.com/XuXianChen/my_resources/blob/master/uml/handler_uml.png?raw=true" alt="image"></p>
 <h2 id="示例代码"><a href="#示例代码" class="headerlink" title="示例代码"></a>示例代码</h2><p>抽象的handler，有点类似于模版方法的抽象类</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">AbstractHandler</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> AbstractHandler nextHandler;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">final</span> HandlerResponse <span class="title">handler</span><span class="params">(HandlerRequest request)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (<span class="keyword">this</span>.getHandlerLevel().getLevel().equals(request.getLevel().getLevel())) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">this</span>.echo(request);</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="keyword">if</span> (<span class="keyword">this</span>.nextHandler != <span class="keyword">null</span>) &#123;</span><br><span class="line">                <span class="keyword">return</span> <span class="keyword">this</span>.nextHandler.handler(request);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setNextHandler</span><span class="params">(AbstractHandler nextHandler)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.nextHandler = nextHandler;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">abstract</span> HandlerResponse <span class="title">echo</span><span class="params">(HandlerRequest request)</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">abstract</span> HandlerLevel <span class="title">getHandlerLevel</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
@@ -114,7 +115,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://www.xuxiancheng.xyz/2019/10/14/责任链模式/" data-id="ck1psaz1q0001cycgeglbc8an" class="article-share-link">Share</a>
+      <a data-url="http://www.xuxiancheng.xyz/2019/10/14/责任链模式/" data-id="ck1psee9q0004j1cgf5d3cmpx" class="article-share-link">Share</a>
       
       
     </footer>
