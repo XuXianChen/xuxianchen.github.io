@@ -5,19 +5,22 @@
   
 
   
-  <title>恶龙咆哮的博客</title>
+  <title>责任链模式 | 恶龙咆哮的博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="一个快乐肥仔">
+  <meta name="description" content="定义使多个对象都有机会处理请求，从而避免了请求的发送者和接受者之间的耦合关系。将这些对象连成一条链，并沿着这条链传递该请求，直到有对象处理它为止。即将一个请求交给一个链，然后由这里链的内部决定是谁对请求进行处理，然后返回结果给客户端。 UML 示例代码抽象的handler，有点类似于模版方法的抽象类 12345678910111213141516171819202122public abstrac">
 <meta name="keywords" content="后端, JAVA, java, Spring, 设计模式, mybatis, mysql, Mysql, oracle, springcloud, springboot">
-<meta property="og:type" content="website">
-<meta property="og:title" content="恶龙咆哮的博客">
-<meta property="og:url" content="http://www.xuxiancheng.xyz/index.html">
+<meta property="og:type" content="article">
+<meta property="og:title" content="责任链模式">
+<meta property="og:url" content="http://www.xuxiancheng.xyz/2019/10/14/责任链模式/index.html">
 <meta property="og:site_name" content="恶龙咆哮的博客">
-<meta property="og:description" content="一个快乐肥仔">
+<meta property="og:description" content="定义使多个对象都有机会处理请求，从而避免了请求的发送者和接受者之间的耦合关系。将这些对象连成一条链，并沿着这条链传递该请求，直到有对象处理它为止。即将一个请求交给一个链，然后由这里链的内部决定是谁对请求进行处理，然后返回结果给客户端。 UML 示例代码抽象的handler，有点类似于模版方法的抽象类 12345678910111213141516171819202122public abstrac">
 <meta property="og:locale" content="chinese">
+<meta property="og:image" content="https://github.com/XuXianChen/my_resources/blob/master/uml/handler_uml.png?raw=true">
+<meta property="og:updated_time" content="2019-10-14T02:14:00.737Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="恶龙咆哮的博客">
-<meta name="twitter:description" content="一个快乐肥仔">
+<meta name="twitter:title" content="责任链模式">
+<meta name="twitter:description" content="定义使多个对象都有机会处理请求，从而避免了请求的发送者和接受者之间的耦合关系。将这些对象连成一条链，并沿着这条链传递该请求，直到有对象处理它为止。即将一个请求交给一个链，然后由这里链的内部决定是谁对请求进行处理，然后返回结果给客户端。 UML 示例代码抽象的handler，有点类似于模版方法的抽象类 12345678910111213141516171819202122public abstrac">
+<meta name="twitter:image" content="https://github.com/XuXianChen/my_resources/blob/master/uml/handler_uml.png?raw=true">
   
     <link rel="alternate" href="/atom.xml" title="恶龙咆哮的博客" type="application/atom+xml">
   
@@ -68,9 +71,7 @@
   </div>
 </header>
       <div class="outer">
-        <section id="main">
-  
-    <article id="post-责任链模式" class="article article-type-post" itemscope itemprop="blogPost">
+        <section id="main"><article id="post-责任链模式" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2019/10/14/责任链模式/" class="article-date">
   <time datetime="2019-10-14T00:58:44.000Z" itemprop="datePublished">2019-10-14</time>
@@ -83,8 +84,8 @@
       <header class="article-header">
         
   
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/10/14/责任链模式/">责任链模式</a>
+    <h1 class="article-title" itemprop="name">
+      责任链模式
     </h1>
   
 
@@ -119,183 +120,19 @@
     </footer>
   </div>
   
-</article>
-
-
+    
+<nav id="article-nav">
   
-    <article id="post-观察者模式" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2019/10/10/观察者模式/" class="article-date">
-  <time datetime="2019-10-10T01:02:21.000Z" itemprop="datePublished">2019-10-10</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
   
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/10/10/观察者模式/">观察者模式</a>
-    </h1>
+    <a href="/2019/10/10/观察者模式/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">观察者模式</div>
+    </a>
   
+</nav>
 
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h2><p>维基百科对观察者模式的定义如下：观察者模式是软件设计模式的一种。在此种模式中，一个目标对象管理所有相依于它的观察者对象，并且在它本身的状态改变时主动发出通知。这通常透过呼叫各观察者所提供的方法来实现。此种模式通常被用来实时事件处理系统。</p>
-        
-          <p class="article-more-link">
-            <a href="/2019/10/10/观察者模式/#more">Read More</a>
-          </p>
-        
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://www.xuxiancheng.xyz/2019/10/10/观察者模式/" data-id="ck1psaz1n0000cycgayablabi" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/设计模式/">设计模式</a></li></ul>
-
-    </footer>
-  </div>
   
 </article>
-
-
-  
-    <article id="post-策略模式" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2019/09/28/策略模式/" class="article-date">
-  <time datetime="2019-09-28T06:14:57.000Z" itemprop="datePublished">2019-09-28</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/09/28/策略模式/">策略模式</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>在面向对象的思想中，多态让我们的设计变得更加的灵活，而策略模式就是巧妙的利用了多态来进行设计的。策略模式将不同的策略通过子类的方式进行定义，抽象类/接口定义抽象的策略，当需求变更的时候可以很方便的对策略进行扩展而不用修改以前的代码，满足开闭原则。</p>
-        
-          <p class="article-more-link">
-            <a href="/2019/09/28/策略模式/#more">Read More</a>
-          </p>
-        
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://www.xuxiancheng.xyz/2019/09/28/策略模式/" data-id="ck1psaz1v0005cycgzf35wm09" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/设计模式/">设计模式</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-单例模式" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2019/09/26/单例模式/" class="article-date">
-  <time datetime="2019-09-26T03:14:40.000Z" itemprop="datePublished">2019-09-26</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/09/26/单例模式/">单例模式</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>单例模式是一种很常见的设计模式，在日常的编程中经常都会遇到，如一个系统中的线程池，数据源，配置信息等。单例模式看似简单，但其实有非常多实现方式，掌握不同的写法有利于我们更好的使用和理解单例模式。</p>
-        
-          <p class="article-more-link">
-            <a href="/2019/09/26/单例模式/#more">Read More</a>
-          </p>
-        
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://www.xuxiancheng.xyz/2019/09/26/单例模式/" data-id="ck1psaz1u0004cycgj8pcs9dy" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/设计模式/">设计模式</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-设计模式原则" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2019/08/07/设计模式原则/" class="article-date">
-  <time datetime="2019-08-07T02:06:39.000Z" itemprop="datePublished">2019-08-07</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/08/07/设计模式原则/">设计模式的六大原则</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>设计模式是前人（The Gang of Four）总结的一套软件开发的经验，对应程序员而言，合理的使用设计模式可以提高代码的可扩展性，可重用性以及和可读性，还可以读懂一些大量使用了设计模式的框架的源码，比如spring/mybatis等。但是设计模式最大的忌讳就是生搬硬套，强行使用设计模式，这样写出来代码不仅难以理解，而且出现BUG还比较难以排除，我之前接手的一个系统中大量的使用了观察者模式，当系统出现问题的时候，我就很难找到出现问题的地方，说出来都是泪呀。而学习设计模式之前首先要先了解一下设计模式的六大原则，设计模式都是基于这些原则被设计出来的，了解了他们有利于我们更好的理解具体的设计模式，下面我将简单的介绍一些设计模式的六大原则：</p>
-        
-          <p class="article-more-link">
-            <a href="/2019/08/07/设计模式原则/#more">Read More</a>
-          </p>
-        
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://www.xuxiancheng.xyz/2019/08/07/设计模式原则/" data-id="ck1psaz1t0003cycgittkcjhx" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/设计模式/">设计模式</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-
 
 </section>
         
