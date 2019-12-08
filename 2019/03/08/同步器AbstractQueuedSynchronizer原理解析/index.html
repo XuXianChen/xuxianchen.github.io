@@ -5,19 +5,20 @@
   
 
   
-  <title>Archives: 2019 | 恶龙咆哮的博客</title>
+  <title>队列同步器AbstractQueuedSynchronizer原理解析 | 恶龙咆哮的博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="一个快乐肥仔">
-<meta name="keywords" content="后端, JAVA, java, Spring, 设计模式, mybatis, mysql, Mysql, oracle, springcloud, springboot">
-<meta property="og:type" content="website">
-<meta property="og:title" content="恶龙咆哮的博客">
-<meta property="og:url" content="http://www.xuxiancheng.xyz/archives/2019/index.html">
+  <meta name="description" content="同步器到底是什么？队列同步器AbstractQueuedSynchronizer并发包的作者Doug Lea开发的一个同步框架，可以用来构建锁和其他同步组件，其核心为一个volatile修饰的state变量（同步状态）和FIFO的队列组成，同步状态主要用来判断是否可以获取资源，队列可以认为是一个等待队列，获取资源失败的线程都会加入到这个队列中去。 同步器原理分析：">
+<meta name="keywords" content="Java并发">
+<meta property="og:type" content="article">
+<meta property="og:title" content="队列同步器AbstractQueuedSynchronizer原理解析">
+<meta property="og:url" content="http://www.xuxiancheng.xyz/2019/03/08/同步器AbstractQueuedSynchronizer原理解析/index.html">
 <meta property="og:site_name" content="恶龙咆哮的博客">
-<meta property="og:description" content="一个快乐肥仔">
+<meta property="og:description" content="同步器到底是什么？队列同步器AbstractQueuedSynchronizer并发包的作者Doug Lea开发的一个同步框架，可以用来构建锁和其他同步组件，其核心为一个volatile修饰的state变量（同步状态）和FIFO的队列组成，同步状态主要用来判断是否可以获取资源，队列可以认为是一个等待队列，获取资源失败的线程都会加入到这个队列中去。 同步器原理分析：">
 <meta property="og:locale" content="chinese">
+<meta property="og:updated_time" content="2019-12-08T09:13:20.573Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="恶龙咆哮的博客">
-<meta name="twitter:description" content="一个快乐肥仔">
+<meta name="twitter:title" content="队列同步器AbstractQueuedSynchronizer原理解析">
+<meta name="twitter:description" content="同步器到底是什么？队列同步器AbstractQueuedSynchronizer并发包的作者Doug Lea开发的一个同步框架，可以用来构建锁和其他同步组件，其核心为一个volatile修饰的state变量（同步状态）和FIFO的队列组成，同步状态主要用来判断是否可以获取资源，队列可以认为是一个等待队列，获取资源失败的线程都会加入到这个队列中去。 同步器原理分析：">
   
     <link rel="alternate" href="/atom.xml" title="恶龙咆哮的博客" type="application/atom+xml">
   
@@ -68,135 +69,54 @@
   </div>
 </header>
       <div class="outer">
-        <section id="main">
-  
-  
-    
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2019" class="archive-year">2019</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2019/03/08/同步器AbstractQueuedSynchronizer原理解析/" class="archive-article-date">
-  <time datetime="2019-03-08T09:03:15.000Z" itemprop="datePublished">Mar 8</time>
+        <section id="main"><article id="post-同步器AbstractQueuedSynchronizer原理解析" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/03/08/同步器AbstractQueuedSynchronizer原理解析/" class="article-date">
+  <time datetime="2019-03-08T09:03:15.000Z" itemprop="datePublished">2019-03-08</time>
 </a>
-      
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2019/03/08/同步器AbstractQueuedSynchronizer原理解析/">队列同步器AbstractQueuedSynchronizer原理解析</a>
+    <h1 class="article-title" itemprop="name">
+      队列同步器AbstractQueuedSynchronizer原理解析
     </h1>
   
 
-    </header>
-  </div>
-</article>
-  
+      </header>
     
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2019/02/28/策略模式/" class="archive-article-date">
-  <time datetime="2019-02-28T06:14:57.000Z" itemprop="datePublished">Feb 28</time>
-</a>
+    <div class="article-entry" itemprop="articleBody">
       
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2019/02/28/策略模式/">策略模式</a>
-    </h1>
-  
-
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2019/02/26/单例模式/" class="archive-article-date">
-  <time datetime="2019-02-26T03:14:40.000Z" itemprop="datePublished">Feb 26</time>
-</a>
+        <h2 id="同步器到底是什么？"><a href="#同步器到底是什么？" class="headerlink" title="同步器到底是什么？"></a>同步器到底是什么？</h2><p>队列同步器AbstractQueuedSynchronizer并发包的作者Doug Lea开发的一个同步框架，可以用来构建锁和其他同步组件，其核心为一个volatile修饰的state变量（同步状态）和FIFO的队列组成，同步状态主要用来判断是否可以获取资源，队列可以认为是一个等待队列，获取资源失败的线程都会加入到这个队列中去。</p>
+<h2 id="同步器原理分析："><a href="#同步器原理分析：" class="headerlink" title="同步器原理分析："></a>同步器原理分析：</h2>
       
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2019/02/26/单例模式/">单例模式</a>
-    </h1>
-  
-
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2019/02/14/责任链模式/" class="archive-article-date">
-  <time datetime="2019-02-14T00:58:44.000Z" itemprop="datePublished">Feb 14</time>
-</a>
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://www.xuxiancheng.xyz/2019/03/08/同步器AbstractQueuedSynchronizer原理解析/" data-id="ck3wshznl0001q3cgkc4mehpu" class="article-share-link">Share</a>
       
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2019/02/14/责任链模式/">责任链模式</a>
-    </h1>
-  
-
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2019/02/10/观察者模式/" class="archive-article-date">
-  <time datetime="2019-02-10T01:02:21.000Z" itemprop="datePublished">Feb 10</time>
-</a>
       
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2019/02/10/观察者模式/">观察者模式</a>
-    </h1>
-  
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java并发/">Java并发</a></li></ul>
 
-    </header>
+    </footer>
   </div>
-</article>
   
     
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2019/02/07/设计模式原则/" class="archive-article-date">
-  <time datetime="2019-02-07T02:06:39.000Z" itemprop="datePublished">Feb 7</time>
-</a>
-      
+<nav id="article-nav">
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2019/02/07/设计模式原则/">设计模式的六大原则</a>
-    </h1>
   
+    <a href="/2019/02/28/策略模式/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">策略模式</div>
+    </a>
+  
+</nav>
 
-    </header>
-  </div>
+  
 </article>
-  
-  
-    </div></section>
-  
-
 
 </section>
         
