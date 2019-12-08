@@ -7,18 +7,18 @@
   
   <title>队列同步器AbstractQueuedSynchronizer原理解析 | 恶龙咆哮的博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="同步器到底是什么？队列同步器AbstractQueuedSynchronizer并发包的作者Doug Lea开发的一个同步框架，可以用来构建锁和其他同步组件，其核心为一个volatile修饰的state变量（同步状态）和FIFO的队列组成，同步状态主要用来判断是否可以获取资源，队列可以认为是一个等待队列，获取资源失败的线程都会加入到这个队列中去。 同步器原理分析：">
+  <meta name="description" content="同步器到底是什么？队列同步器AbstractQueuedSynchronizer是并发包的作者Doug Lea开发的一个同步框架，可以用来构建锁和其他同步组件，并发包下很多常用的类核心都是使用AQS实现的，所以掌握AQS对于我们学习并发编程尤为重要。其核心为一个volatile修饰的state变量（同步状态）和FIFO的队列组成，通过获取和设置同步状态来判断是否可以占有资源，而队列可以认为是一个等">
 <meta name="keywords" content="Java并发">
 <meta property="og:type" content="article">
 <meta property="og:title" content="队列同步器AbstractQueuedSynchronizer原理解析">
 <meta property="og:url" content="http://www.xuxiancheng.xyz/2019/03/08/同步器AbstractQueuedSynchronizer原理解析/index.html">
 <meta property="og:site_name" content="恶龙咆哮的博客">
-<meta property="og:description" content="同步器到底是什么？队列同步器AbstractQueuedSynchronizer并发包的作者Doug Lea开发的一个同步框架，可以用来构建锁和其他同步组件，其核心为一个volatile修饰的state变量（同步状态）和FIFO的队列组成，同步状态主要用来判断是否可以获取资源，队列可以认为是一个等待队列，获取资源失败的线程都会加入到这个队列中去。 同步器原理分析：">
+<meta property="og:description" content="同步器到底是什么？队列同步器AbstractQueuedSynchronizer是并发包的作者Doug Lea开发的一个同步框架，可以用来构建锁和其他同步组件，并发包下很多常用的类核心都是使用AQS实现的，所以掌握AQS对于我们学习并发编程尤为重要。其核心为一个volatile修饰的state变量（同步状态）和FIFO的队列组成，通过获取和设置同步状态来判断是否可以占有资源，而队列可以认为是一个等">
 <meta property="og:locale" content="chinese">
-<meta property="og:updated_time" content="2019-12-08T09:13:20.573Z">
+<meta property="og:updated_time" content="2019-12-08T09:20:15.871Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="队列同步器AbstractQueuedSynchronizer原理解析">
-<meta name="twitter:description" content="同步器到底是什么？队列同步器AbstractQueuedSynchronizer并发包的作者Doug Lea开发的一个同步框架，可以用来构建锁和其他同步组件，其核心为一个volatile修饰的state变量（同步状态）和FIFO的队列组成，同步状态主要用来判断是否可以获取资源，队列可以认为是一个等待队列，获取资源失败的线程都会加入到这个队列中去。 同步器原理分析：">
+<meta name="twitter:description" content="同步器到底是什么？队列同步器AbstractQueuedSynchronizer是并发包的作者Doug Lea开发的一个同步框架，可以用来构建锁和其他同步组件，并发包下很多常用的类核心都是使用AQS实现的，所以掌握AQS对于我们学习并发编程尤为重要。其核心为一个volatile修饰的state变量（同步状态）和FIFO的队列组成，通过获取和设置同步状态来判断是否可以占有资源，而队列可以认为是一个等">
   
     <link rel="alternate" href="/atom.xml" title="恶龙咆哮的博客" type="application/atom+xml">
   
@@ -91,12 +91,12 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="同步器到底是什么？"><a href="#同步器到底是什么？" class="headerlink" title="同步器到底是什么？"></a>同步器到底是什么？</h2><p>队列同步器AbstractQueuedSynchronizer并发包的作者Doug Lea开发的一个同步框架，可以用来构建锁和其他同步组件，其核心为一个volatile修饰的state变量（同步状态）和FIFO的队列组成，同步状态主要用来判断是否可以获取资源，队列可以认为是一个等待队列，获取资源失败的线程都会加入到这个队列中去。</p>
+        <h2 id="同步器到底是什么？"><a href="#同步器到底是什么？" class="headerlink" title="同步器到底是什么？"></a>同步器到底是什么？</h2><p><code>队列同步器AbstractQueuedSynchronizer是并发包的作者Doug Lea开发的一个同步框架，可以用来构建锁和其他同步组件，并发包下很多常用的类核心都是使用AQS实现的，所以掌握AQS对于我们学习并发编程尤为重要。</code><br><code>其核心为一个volatile修饰的state变量（同步状态）和FIFO的队列组成，通过获取和设置同步状态来判断是否可以占有资源，而队列可以认为是一个等待队列，获取资源失败的线程都会加入到这个队列中去，当Runnable状态的线程执行完毕释放资源的时候，队列中的一个线程会被唤醒。</code></p>
 <h2 id="同步器原理分析："><a href="#同步器原理分析：" class="headerlink" title="同步器原理分析："></a>同步器原理分析：</h2>
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://www.xuxiancheng.xyz/2019/03/08/同步器AbstractQueuedSynchronizer原理解析/" data-id="ck3wshznl0001q3cgkc4mehpu" class="article-share-link">Share</a>
+      <a data-url="http://www.xuxiancheng.xyz/2019/03/08/同步器AbstractQueuedSynchronizer原理解析/" data-id="ck3wsqpqe0001o1cgy2b7m1cw" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java并发/">Java并发</a></li></ul>

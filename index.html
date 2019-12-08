@@ -92,12 +92,12 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="同步器到底是什么？"><a href="#同步器到底是什么？" class="headerlink" title="同步器到底是什么？"></a>同步器到底是什么？</h2><p>队列同步器AbstractQueuedSynchronizer并发包的作者Doug Lea开发的一个同步框架，可以用来构建锁和其他同步组件，其核心为一个volatile修饰的state变量（同步状态）和FIFO的队列组成，同步状态主要用来判断是否可以获取资源，队列可以认为是一个等待队列，获取资源失败的线程都会加入到这个队列中去。</p>
+        <h2 id="同步器到底是什么？"><a href="#同步器到底是什么？" class="headerlink" title="同步器到底是什么？"></a>同步器到底是什么？</h2><p><code>队列同步器AbstractQueuedSynchronizer是并发包的作者Doug Lea开发的一个同步框架，可以用来构建锁和其他同步组件，并发包下很多常用的类核心都是使用AQS实现的，所以掌握AQS对于我们学习并发编程尤为重要。</code><br><code>其核心为一个volatile修饰的state变量（同步状态）和FIFO的队列组成，通过获取和设置同步状态来判断是否可以占有资源，而队列可以认为是一个等待队列，获取资源失败的线程都会加入到这个队列中去，当Runnable状态的线程执行完毕释放资源的时候，队列中的一个线程会被唤醒。</code></p>
 <h2 id="同步器原理分析："><a href="#同步器原理分析：" class="headerlink" title="同步器原理分析："></a>同步器原理分析：</h2>
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://www.xuxiancheng.xyz/2019/03/08/同步器AbstractQueuedSynchronizer原理解析/" data-id="ck3wshznl0001q3cgkc4mehpu" class="article-share-link">Share</a>
+      <a data-url="http://www.xuxiancheng.xyz/2019/03/08/同步器AbstractQueuedSynchronizer原理解析/" data-id="ck3wsqpqe0001o1cgy2b7m1cw" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java并发/">Java并发</a></li></ul>
@@ -140,7 +140,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://www.xuxiancheng.xyz/2019/02/28/策略模式/" data-id="ck3wshzno0003q3cgktvuyg2n" class="article-share-link">Share</a>
+      <a data-url="http://www.xuxiancheng.xyz/2019/02/28/策略模式/" data-id="ck3wsqpqi0004o1cgyjz7dqjm" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/设计模式/">设计模式</a></li></ul>
@@ -183,7 +183,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://www.xuxiancheng.xyz/2019/02/26/单例模式/" data-id="ck3wshznf0000q3cg96o8wqis" class="article-share-link">Share</a>
+      <a data-url="http://www.xuxiancheng.xyz/2019/02/26/单例模式/" data-id="ck3wsqpqb0000o1cgcxg8stnr" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/设计模式/">设计模式</a></li></ul>
@@ -226,7 +226,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://www.xuxiancheng.xyz/2019/02/14/责任链模式/" data-id="ck3wshznr0008q3cgvq7kcec5" class="article-share-link">Share</a>
+      <a data-url="http://www.xuxiancheng.xyz/2019/02/14/责任链模式/" data-id="ck3wsqpqk0008o1cgupcee8em" class="article-share-link">Share</a>
       
       
     </footer>
@@ -267,7 +267,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://www.xuxiancheng.xyz/2019/02/10/观察者模式/" data-id="ck3wshznp0004q3cgvhjuo5wc" class="article-share-link">Share</a>
+      <a data-url="http://www.xuxiancheng.xyz/2019/02/10/观察者模式/" data-id="ck3wsqpqh0003o1cgsuixota5" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/设计模式/">设计模式</a></li></ul>
@@ -310,7 +310,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://www.xuxiancheng.xyz/2019/02/07/设计模式原则/" data-id="ck3wshznq0005q3cgjwxq0cky" class="article-share-link">Share</a>
+      <a data-url="http://www.xuxiancheng.xyz/2019/02/07/设计模式原则/" data-id="ck3wsqpqj0005o1cg3kea3mev" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/设计模式/">设计模式</a></li></ul>
