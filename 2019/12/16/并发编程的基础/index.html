@@ -5,19 +5,20 @@
   
 
   
-  <title>Allen&#39;s blog</title>
+  <title>并发编程的基础 | Allen&#39;s blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="一个快乐肥仔">
-<meta name="keywords" content="后端, JAVA, java, Spring, 设计模式, mybatis, mysql, Mysql, oracle, springcloud, springboot">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Allen&#39;s blog">
-<meta property="og:url" content="http://www.xuxiancheng.xyz/index.html">
+  <meta name="description" content="线程是操作系统最小的调度单元, 如果能让多个线程同时执行, 特别是某些任务会阻塞(如IO操作)的情况下, 使用多线程能显著的提升程序的性能。与此同时, 如果创建过多的线程或者对线程的管理不当, 也会造成很多难以解决的问题。">
+<meta name="keywords" content="Java并发">
+<meta property="og:type" content="article">
+<meta property="og:title" content="并发编程的基础">
+<meta property="og:url" content="http://www.xuxiancheng.xyz/2019/12/16/并发编程的基础/index.html">
 <meta property="og:site_name" content="Allen&#39;s blog">
-<meta property="og:description" content="一个快乐肥仔">
+<meta property="og:description" content="线程是操作系统最小的调度单元, 如果能让多个线程同时执行, 特别是某些任务会阻塞(如IO操作)的情况下, 使用多线程能显著的提升程序的性能。与此同时, 如果创建过多的线程或者对线程的管理不当, 也会造成很多难以解决的问题。">
 <meta property="og:locale" content="chinese">
+<meta property="og:updated_time" content="2019-12-16T23:54:02.158Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Allen&#39;s blog">
-<meta name="twitter:description" content="一个快乐肥仔">
+<meta name="twitter:title" content="并发编程的基础">
+<meta name="twitter:description" content="线程是操作系统最小的调度单元, 如果能让多个线程同时执行, 特别是某些任务会阻塞(如IO操作)的情况下, 使用多线程能显著的提升程序的性能。与此同时, 如果创建过多的线程或者对线程的管理不当, 也会造成很多难以解决的问题。">
   
     <link rel="alternate" href="/atom.xml" title="Allen&#39;s blog" type="application/atom+xml">
   
@@ -68,9 +69,7 @@
   </div>
 </header>
       <div class="outer">
-        <section id="main">
-  
-    <article id="post-并发编程的基础" class="article article-type-post" itemscope itemprop="blogPost">
+        <section id="main"><article id="post-并发编程的基础" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2019/12/16/并发编程的基础/" class="article-date">
   <time datetime="2019-12-16T14:50:54.000Z" itemprop="datePublished">2019-12-16</time>
@@ -83,8 +82,8 @@
       <header class="article-header">
         
   
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/12/16/并发编程的基础/">并发编程的基础</a>
+    <h1 class="article-title" itemprop="name">
+      并发编程的基础
     </h1>
   
 
@@ -93,11 +92,10 @@
     <div class="article-entry" itemprop="articleBody">
       
         <p>线程是操作系统最小的调度单元, 如果能让多个线程同时执行, 特别是某些任务会阻塞(如IO操作)的情况下, 使用多线程能显著的提升程序的性能。与此同时, 如果创建过多的线程或者对线程的管理不当, 也会造成很多难以解决的问题。</p>
-        
-          <p class="article-more-link">
-            <a href="/2019/12/16/并发编程的基础/#more">Read More</a>
-          </p>
-        
+<a id="more"></a>
+<p>一、基本概念<br>    1、定义: CPU通过给每个线程分配时间片(通常几十毫秒)的方式来调度线程, 即便计算机只是单核处理器, 由于线程之间切换非常快, 也会让使用者感觉多个线程是同时运行中。而多核处理器做到了真正意义上的并发执行<br>    2、JAVA多线程的状态: JAVA线程有六种状态, 每一个线程在一个时间点只能拥有一种状态, 如下<br>       NEW: 新建状态,即线程被创建完成,还没有调用start()方法<br>       RUNNABLE: 运行状态(就绪/运行中)<br>       BLOCKED: 阻塞状态, 表示线程等待锁的释放<br>       WAITING: 等待状态, 需要其他线程通知后才能唤醒<br>       TIME_WAITING: 和WAITING类似, 只是具备了超时自动返回机制<br>       TERMINATED: 终止状态<br>    3、如何启动和优雅的结束线程?</p>
+<p>二、多线程的优点和挑战<br>    1、具备的优点:<br>        A.提高程序的性能:<br>        B.建模的便捷性:<br>三、线程之间通信<br>    在操作系统层面来看, 线程之间通信有两种方式: 直接通过管道进行显示的通信, 间接的通过共享内存的方式进行通信, 而JAVA采用了共享内存的方式进行隐式的通信</p>
+
       
     </div>
     <footer class="article-footer">
@@ -109,54 +107,19 @@
     </footer>
   </div>
   
-</article>
-
-
+    
+<nav id="article-nav">
   
-    <article id="post-同步器AbstractQueuedSynchronizer原理解析" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2019/12/15/同步器AbstractQueuedSynchronizer原理解析/" class="article-date">
-  <time datetime="2019-12-15T00:03:15.000Z" itemprop="datePublished">2019-12-15</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
   
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/12/15/同步器AbstractQueuedSynchronizer原理解析/">队列同步器AbstractQueuedSynchronizer原理解析</a>
-    </h1>
+    <a href="/2019/12/15/同步器AbstractQueuedSynchronizer原理解析/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">队列同步器AbstractQueuedSynchronizer原理解析</div>
+    </a>
   
+</nav>
 
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="同步器到底是什么？"><a href="#同步器到底是什么？" class="headerlink" title="同步器到底是什么？"></a>同步器到底是什么？</h2><p>队列同步器AbstractQueuedSynchronizer（简称AQS）是并发包的作者Doug Lea开发的一个同步框架，可以用来构建锁和其他同步组件，并发包下很多常用的类核心都是使用AQS实现的，所以掌握AQS对于我们学习并发编程尤为重要。</p>
-        
-          <p class="article-more-link">
-            <a href="/2019/12/15/同步器AbstractQueuedSynchronizer原理解析/#more">Read More</a>
-          </p>
-        
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://www.xuxiancheng.xyz/2019/12/15/同步器AbstractQueuedSynchronizer原理解析/" data-id="ck494cd6c0001v4cg5w2o4n2o" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java并发/">Java并发</a></li></ul>
-
-    </footer>
-  </div>
   
 </article>
-
-
-  
-
 
 </section>
         
