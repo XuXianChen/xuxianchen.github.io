@@ -95,36 +95,15 @@
         <blockquote>
 <p>哈希表是一种非常常用的数据结构(KEY-VALUE)，理论上通过键(KEY)进行CRUD操作数据的为时间复杂度位O(1)。大部分的开发语言如Java、Go、C#的库都有实现，还有常见的KV数据库，其核心原理也是哈希表。哈希算法的应用常见更加广泛，如加密、分布式场景数据分片、生成唯一标识、P2P协议验证数据的完整性等。我认为带着问题学习是一种很好的学习方法，下面我对每个知识点以问题的形式展开。</p>
 </blockquote>
-<h3 id="哈希表为啥这么快"><a href="#哈希表为啥这么快" class="headerlink" title="哈希表为啥这么快"></a>哈希表为啥这么快</h3><p>哈希表是建立在数组上的一种数据结构，数组是一种内存空间连续，并且存储相同数据类型的数据结构，所以当我们知道了一个数组的下标，只需要一次计算（首地址 + 下标值*数组类型字节数）就可以得到对应下标的地址。而哈希表是在数组的基础上的一种数据结构，大致的结构如下:<br><img src="https://user-gold-cdn.xitu.io/2020/7/22/1737499941978ac7?w=666&h=470&f=png&s=35042" alt><br>这里假如我们不考虑多个键(key)通过哈希算法得到值相同的情况下,我们将得到的值和数组进行取模或者与操作，就会得到一个数组的下标。并且我们假设hash(key)得到的下标都不相同。那么当我们存储多个key-value类型的数据时,只需通过一次计算就可以完成查询、插入和删除等操作。但是这里有很多情况都没有考虑，我们下面将一一的进行剖析。</p>
-<h3 id="hash冲突问题"><a href="#hash冲突问题" class="headerlink" title="hash冲突问题"></a>hash冲突问题</h3><h4 id="hash冲突是什么？"><a href="#hash冲突是什么？" class="headerlink" title="hash冲突是什么？"></a>hash冲突是什么？</h4><p>不同的key通过hash算法计算后，会得到相同的值。从理论上来说，不存在没有hash冲突的算法，为什么呢？我们先来分析一下hash算法具备哪些特征：</p>
-<ul>
-<li>相同的key，每次计算出来的value值不会发生改变</li>
-<li>不能通过value推导出key值</li>
-<li>不同的key计算出来的value不重复(理论上不可能实现), 但是value的长度一样</li>
-</ul>
-<p>第三点可以看到，hash算法希望不同的key推导出来的value长度一样，即便是MD5这样的算法，那么根据数学基本常识，通过MD5算法计算出来的value集合最大为：16^32 = 2^128(常见的MD5算法使用16进制，并且最后计算出的value是32个字符)个不同的字符串，然而我们key集合是无穷大的，所以肯定会出现hash冲突情况。</p>
-<h4 id="如何解决hash冲突？"><a href="#如何解决hash冲突？" class="headerlink" title="如何解决hash冲突？"></a>如何解决hash冲突？</h4><p>hash冲突的解决方法目前有两种，一种是<em>开放寻址法</em>，另外一种则是<em>链表法</em>。</p>
-<p>开放寻址法就是当发生hash冲突时，使用顺序探测的方式遍历后续节点，如果是插入元素，如果探测到对应的slot为空时，直接将数据进行存储，查询类似，删除操作较为复杂一点，探测到数据是需要删除时，只是将其标记为deleted，并不真正的将其删除。通常顺序的探测效率比较低，可以通过多个hash算法或者跳跃式探测的方式进行优化。<br><img src="https://user-gold-cdn.xitu.io/2020/7/22/1737551150bcd7b7?w=686&h=524&f=png&s=39062" alt><br>如图所示，通过hash算法计算得到下标为3的地址，但是下标为3的slot已经存储数据了，那么我们会去获取下标为4的地址，并且判断该slot有没有存储数据，没有的话就将数据存储到该位置，有就依次进行递归，直到发现空的slot，然后存储。</p>
-<p>链表法就是每个slot存储一个链表的head节点的指针，当发生hash冲突时候，在链表的tail节点加入新的元素即可，查询的时候遍历该链表即可。如下图：</p>
-<p><img src="https://user-gold-cdn.xitu.io/2020/7/22/1737558eea686a53?w=1156&h=528&f=png&s=58997" alt></p>
-<h3 id="一次性扩容性能问题"><a href="#一次性扩容性能问题" class="headerlink" title="一次性扩容性能问题"></a>一次性扩容性能问题</h3><p>当散列表中的元素过多时，而数组的长度是固定的，这个时候就会出现大量的hash冲突的情况，这个时候如果不对数组进行扩容的话，整个散列的性能就会不断的下降，甚至退化为链表。</p>
-<p>这个时候，就需要对数组进行扩容，一般是原来数组的两倍，然而扩容后，同一个数组取模运算或者与运算在基数不同的情况下，得到的结果不一样，所以每次扩容都会出现的大量的数据的搬移，在一些高性能的场景下就会成为性能瓶颈。这个时候我们可以采用渐进式数据迁移，每次新增数据的时候将原散列表的一个数据进行迁移，直到最后全部数据迁移完成，在查询的过程中，先查询新的散列表，如果数据不存在，再查询原来的散列表，其实这就是一种空间换时间的做法，Redis的扩容就是采用渐进式的扩容方式。</p>
-<h3 id="哈希算法常用的应用场景"><a href="#哈希算法常用的应用场景" class="headerlink" title="哈希算法常用的应用场景"></a>哈希算法常用的应用场景</h3><ul>
-<li>安全加密场景，如果有同学对接过微信支付或者支付宝支付，就知道数据传输过程中需要使用MD5生成数字签名sign，微信服务端会对该sign进行校验，校验通过才能进行下一步操作</li>
-<li>散列表，场景的如Java里面的HashMap&lt;&gt;(),Go语言map关键字实现等</li>
-<li>校验数据的完整性。如场景的P2P协议，常规的协议客户端都是从中心服务器获取数据，而P2P协议是一种去中心化的协议，每个客户端下载文件后，那么他自己就会成为一个服务器供别人下载文件。在这样的场景下，肯定会出现安全性问题，因为任何一个人都可以修改文件。在这种情况下，P2P协议需要使用一个种子文件，该文件存储需要下载的文件的分片的hash值，每次下载完的文件分片都需要和该hash进行对比，如果匹配就可以认为该文件没有被破坏，否则就从其他节点下载该片段。</li>
-<li>唯一标识。如何识别图片的唯一性，我们可以对图片序列化后的一部分字节进行hash运算，作为该图片的唯一标识。</li>
-<li>分布式场景，如负载均衡算法，数据分片等。通过对用户的id或者ip进行hash运算并对机器节点数量取模运算，可以让一个用户的请求固定的落到一个服务接点上，这样我们只需要缓存一份数据，而不是每个节点都需要缓存，可以节约内存开销，如session缓存。但是这里同样会遇到一个问题就是数组扩容时，需要进行大量的数据搬运，通过渐进式迁移数据会需要浪费大量的空间，在缓存或者数据分片的场景下显然是不合适的，这个时候我们就会有一致性hash算法解决，每次扩容都只搬运少量的数据。</li>
-</ul>
-<h3 id="一致性hash算法如何理解"><a href="#一致性hash算法如何理解" class="headerlink" title="一致性hash算法如何理解"></a>一致性hash算法如何理解</h3><p>我们先来看看什么是一致性hash算法，根据维基百科定义如下：</p>
-<p>In computer science, consistent hashing is a special kind of hashing such that when a hash table is resized, only n/m keys need to be remapped on average where n is the number of keys and m is the number of slots.</p>
-<p>翻译大概意思就是：一致性hash是一种特殊的hash算法，当哈希表表进行扩容时，一致性hash算法只需要移动n/m个元素的位置，其中n代表hash表key的数量，m代表数组长度。</p>
-<p>简单来说，就是如果你设计的hash算法的值范围是0<del>100，即无论key是什么，hash(key)得到的值都在0</del>100以内，这个时候，如果数组长度为10，那么我们可以hash(key)值为0<del>10，11</del>20，21<del>30…等均匀的落到下标为0，1，2…的slot中，当新增一个数组节点时，可以将hash值为0</del>9，10<del>18…均匀的落到下标为：0, 1, 2…10的节点上，这样你可以看到hash值为0</del>9这一段数据就没有发生搬运，核心思想就是这样，当然工业上还有使用环这样的方式更加巧妙的进行，总之其目的就是在数组扩容时，尽量减少数组的搬运</p>
-
+        
+          <p class="article-more-link">
+            <a href="/2020/07/31/散列表浅谈/#more">Read More</a>
+          </p>
+        
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://www.xuxiancheng.xyz/2020/07/31/散列表浅谈/" data-id="ckda78l2000007acgl94duyd7" class="article-share-link">Share</a>
+      <a data-url="http://www.xuxiancheng.xyz/2020/07/31/散列表浅谈/" data-id="ckda7aj3d0000a5cgcomrlm24" class="article-share-link">Share</a>
       
       
     </footer>
@@ -165,7 +144,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://www.xuxiancheng.xyz/2020/07/30/架构设计浅谈/" data-id="ckda78l2d00017acg4141fsjm" class="article-share-link">Share</a>
+      <a data-url="http://www.xuxiancheng.xyz/2020/07/30/架构设计浅谈/" data-id="ckda7aj3j0002a5cg7hvdf3ge" class="article-share-link">Share</a>
       
       
     </footer>
@@ -206,7 +185,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://www.xuxiancheng.xyz/2019/12/15/JAVA并发队列同步器浅谈/" data-id="ckda78l2f00027acgi8vbxv4f" class="article-share-link">Share</a>
+      <a data-url="http://www.xuxiancheng.xyz/2019/12/15/JAVA并发队列同步器浅谈/" data-id="ckda7aj3h0001a5cgwt99bd9a" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java并发/">Java并发</a></li></ul>
