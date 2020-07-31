@@ -7,21 +7,21 @@
   
   <title>散列表浅谈 | Allen&#39;s Blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="哈希表是一种非常常用的数据结构(KEY-VALUE)，理论上通过键(KEY)进行CRUD操作数据的为时间复杂度位O(1)。大部分的开发语言如Java、Go、C#的库都有实现，还有常见的KV数据库，其核心原理也是哈希表。哈希算法的应用常见更加广泛，如加密、分布式场景数据分片、生成唯一标识、P2P协议验证数据的完整性等。我认为带着问题学习是一种很好的学习方法，下面我对每个知识点以问题的形式展开。">
+  <meta name="description" content="引言哈希表是一种非常常用的数据结构(KEY-VALUE)，理论上通过键(KEY)进行CRUD操作数据的为时间复杂度位O(1)。大部分的开发语言如Java、Go、C#的库都有实现，还有常见的KV数据库，其核心原理也是哈希表。哈希算法的应用常见更加广泛，如加密、分布式场景数据分片、生成唯一标识、P2P协议验证数据的完整性等。我认为带着问题学习是一种很好的学习方法，下面我对每个知识点以问题的形式展开。">
 <meta name="keywords" content="后端, JAVA, java, Spring, 设计模式, mybatis, mysql, Mysql, oracle, springcloud, springboot">
 <meta property="og:type" content="article">
 <meta property="og:title" content="散列表浅谈">
 <meta property="og:url" content="http://www.xuxiancheng.xyz/2020/07/31/散列表浅谈/index.html">
 <meta property="og:site_name" content="Allen&#39;s Blog">
-<meta property="og:description" content="哈希表是一种非常常用的数据结构(KEY-VALUE)，理论上通过键(KEY)进行CRUD操作数据的为时间复杂度位O(1)。大部分的开发语言如Java、Go、C#的库都有实现，还有常见的KV数据库，其核心原理也是哈希表。哈希算法的应用常见更加广泛，如加密、分布式场景数据分片、生成唯一标识、P2P协议验证数据的完整性等。我认为带着问题学习是一种很好的学习方法，下面我对每个知识点以问题的形式展开。">
+<meta property="og:description" content="引言哈希表是一种非常常用的数据结构(KEY-VALUE)，理论上通过键(KEY)进行CRUD操作数据的为时间复杂度位O(1)。大部分的开发语言如Java、Go、C#的库都有实现，还有常见的KV数据库，其核心原理也是哈希表。哈希算法的应用常见更加广泛，如加密、分布式场景数据分片、生成唯一标识、P2P协议验证数据的完整性等。我认为带着问题学习是一种很好的学习方法，下面我对每个知识点以问题的形式展开。">
 <meta property="og:locale" content="chinese">
 <meta property="og:image" content="https://user-gold-cdn.xitu.io/2020/7/22/1737499941978ac7?w=666&h=470&f=png&s=35042">
 <meta property="og:image" content="https://user-gold-cdn.xitu.io/2020/7/22/1737551150bcd7b7?w=686&h=524&f=png&s=39062">
 <meta property="og:image" content="https://user-gold-cdn.xitu.io/2020/7/22/1737558eea686a53?w=1156&h=528&f=png&s=58997">
-<meta property="og:updated_time" content="2020-07-31T12:25:51.683Z">
+<meta property="og:updated_time" content="2020-07-31T12:30:56.963Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="散列表浅谈">
-<meta name="twitter:description" content="哈希表是一种非常常用的数据结构(KEY-VALUE)，理论上通过键(KEY)进行CRUD操作数据的为时间复杂度位O(1)。大部分的开发语言如Java、Go、C#的库都有实现，还有常见的KV数据库，其核心原理也是哈希表。哈希算法的应用常见更加广泛，如加密、分布式场景数据分片、生成唯一标识、P2P协议验证数据的完整性等。我认为带着问题学习是一种很好的学习方法，下面我对每个知识点以问题的形式展开。">
+<meta name="twitter:description" content="引言哈希表是一种非常常用的数据结构(KEY-VALUE)，理论上通过键(KEY)进行CRUD操作数据的为时间复杂度位O(1)。大部分的开发语言如Java、Go、C#的库都有实现，还有常见的KV数据库，其核心原理也是哈希表。哈希算法的应用常见更加广泛，如加密、分布式场景数据分片、生成唯一标识、P2P协议验证数据的完整性等。我认为带着问题学习是一种很好的学习方法，下面我对每个知识点以问题的形式展开。">
 <meta name="twitter:image" content="https://user-gold-cdn.xitu.io/2020/7/22/1737499941978ac7?w=666&h=470&f=png&s=35042">
   
     <link rel="alternate" href="/atom.xml" title="Allen&#39;s Blog" type="application/atom+xml">
@@ -95,9 +95,7 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <blockquote>
-<p>哈希表是一种非常常用的数据结构(KEY-VALUE)，理论上通过键(KEY)进行CRUD操作数据的为时间复杂度位O(1)。大部分的开发语言如Java、Go、C#的库都有实现，还有常见的KV数据库，其核心原理也是哈希表。哈希算法的应用常见更加广泛，如加密、分布式场景数据分片、生成唯一标识、P2P协议验证数据的完整性等。我认为带着问题学习是一种很好的学习方法，下面我对每个知识点以问题的形式展开。</p>
-</blockquote>
+        <h3 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h3><p>哈希表是一种非常常用的数据结构(KEY-VALUE)，理论上通过键(KEY)进行CRUD操作数据的为时间复杂度位O(1)。大部分的开发语言如Java、Go、C#的库都有实现，还有常见的KV数据库，其核心原理也是哈希表。哈希算法的应用常见更加广泛，如加密、分布式场景数据分片、生成唯一标识、P2P协议验证数据的完整性等。我认为带着问题学习是一种很好的学习方法，下面我对每个知识点以问题的形式展开。</p>
 <a id="more"></a>
 
 <h3 id="哈希表为啥这么快"><a href="#哈希表为啥这么快" class="headerlink" title="哈希表为啥这么快"></a>哈希表为啥这么快</h3><p>哈希表是建立在数组上的一种数据结构，数组是一种内存空间连续，并且存储相同数据类型的数据结构，所以当我们知道了一个数组的下标，只需要一次计算（首地址 + 下标值*数组类型字节数）就可以得到对应下标的地址。而哈希表是在数组的基础上的一种数据结构，大致的结构如下:<br><img src="https://user-gold-cdn.xitu.io/2020/7/22/1737499941978ac7?w=666&h=470&f=png&s=35042" alt><br>这里假如我们不考虑多个键(key)通过哈希算法得到值相同的情况下,我们将得到的值和数组进行取模或者与操作，就会得到一个数组的下标。并且我们假设hash(key)得到的下标都不相同。那么当我们存储多个key-value类型的数据时,只需通过一次计算就可以完成查询、插入和删除等操作。但是这里有很多情况都没有考虑，我们下面将一一的进行剖析。</p>
@@ -108,10 +106,10 @@
 <li>不同的key计算出来的value不重复(理论上不可能实现), 但是value的长度一样</li>
 </ul>
 <p>第三点可以看到，hash算法希望不同的key推导出来的value长度一样，即便是MD5这样的算法，那么根据数学基本常识，通过MD5算法计算出来的value集合最大为：16^32 = 2^128(常见的MD5算法使用16进制，并且最后计算出的value是32个字符)个不同的字符串，然而我们key集合是无穷大的，所以肯定会出现hash冲突情况。</p>
-<h4 id="如何解决hash冲突？"><a href="#如何解决hash冲突？" class="headerlink" title="如何解决hash冲突？"></a>如何解决hash冲突？</h4><p>hash冲突的解决方法目前有两种，一种是<em>开放寻址法</em>，另外一种则是<em>链表法</em>。</p>
-<p>开放寻址法就是当发生hash冲突时，使用顺序探测的方式遍历后续节点，如果是插入元素，如果探测到对应的slot为空时，直接将数据进行存储，查询类似，删除操作较为复杂一点，探测到数据是需要删除时，只是将其标记为deleted，并不真正的将其删除。通常顺序的探测效率比较低，可以通过多个hash算法或者跳跃式探测的方式进行优化。<br><img src="https://user-gold-cdn.xitu.io/2020/7/22/1737551150bcd7b7?w=686&h=524&f=png&s=39062" alt><br>如图所示，通过hash算法计算得到下标为3的地址，但是下标为3的slot已经存储数据了，那么我们会去获取下标为4的地址，并且判断该slot有没有存储数据，没有的话就将数据存储到该位置，有就依次进行递归，直到发现空的slot，然后存储。</p>
+<h4 id="如何解决hash冲突？"><a href="#如何解决hash冲突？" class="headerlink" title="如何解决hash冲突？"></a>如何解决hash冲突？</h4><p>hash冲突的解决方法目前有两种，一种是<strong>开放寻址法</strong>，另外一种则是<strong>链表法</strong>。</p>
+<p>开放寻址法就是当发生hash冲突时，使用顺序探测的方式遍历后续节点，如果是插入元素，如果探测到对应的slot为空时，直接将数据进行存储，查询类似，删除操作较为复杂一点，探测到数据是需要删除时，只是将其标记为deleted，并不真正的将其删除。通常顺序的探测效率比较低，可以通过多个hash算法或者跳跃式探测的方式进行优化。<br><img src="https://user-gold-cdn.xitu.io/2020/7/22/1737551150bcd7b7?w=686&h=524&f=png&s=39062" alt="Image text"><br>如图所示，通过hash算法计算得到下标为3的地址，但是下标为3的slot已经存储数据了，那么我们会去获取下标为4的地址，并且判断该slot有没有存储数据，没有的话就将数据存储到该位置，有就依次进行递归，直到发现空的slot，然后存储。</p>
 <p>链表法就是每个slot存储一个链表的head节点的指针，当发生hash冲突时候，在链表的tail节点加入新的元素即可，查询的时候遍历该链表即可。如下图：</p>
-<p><img src="https://user-gold-cdn.xitu.io/2020/7/22/1737558eea686a53?w=1156&h=528&f=png&s=58997" alt></p>
+<p><img src="https://user-gold-cdn.xitu.io/2020/7/22/1737558eea686a53?w=1156&h=528&f=png&s=58997" alt="Image text"></p>
 <h3 id="一次性扩容性能问题"><a href="#一次性扩容性能问题" class="headerlink" title="一次性扩容性能问题"></a>一次性扩容性能问题</h3><p>当散列表中的元素过多时，而数组的长度是固定的，这个时候就会出现大量的hash冲突的情况，这个时候如果不对数组进行扩容的话，整个散列的性能就会不断的下降，甚至退化为链表。</p>
 <p>这个时候，就需要对数组进行扩容，一般是原来数组的两倍，然而扩容后，同一个数组取模运算或者与运算在基数不同的情况下，得到的结果不一样，所以每次扩容都会出现的大量的数据的搬移，在一些高性能的场景下就会成为性能瓶颈。这个时候我们可以采用渐进式数据迁移，每次新增数据的时候将原散列表的一个数据进行迁移，直到最后全部数据迁移完成，在查询的过程中，先查询新的散列表，如果数据不存在，再查询原来的散列表，其实这就是一种空间换时间的做法，Redis的扩容就是采用渐进式的扩容方式。</p>
 <h3 id="哈希算法常用的应用场景"><a href="#哈希算法常用的应用场景" class="headerlink" title="哈希算法常用的应用场景"></a>哈希算法常用的应用场景</h3><ul>
@@ -129,7 +127,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://www.xuxiancheng.xyz/2020/07/31/散列表浅谈/" data-id="ckda7aj3d0000a5cgcomrlm24" class="article-share-link">Share</a>
+      <a data-url="http://www.xuxiancheng.xyz/2020/07/31/散列表浅谈/" data-id="ckda7h1zw0003cncgt7jms3ai" class="article-share-link">Share</a>
       
       
     </footer>
