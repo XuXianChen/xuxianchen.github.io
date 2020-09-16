@@ -3,97 +3,145 @@
 <head><meta name="generator" content="Hexo 3.9.0">
   <meta charset="utf-8">
   
-
-  
-  <title>架构设计浅谈 | Allen&#39;s Blog</title>
+  <title>架构设计浅谈 | 宪成小哥的技术博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  
+    <meta name="keywords" content="MinHow,MinHow's Blog">
+  
   <meta name="description" content="前言可以说，任何软件都有一个架构，一般大型互联网公司还会专门设有架构师的职位。那么我们有没有想过这个问题，架构到底是什么？为什么我们需要去做架构设计？如果没有架构设计的话我们软件开发与维护的过程中会遇到什么问题？要回答这些问题，我们可以在下面的文章中慢慢的讲述。">
-<meta name="keywords" content="后端, JAVA, java, Spring, 设计模式, mybatis, mysql, Mysql, oracle, springcloud, springboot">
+<meta name="keywords" content="架构设计">
 <meta property="og:type" content="article">
 <meta property="og:title" content="架构设计浅谈">
 <meta property="og:url" content="http://www.xuxiancheng.xyz/2020/07/30/架构设计浅谈/index.html">
-<meta property="og:site_name" content="Allen&#39;s Blog">
+<meta property="og:site_name" content="宪成小哥的技术博客">
 <meta property="og:description" content="前言可以说，任何软件都有一个架构，一般大型互联网公司还会专门设有架构师的职位。那么我们有没有想过这个问题，架构到底是什么？为什么我们需要去做架构设计？如果没有架构设计的话我们软件开发与维护的过程中会遇到什么问题？要回答这些问题，我们可以在下面的文章中慢慢的讲述。">
 <meta property="og:locale" content="chinese">
 <meta property="og:image" content="https://img-blog.csdn.net/20180831173911997?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3pfcnlhbg==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70">
-<meta property="og:updated_time" content="2020-07-30T15:05:46.726Z">
+<meta property="og:updated_time" content="2020-07-31T12:35:55.565Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="架构设计浅谈">
 <meta name="twitter:description" content="前言可以说，任何软件都有一个架构，一般大型互联网公司还会专门设有架构师的职位。那么我们有没有想过这个问题，架构到底是什么？为什么我们需要去做架构设计？如果没有架构设计的话我们软件开发与维护的过程中会遇到什么问题？要回答这些问题，我们可以在下面的文章中慢慢的讲述。">
 <meta name="twitter:image" content="https://img-blog.csdn.net/20180831173911997?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3pfcnlhbg==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70">
   
-    <link rel="alternate" href="/atom.xml" title="Allen&#39;s Blog" type="application/atom+xml">
   
+    <link rel="icon" href="/favicon.ico">
   
-    <link rel="icon" href="/favicon.png">
-  
-  
-    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
-  
+  <link href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
   <link rel="stylesheet" href="/css/style.css">
+  <script src="/js/pace.min.js"></script>
+  
+
+  
+  
+
 </head>
 </html>
 <body>
   <div id="container">
-    <div id="wrap">
       <header id="header">
-  <div id="banner"></div>
-  <div id="header-outer" class="outer">
-    <div id="header-title" class="inner">
-      <h1 id="logo-wrap">
-        <a href="/" id="logo">Allen&#39;s Blog</a>
-      </h1>
-      
-        <h2 id="subtitle-wrap">
-          <a href="/" id="subtitle">好好工作，热爱生活，每天进步一点点就好～</a>
-        </h2>
-      
+    <div id="banner"></div>
+    <div id="header-outer">
+        <div id="header-menu" class="header-menu-pos animated">
+            <div class="header-menu-container">
+                <a href="/" class="left">
+                    <span class="site-title">MinHow&#39;s Blog</span>
+                </a>
+                <nav id="header-menu-nav" class="right">
+                    
+                    <a  href="/">
+                        <i class="fa fa-home"></i>
+                        <span>Home</span>
+                    </a>
+                    
+                    <a  href="/archives">
+                        <i class="fa fa-archive"></i>
+                        <span>Archives</span>
+                    </a>
+                    
+                    <a  href="/about">
+                        <i class="fa fa-user"></i>
+                        <span>About</span>
+                    </a>
+                    
+                </nav>
+                <a class="mobile-header-menu-button">
+                    <i class="fa fa-bars"></i>
+                </a>
+            </div>
+        </div>
+        <div id="header-row">
+            <div id="logo">
+                <a href="/">
+                    <img src="/images/logo.png" alt="logo">
+                </a>
+            </div>
+            <div class="header-info">
+                <div id="header-title">
+                    
+                    <h2>
+                        MinHow&#39;s Blog
+                    </h2>
+                    
+                </div>
+                <div id="header-description">
+                    
+                    <h3>
+                        一个专注 WEB 开发的技术博客
+                    </h3>
+                    
+                </div>
+            </div>
+            <nav class="header-nav">
+                <div class="social">
+                    
+                        <a title="MinHow" target="_blank" href="//minhow.com">
+                            <i class="fa fa-home fa-2x"></i></a>
+                    
+                        <a title="Github" target="_blank" href="//github.com/wongminho">
+                            <i class="fa fa-github fa-2x"></i></a>
+                    
+                        <a title="Weibo" target="_blank" href="//weibo.com/WongMinHo">
+                            <i class="fa fa-weibo fa-2x"></i></a>
+                    
+                        <a title="Twitter" target="_blank" href="//twitter.com/huangminhow">
+                            <i class="fa fa-twitter fa-2x"></i></a>
+                    
+                </div>
+            </nav>
+        </div>
     </div>
-    <div id="header-inner" class="inner">
-      <nav id="main-nav">
-        <a id="main-nav-toggle" class="nav-icon"></a>
-        
-          <a class="main-nav-link" href="/">Home</a>
-        
-          <a class="main-nav-link" href="/archives">Archives</a>
-        
-      </nav>
-      <nav id="sub-nav">
-        
-          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
-        
-        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
-      </nav>
-      <div id="search-form-wrap">
-        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://www.xuxiancheng.xyz"></form>
-      </div>
-    </div>
-  </div>
 </header>
       <div class="outer">
-        <section id="main"><article id="post-架构设计浅谈" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2020/07/30/架构设计浅谈/" class="article-date">
-  <time datetime="2020-07-30T14:47:32.000Z" itemprop="datePublished">2020-07-30</time>
-</a>
-    
-  </div>
+        <section id="main" class="body-wrap"><article id="post-架构设计浅谈" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-inner">
-    
     
       <header class="article-header">
         
   
-    <h1 class="article-title" itemprop="name">
+    <h1 class="post-title" itemprop="name">
       架构设计浅谈
     </h1>
+    <div class="post-title-bar">
+      <ul>
+          
+        <li>
+          <i class="fa fa-calendar"></i>  2020-07-30
+        </li>
+        <li>
+          <i class="fa fa-eye"></i>
+          <span id="busuanzi_value_page_pv"></span>
+        </li>
+      </ul>
+    </div>
   
 
+          
       </header>
     
-    <div class="article-entry" itemprop="articleBody">
+    <div class="article-entry post-content" itemprop="articleBody">
       
-        <h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>可以说，任何软件都有一个架构，一般大型互联网公司还会专门设有架构师的职位。那么我们有没有想过这个问题，架构到底是什么？为什么我们需要去做架构设计？如果没有架构设计的话我们软件开发与维护的过程中会遇到什么问题？要回答这些问题，我们可以在下面的文章中慢慢的讲述。</p>
+            
+            <h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>可以说，任何软件都有一个架构，一般大型互联网公司还会专门设有架构师的职位。那么我们有没有想过这个问题，架构到底是什么？为什么我们需要去做架构设计？如果没有架构设计的话我们软件开发与维护的过程中会遇到什么问题？要回答这些问题，我们可以在下面的文章中慢慢的讲述。</p>
 <a id="more"></a>
 
 <h3 id="首先，软件架构到底是指什么？"><a href="#首先，软件架构到底是指什么？" class="headerlink" title="首先，软件架构到底是指什么？"></a>首先，软件架构到底是指什么？</h3><p>通常，我们去阅读一本书的时候，我们首先会去翻一翻这本书的目录结构，看一下这本书到底讲的是什么，每个章节作者想表达的主要意思是什么，通过阅读目录让我们对整本书有了一个系统性的认识。软件架构和书本的目录有点类似，但是又有明显的区别。我们可以认为软件架构就是软件或者系统的一个顶层结构。在这里有一个关键点，整个系统的架构会由子系统、模块、组件等元素组成，并且这些元素之间需要互相的合作，从而组成一个新的系统，能完成他们任何一个元素都无法完成的事情。<br>这里顺便讲一下系统、子系统、模块和组件的关联和区别，一个大型系统一般都是由一些的子系统组成的，如现在流行的微服务架构，一个主流的电商的微服务架构的系统，通常都会由用户子系统、订单子系统、商品子系统、库存子系统、支付子系统等构成。而一个子系统通常又会由模块或者组件构成。模块和组件表达的维度不同，模块强调的是子系统如何进行拆分的，而组件侧重的维度则是复用功能。</p>
@@ -120,129 +168,292 @@
 </ul>
 <h3 id="结语"><a href="#结语" class="headerlink" title="结语"></a>结语</h3><p>最后，知之非难，行之不易，要学会架构设计还需要不断的实践和演练，优秀的架构师不是学出来的，而是实践演练出来的，一个优秀的的系统架构一般也不是一下就设计出来的，通常都是不断的演练，不断的修改形成的，这也是为什么很多大型的架构分享都是XX架构的演进，而不是XX架构的设计。咳咳，连淘宝最初都是采用外购的呀～</p>
 
+            <div class="post-copyright">
+    <div class="content">
+        <p>最后更新： 2020年07月31日 20:35</p>
+        <p>原始链接： <a class="post-url" href="/2020/07/30/架构设计浅谈/" title="架构设计浅谈">http://www.xuxiancheng.xyz/2020/07/30/架构设计浅谈/</a></p>
+        <footer>
+            <a href="http://www.xuxiancheng.xyz">
+                <img src="/images/logo.png" alt="宪成小哥的技术博客">
+                宪成小哥的技术博客
+            </a>
+        </footer>
+    </div>
+</div>
+
       
+        
+            
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;">赏</a>
+</div>
+
+<div id="reward" class="post-modal reward-lay">
+    <a class="close" href="javascript:;" id="reward-close">×</a>
+    <span class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        请我吃糖~
+        <i class="icon icon-quote-right"></i>
+    </span>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="/images/wechat_code.jpg" alt="打赏二维码">
+        </div>
+        <div class="reward-select">
+            
+            <label class="reward-select-item checked" data-id="wechat" data-wechat="/images/wechat_code.jpg">
+                <img class="reward-select-item-wechat" src="/images/wechat.png" alt="微信">
+            </label>
+            
+            
+            <label class="reward-select-item" data-id="alipay" data-alipay="/images/alipay_code.jpg">
+                <img class="reward-select-item-alipay" src="/images/alipay.png" alt="支付宝">
+            </label>
+            
+        </div>
+    </div>
+</div>
+
+
+        
     </div>
     <footer class="article-footer">
-      <a data-url="http://www.xuxiancheng.xyz/2020/07/30/架构设计浅谈/" data-id="ckda7hyko0004etcgiexg012d" class="article-share-link">Share</a>
+        
+        
+<div class="post-share">
+    <a href="javascript:;" id="share-sub" class="post-share-fab">
+        <i class="fa fa-share-alt"></i>
+    </a>
+    <div class="post-share-list" id="share-list">
+        <ul class="share-icons">
+          <li>
+            <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://www.xuxiancheng.xyz/2020/07/30/架构设计浅谈/&title=《架构设计浅谈》 — 宪成小哥的技术博客&pic=http://www.xuxiancheng.xyzimages/logo.png" data-title="微博">
+              <i class="fa fa-weibo"></i>
+            </a>
+          </li>
+          <li>
+            <a class="weixin share-sns" id="wxFab" href="javascript:;" data-title="微信">
+              <i class="fa fa-weixin"></i>
+            </a>
+          </li>
+          <li>
+            <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://www.xuxiancheng.xyz/2020/07/30/架构设计浅谈/&title=《架构设计浅谈》 — 宪成小哥的技术博客&source=前言可以说，任何软件都有一个架构，一般大型互联网公司还会专门设有架构师的职位。那么我们有没有想过这个问题，架构到底是什么？为什么我们需要去做架构设计？如果..." data-title="QQ">
+              <i class="fa fa-qq"></i>
+            </a>
+          </li>
+          <li>
+            <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://www.xuxiancheng.xyz/2020/07/30/架构设计浅谈/" data-title="Facebook">
+              <i class="fa fa-facebook"></i>
+            </a>
+          </li>
+          <li>
+            <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《架构设计浅谈》 — 宪成小哥的技术博客&url=http://www.xuxiancheng.xyz/2020/07/30/架构设计浅谈/&via=http://www.xuxiancheng.xyz" data-title="Twitter">
+              <i class="fa fa-twitter"></i>
+            </a>
+          </li>
+          <li>
+            <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://www.xuxiancheng.xyz/2020/07/30/架构设计浅谈/" data-title="Google+">
+              <i class="fa fa-google-plus"></i>
+            </a>
+          </li>
+        </ul>
+     </div>
+</div>
+<div class="post-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;" id="wxShare-close">×</a>
+    <p>扫一扫，分享到微信</p>
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=http://www.xuxiancheng.xyz/2020/07/30/架构设计浅谈/" alt="微信分享二维码">
+</div>
+
+<div class="mask"></div>
+
+        
+        <ul class="article-footer-menu">
+            
+            
+  <li class="article-footer-tags">
+    <i class="fa fa-tags"></i>
       
+    <a href="/tags/架构设计/" class="color5">架构设计</a>
       
+  </li>
+
+        </ul>
+        
     </footer>
   </div>
-  
+</article>
+
+
+    <aside class="post-toc-pos post-toc-top" id="post-toc">
+        <nav class="post-toc-wrap">
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#前言"><span class="post-toc-text">前言</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#首先，软件架构到底是指什么？"><span class="post-toc-text">首先，软件架构到底是指什么？</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#其次，架构设计的目的是什么？"><span class="post-toc-text">其次，架构设计的目的是什么？</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#架构设计常用的一些套路"><span class="post-toc-text">架构设计常用的一些套路</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#简单分析一波Mysql的逻辑架构"><span class="post-toc-text">简单分析一波Mysql的逻辑架构</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#结语"><span class="post-toc-text">结语</span></a></li></ol>
+        </nav>
+    </aside>
     
+
 <nav id="article-nav">
   
     <a href="/2020/07/31/散列表浅谈/" id="article-nav-newer" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">Newer</strong>
-      <div class="article-nav-title">
+
+      <span class="article-nav-title">
+        <i class="fa fa-hand-o-left" aria-hidden="true"></i>
         
           散列表浅谈
         
-      </div>
+      </span>
     </a>
   
   
     <a href="/2019/12/15/JAVA并发队列同步器浅谈/" id="article-nav-older" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">Older</strong>
-      <div class="article-nav-title">JAVA并发队列同步器浅谈</div>
+      <span class="article-nav-title">JAVA队列同步器浅谈</span>
+      <i class="fa fa-hand-o-right" aria-hidden="true"></i>
     </a>
   
 </nav>
 
-  
-</article>
 
+
+    
 </section>
-        
-          <aside id="sidebar">
-  
-    
-
-  
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title">Tags</h3>
-    <div class="widget">
-      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java并发/">Java并发</a></li></ul>
-    </div>
-  </div>
-
-
-  
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title">Tag Cloud</h3>
-    <div class="widget tagcloud">
-      <a href="/tags/Java并发/" style="font-size: 10px;">Java并发</a>
-    </div>
-  </div>
-
-  
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title">Archives</h3>
-    <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/07/">July 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/12/">December 2019</a></li></ul>
-    </div>
-  </div>
-
-
-  
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title">Recent Posts</h3>
-    <div class="widget">
-      <ul>
-        
-          <li>
-            <a href="/2020/07/31/散列表浅谈/">散列表浅谈</a>
-          </li>
-        
-          <li>
-            <a href="/2020/07/30/架构设计浅谈/">架构设计浅谈</a>
-          </li>
-        
-          <li>
-            <a href="/2019/12/15/JAVA并发队列同步器浅谈/">JAVA并发队列同步器浅谈</a>
-          </li>
-        
-      </ul>
-    </div>
-  </div>
-
-  
-</aside>
         
       </div>
       <footer id="footer">
-  
   <div class="outer">
     <div id="footer-info" class="inner">
-      &copy; 2020 Allen&#39;s blog<br>
-      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+      
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+      <p>
+        Powered by  <a href="http://hexo.io/" target="_blank">Hexo</a>
+        Theme <a href="//github.com/wongminho/hexo-theme-miho" target="_blank">MiHo</a>
+      &copy; 2020 宪成小哥的技术博客<br>
+      </p>
     </div>
   </div>
 </footer>
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<script src="//cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+<script>
+  var mihoConfig = {
+      root: "http://www.xuxiancheng.xyz",
+      animate: true,
+      isHome: false,
+      share: true,
+      reward: 1
+  }
+</script>
+<div class="sidebar">
+    <div id="sidebar-search" title="Search">
+        <i class="fa fa-search"></i>
     </div>
-    <nav id="mobile-nav">
-  
-    <a href="/" class="mobile-nav-link">Home</a>
-  
-    <a href="/archives" class="mobile-nav-link">Archives</a>
-  
-</nav>
-    
+    <div id="sidebar-category" title="Categories">
+        <i class="fa fa-book"></i>
+    </div>
+    <div id="sidebar-tag" title="Tags">
+        <i class="fa fa-tags"></i>
+    </div>
+    <div id="sidebar-top">
+        <span class="sidebar-top-icon"><i class="fa fa-angle-up"></i></span>
+    </div>
+</div>
+<div class="sidebar-menu-box" id="sidebar-menu-box">
+    <div class="sidebar-menu-box-container">
+        <div id="sidebar-menu-box-categories">
+            
+        </div>
+        <div id="sidebar-menu-box-tags">
+            <a href="/tags/Java并发/" style="font-size: 10px;">Java并发</a> <a href="/tags/架构设计/" style="font-size: 10px;">架构设计</a> <a href="/tags/算法和数据结构/" style="font-size: 10px;">算法和数据结构</a>
+        </div>
+    </div>
+    <a href="javascript:;" class="sidebar-menu-box-close">&times;</a>
+</div>
+<div class="mobile-header-menu-nav" id="mobile-header-menu-nav">
+    <div class="mobile-header-menu-container">
+        <span class="title">Menus</span>
+        <ul class="mobile-header-menu-navbar">
+            
+            <li>
+                <a  href="/">
+                    <i class="fa fa-home"></i><span>Home</span>
+                </a>
+            </li>
+            
+            <li>
+                <a  href="/archives">
+                    <i class="fa fa-archive"></i><span>Archives</span>
+                </a>
+            </li>
+            
+            <li>
+                <a  href="/about">
+                    <i class="fa fa-user"></i><span>About</span>
+                </a>
+            </li>
+            
+        </ul>
+    </div>
+    <div class="mobile-header-tag-container">
+        <span class="title">Tags</span>
+        <div id="mobile-header-container-tags">
+            <a href="/tags/Java并发/" style="font-size: 10px;">Java并发</a> <a href="/tags/架构设计/" style="font-size: 10px;">架构设计</a> <a href="/tags/算法和数据结构/" style="font-size: 10px;">算法和数据结构</a>
+        </div>
+    </div>
+</div>
+<div class="search-wrap">
+    <span class="search-close">&times;</span>
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+            <i class="icon icon-lg icon-chevron-left"></i>
+        </a>
+        <input class="search-field" placeholder="Search..." id="keywords">
+        <a id="search-submit" href="javascript:;">
+            <i class="fa fa-search"></i>
+        </a>
+    <div class="search-container" id="search-container">
+        <ul class="search-result" id="search-result">
+        </ul>
+    </div>
+</div>
 
-<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+<div id="search-tpl">
+    <li class="search-result-item">
+        <a href="{url}" class="search-item-li">
+            <span class="search-item-li-title" title="{title}">{title}</span>
+        </a>
+    </li>
+</div>
+<script src="/js/search.js"></script>
+<script src="/js/main.js"></script>
 
 
-  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
-  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+  <script src="//cdn.bootcss.com/particles.js/2.0.0/particles.min.js"></script>
+  <div id="particles"></div>
+  <script src="/js/particles.js"></script>
 
 
-<script src="/js/script.js"></script>
 
 
+
+
+
+  <link rel="stylesheet" href="//cdn.bootcss.com/animate.css/3.5.0/animate.min.css">
+  <script src="//cdn.bootcss.com/scrollReveal.js/3.0.5/scrollreveal.js"></script>
+  <script src="/js/animate.js"></script>
+
+
+  <script src="/js/pop-img.js"></script>
+  <script>
+     $(".article-entry p img").popImg();
+  </script>
 
   </div>
 </body>

@@ -3,95 +3,143 @@
 <head><meta name="generator" content="Hexo 3.9.0">
   <meta charset="utf-8">
   
-
-  
-  <title>JAVA并发队列同步器浅谈 | Allen&#39;s Blog</title>
+  <title>JAVA队列同步器浅谈 | 宪成小哥的技术博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  
+    <meta name="keywords" content="MinHow,MinHow's Blog">
+  
   <meta name="description" content="同步器到底是什么？队列同步器AbstractQueuedSynchronizer（简称AQS）是并发包的作者Doug Lea开发的一个同步框架，可以用来构建锁和其他同步组件，并发包下很多常用的类核心都是使用AQS实现的，所以掌握AQS对于我们学习并发编程尤为重要。">
 <meta name="keywords" content="Java并发">
 <meta property="og:type" content="article">
-<meta property="og:title" content="JAVA并发队列同步器浅谈">
+<meta property="og:title" content="JAVA队列同步器浅谈">
 <meta property="og:url" content="http://www.xuxiancheng.xyz/2019/12/15/JAVA并发队列同步器浅谈/index.html">
-<meta property="og:site_name" content="Allen&#39;s Blog">
+<meta property="og:site_name" content="宪成小哥的技术博客">
 <meta property="og:description" content="同步器到底是什么？队列同步器AbstractQueuedSynchronizer（简称AQS）是并发包的作者Doug Lea开发的一个同步框架，可以用来构建锁和其他同步组件，并发包下很多常用的类核心都是使用AQS实现的，所以掌握AQS对于我们学习并发编程尤为重要。">
 <meta property="og:locale" content="chinese">
-<meta property="og:updated_time" content="2020-07-30T15:05:46.720Z">
+<meta property="og:updated_time" content="2020-07-31T12:35:55.558Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="JAVA并发队列同步器浅谈">
+<meta name="twitter:title" content="JAVA队列同步器浅谈">
 <meta name="twitter:description" content="同步器到底是什么？队列同步器AbstractQueuedSynchronizer（简称AQS）是并发包的作者Doug Lea开发的一个同步框架，可以用来构建锁和其他同步组件，并发包下很多常用的类核心都是使用AQS实现的，所以掌握AQS对于我们学习并发编程尤为重要。">
   
-    <link rel="alternate" href="/atom.xml" title="Allen&#39;s Blog" type="application/atom+xml">
   
+    <link rel="icon" href="/favicon.ico">
   
-    <link rel="icon" href="/favicon.png">
-  
-  
-    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
-  
+  <link href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
   <link rel="stylesheet" href="/css/style.css">
+  <script src="/js/pace.min.js"></script>
+  
+
+  
+  
+
 </head>
 </html>
 <body>
   <div id="container">
-    <div id="wrap">
       <header id="header">
-  <div id="banner"></div>
-  <div id="header-outer" class="outer">
-    <div id="header-title" class="inner">
-      <h1 id="logo-wrap">
-        <a href="/" id="logo">Allen&#39;s Blog</a>
-      </h1>
-      
-        <h2 id="subtitle-wrap">
-          <a href="/" id="subtitle">好好工作，热爱生活，每天进步一点点就好～</a>
-        </h2>
-      
+    <div id="banner"></div>
+    <div id="header-outer">
+        <div id="header-menu" class="header-menu-pos animated">
+            <div class="header-menu-container">
+                <a href="/" class="left">
+                    <span class="site-title">MinHow&#39;s Blog</span>
+                </a>
+                <nav id="header-menu-nav" class="right">
+                    
+                    <a  href="/">
+                        <i class="fa fa-home"></i>
+                        <span>Home</span>
+                    </a>
+                    
+                    <a  href="/archives">
+                        <i class="fa fa-archive"></i>
+                        <span>Archives</span>
+                    </a>
+                    
+                    <a  href="/about">
+                        <i class="fa fa-user"></i>
+                        <span>About</span>
+                    </a>
+                    
+                </nav>
+                <a class="mobile-header-menu-button">
+                    <i class="fa fa-bars"></i>
+                </a>
+            </div>
+        </div>
+        <div id="header-row">
+            <div id="logo">
+                <a href="/">
+                    <img src="/images/logo.png" alt="logo">
+                </a>
+            </div>
+            <div class="header-info">
+                <div id="header-title">
+                    
+                    <h2>
+                        MinHow&#39;s Blog
+                    </h2>
+                    
+                </div>
+                <div id="header-description">
+                    
+                    <h3>
+                        一个专注 WEB 开发的技术博客
+                    </h3>
+                    
+                </div>
+            </div>
+            <nav class="header-nav">
+                <div class="social">
+                    
+                        <a title="MinHow" target="_blank" href="//minhow.com">
+                            <i class="fa fa-home fa-2x"></i></a>
+                    
+                        <a title="Github" target="_blank" href="//github.com/wongminho">
+                            <i class="fa fa-github fa-2x"></i></a>
+                    
+                        <a title="Weibo" target="_blank" href="//weibo.com/WongMinHo">
+                            <i class="fa fa-weibo fa-2x"></i></a>
+                    
+                        <a title="Twitter" target="_blank" href="//twitter.com/huangminhow">
+                            <i class="fa fa-twitter fa-2x"></i></a>
+                    
+                </div>
+            </nav>
+        </div>
     </div>
-    <div id="header-inner" class="inner">
-      <nav id="main-nav">
-        <a id="main-nav-toggle" class="nav-icon"></a>
-        
-          <a class="main-nav-link" href="/">Home</a>
-        
-          <a class="main-nav-link" href="/archives">Archives</a>
-        
-      </nav>
-      <nav id="sub-nav">
-        
-          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
-        
-        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
-      </nav>
-      <div id="search-form-wrap">
-        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://www.xuxiancheng.xyz"></form>
-      </div>
-    </div>
-  </div>
 </header>
       <div class="outer">
-        <section id="main"><article id="post-JAVA并发队列同步器浅谈" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2019/12/15/JAVA并发队列同步器浅谈/" class="article-date">
-  <time datetime="2019-12-15T00:03:15.000Z" itemprop="datePublished">2019-12-15</time>
-</a>
-    
-  </div>
+        <section id="main" class="body-wrap"><article id="post-JAVA并发队列同步器浅谈" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-inner">
-    
     
       <header class="article-header">
         
   
-    <h1 class="article-title" itemprop="name">
-      JAVA并发队列同步器浅谈
+    <h1 class="post-title" itemprop="name">
+      JAVA队列同步器浅谈
     </h1>
+    <div class="post-title-bar">
+      <ul>
+          
+        <li>
+          <i class="fa fa-calendar"></i>  2019-12-15
+        </li>
+        <li>
+          <i class="fa fa-eye"></i>
+          <span id="busuanzi_value_page_pv"></span>
+        </li>
+      </ul>
+    </div>
   
 
+          
       </header>
     
-    <div class="article-entry" itemprop="articleBody">
+    <div class="article-entry post-content" itemprop="articleBody">
       
-        <h2 id="同步器到底是什么？"><a href="#同步器到底是什么？" class="headerlink" title="同步器到底是什么？"></a>同步器到底是什么？</h2><p>队列同步器AbstractQueuedSynchronizer（简称AQS）是并发包的作者Doug Lea开发的一个同步框架，可以用来构建锁和其他同步组件，并发包下很多常用的类核心都是使用AQS实现的，所以掌握AQS对于我们学习并发编程尤为重要。</p>
+            
+            <h2 id="同步器到底是什么？"><a href="#同步器到底是什么？" class="headerlink" title="同步器到底是什么？"></a>同步器到底是什么？</h2><p>队列同步器AbstractQueuedSynchronizer（简称AQS）是并发包的作者Doug Lea开发的一个同步框架，可以用来构建锁和其他同步组件，并发包下很多常用的类核心都是使用AQS实现的，所以掌握AQS对于我们学习并发编程尤为重要。</p>
 <a id="more"></a>
 <p>其核心为一个volatile修饰的state变量（同步状态）和FIFO的队列组成，通过获取和设置同步状态来判断是否可以占有资源，而队列可以认为是一个等待队列，获取资源失败的线程都会加入到这个队列中去，当Runnable状态的线程执行完毕释放资源的时候，队列中的一个线程会被唤醒。</p>
 <h2 id="同步器接口实现简单分析："><a href="#同步器接口实现简单分析：" class="headerlink" title="同步器接口实现简单分析："></a>同步器接口实现简单分析：</h2><p>AQS采用了模版方法设计模式，Doug Lea将一些通用的操作封装成了模版方法，所以使用者需要继承AQS并实现AQS指定的方法，然后调用同步器提供的模版方法方法，而这些模版方法会反过来调用重写的方法。AQS提供的模版方法大体分为三类：独占式的获取/释放同步状态、共享式的获取/释放同步状态、获取等待队列中等待线上的情况。下面是AQS部分代码：</p>
@@ -113,126 +161,287 @@
 <p>从代码中可以看出，只要state返回值大于或者等于0，即表示可以获取同步状态，释放和独占式释放没有什么区别</p>
 <h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>AQS的核心为：<br>    1、采用模版方法设计模式，核心的队列构建、获取/释放同步状态等由类自身实现，只将一些可变的操作交给锁或者同步组件的实现者<br>    2、volatile修饰的state保证同步状态被修改后可见<br>    3、使用FIFO的同步队列来保存未获取到同步状态的线程，并在条件满足时唤醒他们</p>
 
+            <div class="post-copyright">
+    <div class="content">
+        <p>最后更新： 2020年07月31日 20:35</p>
+        <p>原始链接： <a class="post-url" href="/2019/12/15/JAVA并发队列同步器浅谈/" title="JAVA队列同步器浅谈">http://www.xuxiancheng.xyz/2019/12/15/JAVA并发队列同步器浅谈/</a></p>
+        <footer>
+            <a href="http://www.xuxiancheng.xyz">
+                <img src="/images/logo.png" alt="宪成小哥的技术博客">
+                宪成小哥的技术博客
+            </a>
+        </footer>
+    </div>
+</div>
+
       
+        
+            
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;">赏</a>
+</div>
+
+<div id="reward" class="post-modal reward-lay">
+    <a class="close" href="javascript:;" id="reward-close">×</a>
+    <span class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        请我吃糖~
+        <i class="icon icon-quote-right"></i>
+    </span>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="/images/wechat_code.jpg" alt="打赏二维码">
+        </div>
+        <div class="reward-select">
+            
+            <label class="reward-select-item checked" data-id="wechat" data-wechat="/images/wechat_code.jpg">
+                <img class="reward-select-item-wechat" src="/images/wechat.png" alt="微信">
+            </label>
+            
+            
+            <label class="reward-select-item" data-id="alipay" data-alipay="/images/alipay_code.jpg">
+                <img class="reward-select-item-alipay" src="/images/alipay.png" alt="支付宝">
+            </label>
+            
+        </div>
+    </div>
+</div>
+
+
+        
     </div>
     <footer class="article-footer">
-      <a data-url="http://www.xuxiancheng.xyz/2019/12/15/JAVA并发队列同步器浅谈/" data-id="ckda7hyk90000etcg3r3zrt1a" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java并发/">Java并发</a></li></ul>
+        
+        
+<div class="post-share">
+    <a href="javascript:;" id="share-sub" class="post-share-fab">
+        <i class="fa fa-share-alt"></i>
+    </a>
+    <div class="post-share-list" id="share-list">
+        <ul class="share-icons">
+          <li>
+            <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://www.xuxiancheng.xyz/2019/12/15/JAVA并发队列同步器浅谈/&title=《JAVA队列同步器浅谈》 — 宪成小哥的技术博客&pic=http://www.xuxiancheng.xyzimages/logo.png" data-title="微博">
+              <i class="fa fa-weibo"></i>
+            </a>
+          </li>
+          <li>
+            <a class="weixin share-sns" id="wxFab" href="javascript:;" data-title="微信">
+              <i class="fa fa-weixin"></i>
+            </a>
+          </li>
+          <li>
+            <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://www.xuxiancheng.xyz/2019/12/15/JAVA并发队列同步器浅谈/&title=《JAVA队列同步器浅谈》 — 宪成小哥的技术博客&source=同步器到底是什么？队列同步器AbstractQueuedSynchronizer（简称AQS）是并发包的作者Doug Lea开发的一个同步框架，可以用来构..." data-title="QQ">
+              <i class="fa fa-qq"></i>
+            </a>
+          </li>
+          <li>
+            <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://www.xuxiancheng.xyz/2019/12/15/JAVA并发队列同步器浅谈/" data-title="Facebook">
+              <i class="fa fa-facebook"></i>
+            </a>
+          </li>
+          <li>
+            <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《JAVA队列同步器浅谈》 — 宪成小哥的技术博客&url=http://www.xuxiancheng.xyz/2019/12/15/JAVA并发队列同步器浅谈/&via=http://www.xuxiancheng.xyz" data-title="Twitter">
+              <i class="fa fa-twitter"></i>
+            </a>
+          </li>
+          <li>
+            <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://www.xuxiancheng.xyz/2019/12/15/JAVA并发队列同步器浅谈/" data-title="Google+">
+              <i class="fa fa-google-plus"></i>
+            </a>
+          </li>
+        </ul>
+     </div>
+</div>
+<div class="post-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;" id="wxShare-close">×</a>
+    <p>扫一扫，分享到微信</p>
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=http://www.xuxiancheng.xyz/2019/12/15/JAVA并发队列同步器浅谈/" alt="微信分享二维码">
+</div>
 
+<div class="mask"></div>
+
+        
+        <ul class="article-footer-menu">
+            
+            
+  <li class="article-footer-tags">
+    <i class="fa fa-tags"></i>
+      
+    <a href="/tags/Java并发/" class="color2">Java并发</a>
+      
+  </li>
+
+        </ul>
+        
     </footer>
   </div>
-  
+</article>
+
+
+    <aside class="post-toc-pos post-toc-top" id="post-toc">
+        <nav class="post-toc-wrap">
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#同步器到底是什么？"><span class="post-toc-text">同步器到底是什么？</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#同步器接口实现简单分析："><span class="post-toc-text">同步器接口实现简单分析：</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#同步器核心原理分析"><span class="post-toc-text">同步器核心原理分析</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#同步队列"><span class="post-toc-text">同步队列</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#独占式的获取-释放同步状态"><span class="post-toc-text">独占式的获取/释放同步状态</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#共享式的同步状态的获取-释放同步状态"><span class="post-toc-text">共享式的同步状态的获取/释放同步状态</span></a></li></ol></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#总结"><span class="post-toc-text">总结</span></a></li></ol>
+        </nav>
+    </aside>
     
+
 <nav id="article-nav">
   
     <a href="/2020/07/30/架构设计浅谈/" id="article-nav-newer" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">Newer</strong>
-      <div class="article-nav-title">
+
+      <span class="article-nav-title">
+        <i class="fa fa-hand-o-left" aria-hidden="true"></i>
         
           架构设计浅谈
         
-      </div>
+      </span>
     </a>
   
   
 </nav>
 
-  
-</article>
 
+
+    
 </section>
-        
-          <aside id="sidebar">
-  
-    
-
-  
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title">Tags</h3>
-    <div class="widget">
-      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java并发/">Java并发</a></li></ul>
-    </div>
-  </div>
-
-
-  
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title">Tag Cloud</h3>
-    <div class="widget tagcloud">
-      <a href="/tags/Java并发/" style="font-size: 10px;">Java并发</a>
-    </div>
-  </div>
-
-  
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title">Archives</h3>
-    <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/07/">July 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/12/">December 2019</a></li></ul>
-    </div>
-  </div>
-
-
-  
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title">Recent Posts</h3>
-    <div class="widget">
-      <ul>
-        
-          <li>
-            <a href="/2020/07/31/散列表浅谈/">散列表浅谈</a>
-          </li>
-        
-          <li>
-            <a href="/2020/07/30/架构设计浅谈/">架构设计浅谈</a>
-          </li>
-        
-          <li>
-            <a href="/2019/12/15/JAVA并发队列同步器浅谈/">JAVA并发队列同步器浅谈</a>
-          </li>
-        
-      </ul>
-    </div>
-  </div>
-
-  
-</aside>
         
       </div>
       <footer id="footer">
-  
   <div class="outer">
     <div id="footer-info" class="inner">
-      &copy; 2020 Allen&#39;s blog<br>
-      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+      
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+      <p>
+        Powered by  <a href="http://hexo.io/" target="_blank">Hexo</a>
+        Theme <a href="//github.com/wongminho/hexo-theme-miho" target="_blank">MiHo</a>
+      &copy; 2020 宪成小哥的技术博客<br>
+      </p>
     </div>
   </div>
 </footer>
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<script src="//cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+<script>
+  var mihoConfig = {
+      root: "http://www.xuxiancheng.xyz",
+      animate: true,
+      isHome: false,
+      share: true,
+      reward: 1
+  }
+</script>
+<div class="sidebar">
+    <div id="sidebar-search" title="Search">
+        <i class="fa fa-search"></i>
     </div>
-    <nav id="mobile-nav">
-  
-    <a href="/" class="mobile-nav-link">Home</a>
-  
-    <a href="/archives" class="mobile-nav-link">Archives</a>
-  
-</nav>
-    
+    <div id="sidebar-category" title="Categories">
+        <i class="fa fa-book"></i>
+    </div>
+    <div id="sidebar-tag" title="Tags">
+        <i class="fa fa-tags"></i>
+    </div>
+    <div id="sidebar-top">
+        <span class="sidebar-top-icon"><i class="fa fa-angle-up"></i></span>
+    </div>
+</div>
+<div class="sidebar-menu-box" id="sidebar-menu-box">
+    <div class="sidebar-menu-box-container">
+        <div id="sidebar-menu-box-categories">
+            
+        </div>
+        <div id="sidebar-menu-box-tags">
+            <a href="/tags/Java并发/" style="font-size: 10px;">Java并发</a> <a href="/tags/架构设计/" style="font-size: 10px;">架构设计</a> <a href="/tags/算法和数据结构/" style="font-size: 10px;">算法和数据结构</a>
+        </div>
+    </div>
+    <a href="javascript:;" class="sidebar-menu-box-close">&times;</a>
+</div>
+<div class="mobile-header-menu-nav" id="mobile-header-menu-nav">
+    <div class="mobile-header-menu-container">
+        <span class="title">Menus</span>
+        <ul class="mobile-header-menu-navbar">
+            
+            <li>
+                <a  href="/">
+                    <i class="fa fa-home"></i><span>Home</span>
+                </a>
+            </li>
+            
+            <li>
+                <a  href="/archives">
+                    <i class="fa fa-archive"></i><span>Archives</span>
+                </a>
+            </li>
+            
+            <li>
+                <a  href="/about">
+                    <i class="fa fa-user"></i><span>About</span>
+                </a>
+            </li>
+            
+        </ul>
+    </div>
+    <div class="mobile-header-tag-container">
+        <span class="title">Tags</span>
+        <div id="mobile-header-container-tags">
+            <a href="/tags/Java并发/" style="font-size: 10px;">Java并发</a> <a href="/tags/架构设计/" style="font-size: 10px;">架构设计</a> <a href="/tags/算法和数据结构/" style="font-size: 10px;">算法和数据结构</a>
+        </div>
+    </div>
+</div>
+<div class="search-wrap">
+    <span class="search-close">&times;</span>
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+            <i class="icon icon-lg icon-chevron-left"></i>
+        </a>
+        <input class="search-field" placeholder="Search..." id="keywords">
+        <a id="search-submit" href="javascript:;">
+            <i class="fa fa-search"></i>
+        </a>
+    <div class="search-container" id="search-container">
+        <ul class="search-result" id="search-result">
+        </ul>
+    </div>
+</div>
 
-<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+<div id="search-tpl">
+    <li class="search-result-item">
+        <a href="{url}" class="search-item-li">
+            <span class="search-item-li-title" title="{title}">{title}</span>
+        </a>
+    </li>
+</div>
+<script src="/js/search.js"></script>
+<script src="/js/main.js"></script>
 
 
-  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
-  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+  <script src="//cdn.bootcss.com/particles.js/2.0.0/particles.min.js"></script>
+  <div id="particles"></div>
+  <script src="/js/particles.js"></script>
 
 
-<script src="/js/script.js"></script>
 
 
+
+
+
+  <link rel="stylesheet" href="//cdn.bootcss.com/animate.css/3.5.0/animate.min.css">
+  <script src="//cdn.bootcss.com/scrollReveal.js/3.0.5/scrollreveal.js"></script>
+  <script src="/js/animate.js"></script>
+
+
+  <script src="/js/pop-img.js"></script>
+  <script>
+     $(".article-entry p img").popImg();
+  </script>
 
   </div>
 </body>
