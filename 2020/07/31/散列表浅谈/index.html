@@ -3,17 +3,17 @@
 <head><meta name="generator" content="Hexo 3.9.0">
   <meta charset="utf-8">
   
-  <title>散列表浅谈 | 宪成小哥的技术博客</title>
+  <title>散列表浅谈 | XuXianXheng&#39;s Blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   
-    <meta name="keywords" content="MinHow,MinHow's Blog">
+    <meta name="keywords" content="MinHow,XuXianCheng's Blog">
   
   <meta name="description" content="引言哈希表是一种非常常用的数据结构(KEY-VALUE)，理论上通过键(KEY)进行CRUD操作数据的为时间复杂度位O(1)。大部分的开发语言如Java、Go、C#的库都有实现，还有常见的KV数据库，其核心原理也是哈希表。哈希算法的应用常见更加广泛，如加密、分布式场景数据分片、生成唯一标识、P2P协议验证数据的完整性等。我认为带着问题学习是一种很好的学习方法，下面我对每个知识点以问题的形式展开。">
 <meta name="keywords" content="算法和数据结构">
 <meta property="og:type" content="article">
 <meta property="og:title" content="散列表浅谈">
 <meta property="og:url" content="http://www.xuxiancheng.xyz/2020/07/31/散列表浅谈/index.html">
-<meta property="og:site_name" content="宪成小哥的技术博客">
+<meta property="og:site_name" content="XuXianXheng&#39;s Blog">
 <meta property="og:description" content="引言哈希表是一种非常常用的数据结构(KEY-VALUE)，理论上通过键(KEY)进行CRUD操作数据的为时间复杂度位O(1)。大部分的开发语言如Java、Go、C#的库都有实现，还有常见的KV数据库，其核心原理也是哈希表。哈希算法的应用常见更加广泛，如加密、分布式场景数据分片、生成唯一标识、P2P协议验证数据的完整性等。我认为带着问题学习是一种很好的学习方法，下面我对每个知识点以问题的形式展开。">
 <meta property="og:locale" content="chinese">
 <meta property="og:image" content="https://user-gold-cdn.xitu.io/2020/7/22/1737499941978ac7?w=666&h=470&f=png&s=35042">
@@ -46,7 +46,7 @@
         <div id="header-menu" class="header-menu-pos animated">
             <div class="header-menu-container">
                 <a href="/" class="left">
-                    <span class="site-title">MinHow&#39;s Blog</span>
+                    <span class="site-title">XuXianCheng&#39;s Blog</span>
                 </a>
                 <nav id="header-menu-nav" class="right">
                     
@@ -74,21 +74,21 @@
         <div id="header-row">
             <div id="logo">
                 <a href="/">
-                    <img src="/images/logo.png" alt="logo">
+                    <img src="/images/logo1.png" alt="logo">
                 </a>
             </div>
             <div class="header-info">
                 <div id="header-title">
                     
                     <h2>
-                        MinHow&#39;s Blog
+                        XuXianCheng&#39;s Blog
                     </h2>
                     
                 </div>
                 <div id="header-description">
                     
                     <h3>
-                        一个专注 WEB 开发的技术博客
+                        一个专注 服务端 开发的技术博客
                     </h3>
                     
                 </div>
@@ -178,8 +178,8 @@
         <p>原始链接： <a class="post-url" href="/2020/07/31/散列表浅谈/" title="散列表浅谈">http://www.xuxiancheng.xyz/2020/07/31/散列表浅谈/</a></p>
         <footer>
             <a href="http://www.xuxiancheng.xyz">
-                <img src="/images/logo.png" alt="宪成小哥的技术博客">
-                宪成小哥的技术博客
+                <img src="/images/logo1.png" alt="xuxiancheng">
+                xuxiancheng
             </a>
         </footer>
     </div>
@@ -232,7 +232,7 @@
     <div class="post-share-list" id="share-list">
         <ul class="share-icons">
           <li>
-            <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://www.xuxiancheng.xyz/2020/07/31/散列表浅谈/&title=《散列表浅谈》 — 宪成小哥的技术博客&pic=http://www.xuxiancheng.xyzimages/logo.png" data-title="微博">
+            <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://www.xuxiancheng.xyz/2020/07/31/散列表浅谈/&title=《散列表浅谈》 — XuXianXheng's Blog&pic=http://www.xuxiancheng.xyzimages/logo1.png" data-title="微博">
               <i class="fa fa-weibo"></i>
             </a>
           </li>
@@ -242,7 +242,7 @@
             </a>
           </li>
           <li>
-            <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://www.xuxiancheng.xyz/2020/07/31/散列表浅谈/&title=《散列表浅谈》 — 宪成小哥的技术博客&source=引言哈希表是一种非常常用的数据结构(KEY-VALUE)，理论上通过键(KEY)进行CRUD操作数据的为时间复杂度位O(1)。大部分的开发语言如Java、..." data-title="QQ">
+            <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://www.xuxiancheng.xyz/2020/07/31/散列表浅谈/&title=《散列表浅谈》 — XuXianXheng's Blog&source=引言哈希表是一种非常常用的数据结构(KEY-VALUE)，理论上通过键(KEY)进行CRUD操作数据的为时间复杂度位O(1)。大部分的开发语言如Java、..." data-title="QQ">
               <i class="fa fa-qq"></i>
             </a>
           </li>
@@ -252,7 +252,7 @@
             </a>
           </li>
           <li>
-            <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《散列表浅谈》 — 宪成小哥的技术博客&url=http://www.xuxiancheng.xyz/2020/07/31/散列表浅谈/&via=http://www.xuxiancheng.xyz" data-title="Twitter">
+            <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《散列表浅谈》 — XuXianXheng's Blog&url=http://www.xuxiancheng.xyz/2020/07/31/散列表浅谈/&via=http://www.xuxiancheng.xyz" data-title="Twitter">
               <i class="fa fa-twitter"></i>
             </a>
           </li>
@@ -330,7 +330,7 @@
       <p>
         Powered by  <a href="http://hexo.io/" target="_blank">Hexo</a>
         Theme <a href="//github.com/wongminho/hexo-theme-miho" target="_blank">MiHo</a>
-      &copy; 2020 宪成小哥的技术博客<br>
+      &copy; 2020 xuxiancheng<br>
       </p>
     </div>
   </div>
