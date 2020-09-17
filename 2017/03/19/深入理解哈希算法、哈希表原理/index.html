@@ -3,23 +3,23 @@
 <head><meta name="generator" content="Hexo 3.9.0">
   <meta charset="utf-8">
   
-  <title>深入理解哈希算法、哈希表原理 | XuXianXheng&#39;s Blog</title>
+  <title>深入理解哈希算法、哈希表原理 | Allen&#39;s Blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   
-    <meta name="keywords" content="MinHow,风一样的男子个人博客">
+    <meta name="keywords" content="MinHow,风一般的男子">
   
   <meta name="description" content="哈希表是一种非常常用的数据结构(KEY-VALUE)，理论上通过键(KEY)进行CRUD操作数据的为时间复杂度位O(1)。大部分的开发语言如Java、Go、C#的库都有实现，还有常见的KV数据库，其核心原理也是哈希表。哈希算法的应用常见更加广泛，如加密、分布式场景数据分片、生成唯一标识、P2P协议验证数据的完整性等。我认为带着问题学习是一种很好的学习方法，下面我对每个知识点以问题的形式展开。">
 <meta name="keywords" content="算法和数据结构">
 <meta property="og:type" content="article">
 <meta property="og:title" content="深入理解哈希算法、哈希表原理">
 <meta property="og:url" content="http://xuxiancheng.xyz/2017/03/19/深入理解哈希算法、哈希表原理/index.html">
-<meta property="og:site_name" content="XuXianXheng&#39;s Blog">
+<meta property="og:site_name" content="Allen&#39;s Blog">
 <meta property="og:description" content="哈希表是一种非常常用的数据结构(KEY-VALUE)，理论上通过键(KEY)进行CRUD操作数据的为时间复杂度位O(1)。大部分的开发语言如Java、Go、C#的库都有实现，还有常见的KV数据库，其核心原理也是哈希表。哈希算法的应用常见更加广泛，如加密、分布式场景数据分片、生成唯一标识、P2P协议验证数据的完整性等。我认为带着问题学习是一种很好的学习方法，下面我对每个知识点以问题的形式展开。">
 <meta property="og:locale" content="chinese">
 <meta property="og:image" content="https://user-gold-cdn.xitu.io/2020/7/22/1737499941978ac7?w=666&h=470&f=png&s=35042">
 <meta property="og:image" content="https://user-gold-cdn.xitu.io/2020/7/22/1737551150bcd7b7?w=686&h=524&f=png&s=39062">
 <meta property="og:image" content="https://user-gold-cdn.xitu.io/2020/7/22/1737558eea686a53?w=1156&h=528&f=png&s=58997">
-<meta property="og:updated_time" content="2020-09-17T03:16:17.063Z">
+<meta property="og:updated_time" content="2020-09-17T03:37:43.792Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="深入理解哈希算法、哈希表原理">
 <meta name="twitter:description" content="哈希表是一种非常常用的数据结构(KEY-VALUE)，理论上通过键(KEY)进行CRUD操作数据的为时间复杂度位O(1)。大部分的开发语言如Java、Go、C#的库都有实现，还有常见的KV数据库，其核心原理也是哈希表。哈希算法的应用常见更加广泛，如加密、分布式场景数据分片、生成唯一标识、P2P协议验证数据的完整性等。我认为带着问题学习是一种很好的学习方法，下面我对每个知识点以问题的形式展开。">
@@ -46,7 +46,7 @@
         <div id="header-menu" class="header-menu-pos animated">
             <div class="header-menu-container">
                 <a href="/" class="left">
-                    <span class="site-title">风一样的男子个人博客</span>
+                    <span class="site-title">风一般的男子</span>
                 </a>
                 <nav id="header-menu-nav" class="right">
                     
@@ -81,7 +81,7 @@
                 <div id="header-title">
                     
                     <h2>
-                        风一样的男子个人博客
+                        风一般的男子
                     </h2>
                     
                 </div>
@@ -125,6 +125,13 @@
     </h1>
     <div class="post-title-bar">
       <ul>
+          
+              <li>
+                  <i class="fa fa-book"></i>
+                  
+                      <a href="/categories/计算机基础/">计算机基础</a>
+                  
+              </li>
           
         <li>
           <i class="fa fa-calendar"></i>  2017-03-19
@@ -174,7 +181,7 @@
 
             <div class="post-copyright">
     <div class="content">
-        <p>最后更新： 2020年09月17日 11:16</p>
+        <p>最后更新： 2020年09月17日 11:37</p>
         <p>原始链接： <a class="post-url" href="/2017/03/19/深入理解哈希算法、哈希表原理/" title="深入理解哈希算法、哈希表原理">http://xuxiancheng.xyz/2017/03/19/深入理解哈希算法、哈希表原理/</a></p>
         <footer>
             <a href="http://xuxiancheng.xyz">
@@ -232,7 +239,7 @@
     <div class="post-share-list" id="share-list">
         <ul class="share-icons">
           <li>
-            <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://xuxiancheng.xyz/2017/03/19/深入理解哈希算法、哈希表原理/&title=《深入理解哈希算法、哈希表原理》 — XuXianXheng's Blog&pic=/images/banner.jpg" data-title="微博">
+            <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://xuxiancheng.xyz/2017/03/19/深入理解哈希算法、哈希表原理/&title=《深入理解哈希算法、哈希表原理》 — Allen's Blog&pic=/images/banner.jpg" data-title="微博">
               <i class="fa fa-weibo"></i>
             </a>
           </li>
@@ -242,7 +249,7 @@
             </a>
           </li>
           <li>
-            <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://xuxiancheng.xyz/2017/03/19/深入理解哈希算法、哈希表原理/&title=《深入理解哈希算法、哈希表原理》 — XuXianXheng's Blog&source=哈希表是一种非常常用的数据结构(KEY-VALUE)，理论上通过键(KEY)进行CRUD操作数据的为时间复杂度位O(1)。大部分的开发语言如Java、Go..." data-title="QQ">
+            <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://xuxiancheng.xyz/2017/03/19/深入理解哈希算法、哈希表原理/&title=《深入理解哈希算法、哈希表原理》 — Allen's Blog&source=哈希表是一种非常常用的数据结构(KEY-VALUE)，理论上通过键(KEY)进行CRUD操作数据的为时间复杂度位O(1)。大部分的开发语言如Java、Go..." data-title="QQ">
               <i class="fa fa-qq"></i>
             </a>
           </li>
@@ -252,7 +259,7 @@
             </a>
           </li>
           <li>
-            <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《深入理解哈希算法、哈希表原理》 — XuXianXheng's Blog&url=http://xuxiancheng.xyz/2017/03/19/深入理解哈希算法、哈希表原理/&via=http://xuxiancheng.xyz" data-title="Twitter">
+            <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《深入理解哈希算法、哈希表原理》 — Allen's Blog&url=http://xuxiancheng.xyz/2017/03/19/深入理解哈希算法、哈希表原理/&via=http://xuxiancheng.xyz" data-title="Twitter">
               <i class="fa fa-twitter"></i>
             </a>
           </li>
@@ -368,7 +375,7 @@
 <div class="sidebar-menu-box" id="sidebar-menu-box">
     <div class="sidebar-menu-box-container">
         <div id="sidebar-menu-box-categories">
-            
+            <a class="category-link" href="/categories/计算机基础/">计算机基础</a>
         </div>
         <div id="sidebar-menu-box-tags">
             <a href="/tags/架构设计/" style="font-size: 10px;">架构设计</a> <a href="/tags/算法和数据结构/" style="font-size: 10px;">算法和数据结构</a>
