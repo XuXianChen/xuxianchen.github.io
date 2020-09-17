@@ -3,26 +3,26 @@
 <head><meta name="generator" content="Hexo 3.9.0">
   <meta charset="utf-8">
   
-  <title>散列表浅谈 | XuXianXheng&#39;s Blog</title>
+  <title>深入理解哈希算法、哈希表原理 | XuXianXheng&#39;s Blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   
     <meta name="keywords" content="MinHow,XuXianCheng's Blog">
   
-  <meta name="description" content="引言哈希表是一种非常常用的数据结构(KEY-VALUE)，理论上通过键(KEY)进行CRUD操作数据的为时间复杂度位O(1)。大部分的开发语言如Java、Go、C#的库都有实现，还有常见的KV数据库，其核心原理也是哈希表。哈希算法的应用常见更加广泛，如加密、分布式场景数据分片、生成唯一标识、P2P协议验证数据的完整性等。我认为带着问题学习是一种很好的学习方法，下面我对每个知识点以问题的形式展开。">
+  <meta name="description" content="哈希表是一种非常常用的数据结构(KEY-VALUE)，理论上通过键(KEY)进行CRUD操作数据的为时间复杂度位O(1)。大部分的开发语言如Java、Go、C#的库都有实现，还有常见的KV数据库，其核心原理也是哈希表。哈希算法的应用常见更加广泛，如加密、分布式场景数据分片、生成唯一标识、P2P协议验证数据的完整性等。我认为带着问题学习是一种很好的学习方法，下面我对每个知识点以问题的形式展开。">
 <meta name="keywords" content="算法和数据结构">
 <meta property="og:type" content="article">
-<meta property="og:title" content="散列表浅谈">
-<meta property="og:url" content="http://xuxiancheng.xyz/2020/07/31/散列表浅谈/index.html">
+<meta property="og:title" content="深入理解哈希算法、哈希表原理">
+<meta property="og:url" content="http://xuxiancheng.xyz/2017/03/19/深入理解哈希算法、哈希表原理/index.html">
 <meta property="og:site_name" content="XuXianXheng&#39;s Blog">
-<meta property="og:description" content="引言哈希表是一种非常常用的数据结构(KEY-VALUE)，理论上通过键(KEY)进行CRUD操作数据的为时间复杂度位O(1)。大部分的开发语言如Java、Go、C#的库都有实现，还有常见的KV数据库，其核心原理也是哈希表。哈希算法的应用常见更加广泛，如加密、分布式场景数据分片、生成唯一标识、P2P协议验证数据的完整性等。我认为带着问题学习是一种很好的学习方法，下面我对每个知识点以问题的形式展开。">
+<meta property="og:description" content="哈希表是一种非常常用的数据结构(KEY-VALUE)，理论上通过键(KEY)进行CRUD操作数据的为时间复杂度位O(1)。大部分的开发语言如Java、Go、C#的库都有实现，还有常见的KV数据库，其核心原理也是哈希表。哈希算法的应用常见更加广泛，如加密、分布式场景数据分片、生成唯一标识、P2P协议验证数据的完整性等。我认为带着问题学习是一种很好的学习方法，下面我对每个知识点以问题的形式展开。">
 <meta property="og:locale" content="chinese">
 <meta property="og:image" content="https://user-gold-cdn.xitu.io/2020/7/22/1737499941978ac7?w=666&h=470&f=png&s=35042">
 <meta property="og:image" content="https://user-gold-cdn.xitu.io/2020/7/22/1737551150bcd7b7?w=686&h=524&f=png&s=39062">
 <meta property="og:image" content="https://user-gold-cdn.xitu.io/2020/7/22/1737558eea686a53?w=1156&h=528&f=png&s=58997">
-<meta property="og:updated_time" content="2020-09-16T18:27:19.000Z">
+<meta property="og:updated_time" content="2020-09-17T03:16:17.063Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="散列表浅谈">
-<meta name="twitter:description" content="引言哈希表是一种非常常用的数据结构(KEY-VALUE)，理论上通过键(KEY)进行CRUD操作数据的为时间复杂度位O(1)。大部分的开发语言如Java、Go、C#的库都有实现，还有常见的KV数据库，其核心原理也是哈希表。哈希算法的应用常见更加广泛，如加密、分布式场景数据分片、生成唯一标识、P2P协议验证数据的完整性等。我认为带着问题学习是一种很好的学习方法，下面我对每个知识点以问题的形式展开。">
+<meta name="twitter:title" content="深入理解哈希算法、哈希表原理">
+<meta name="twitter:description" content="哈希表是一种非常常用的数据结构(KEY-VALUE)，理论上通过键(KEY)进行CRUD操作数据的为时间复杂度位O(1)。大部分的开发语言如Java、Go、C#的库都有实现，还有常见的KV数据库，其核心原理也是哈希表。哈希算法的应用常见更加广泛，如加密、分布式场景数据分片、生成唯一标识、P2P协议验证数据的完整性等。我认为带着问题学习是一种很好的学习方法，下面我对每个知识点以问题的形式展开。">
 <meta name="twitter:image" content="https://user-gold-cdn.xitu.io/2020/7/22/1737499941978ac7?w=666&h=470&f=png&s=35042">
   
   
@@ -114,20 +114,20 @@
     </div>
 </header>
       <div class="outer">
-        <section id="main" class="body-wrap"><article id="post-散列表浅谈" class="article article-type-post" itemscope itemprop="blogPost">
+        <section id="main" class="body-wrap"><article id="post-深入理解哈希算法、哈希表原理" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 class="post-title" itemprop="name">
-      散列表浅谈
+      深入理解哈希算法、哈希表原理
     </h1>
     <div class="post-title-bar">
       <ul>
           
         <li>
-          <i class="fa fa-calendar"></i>  2020-07-31
+          <i class="fa fa-calendar"></i>  2017-03-19
         </li>
         <li>
           <i class="fa fa-eye"></i>
@@ -143,7 +143,7 @@
     <div class="article-entry post-content" itemprop="articleBody">
       
             
-            <h3 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h3><p>哈希表是一种非常常用的数据结构(KEY-VALUE)，理论上通过键(KEY)进行CRUD操作数据的为时间复杂度位O(1)。大部分的开发语言如Java、Go、C#的库都有实现，还有常见的KV数据库，其核心原理也是哈希表。哈希算法的应用常见更加广泛，如加密、分布式场景数据分片、生成唯一标识、P2P协议验证数据的完整性等。我认为带着问题学习是一种很好的学习方法，下面我对每个知识点以问题的形式展开。</p>
+            <p>哈希表是一种非常常用的数据结构(KEY-VALUE)，理论上通过键(KEY)进行CRUD操作数据的为时间复杂度位O(1)。大部分的开发语言如Java、Go、C#的库都有实现，还有常见的KV数据库，其核心原理也是哈希表。哈希算法的应用常见更加广泛，如加密、分布式场景数据分片、生成唯一标识、P2P协议验证数据的完整性等。我认为带着问题学习是一种很好的学习方法，下面我对每个知识点以问题的形式展开。</p>
 <a id="more"></a>
 
 <h3 id="哈希表为啥这么快"><a href="#哈希表为啥这么快" class="headerlink" title="哈希表为啥这么快"></a>哈希表为啥这么快</h3><p>哈希表是建立在数组上的一种数据结构，数组是一种内存空间连续，并且存储相同数据类型的数据结构，所以当我们知道了一个数组的下标，只需要一次计算（首地址 + 下标值*数组类型字节数）就可以得到对应下标的地址。而哈希表是在数组的基础上的一种数据结构，大致的结构如下:<br><img src="https://user-gold-cdn.xitu.io/2020/7/22/1737499941978ac7?w=666&h=470&f=png&s=35042" alt><br>这里假如我们不考虑多个键(key)通过哈希算法得到值相同的情况下,我们将得到的值和数hexo 组进行取模或者与操作，就会得到一个数组的下标。并且我们假设hash(key)得到的下标都不相同。那么当我们存储多个key-value类型的数据时,只需通过一次计算就可以完成查询、插入和删除等操作。但是这里有很多情况都没有考虑，我们下面将一一的进行剖析。</p>
@@ -174,8 +174,8 @@
 
             <div class="post-copyright">
     <div class="content">
-        <p>最后更新： 2020年09月17日 02:27</p>
-        <p>原始链接： <a class="post-url" href="/2020/07/31/散列表浅谈/" title="散列表浅谈">http://xuxiancheng.xyz/2020/07/31/散列表浅谈/</a></p>
+        <p>最后更新： 2020年09月17日 11:16</p>
+        <p>原始链接： <a class="post-url" href="/2017/03/19/深入理解哈希算法、哈希表原理/" title="深入理解哈希算法、哈希表原理">http://xuxiancheng.xyz/2017/03/19/深入理解哈希算法、哈希表原理/</a></p>
         <footer>
             <a href="http://xuxiancheng.xyz">
                 <img src="/images/logo1.png" alt="xuxiancheng">
@@ -232,7 +232,7 @@
     <div class="post-share-list" id="share-list">
         <ul class="share-icons">
           <li>
-            <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://xuxiancheng.xyz/2020/07/31/散列表浅谈/&title=《散列表浅谈》 — XuXianXheng's Blog&pic=/images/banner.jpg" data-title="微博">
+            <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://xuxiancheng.xyz/2017/03/19/深入理解哈希算法、哈希表原理/&title=《深入理解哈希算法、哈希表原理》 — XuXianXheng's Blog&pic=/images/banner.jpg" data-title="微博">
               <i class="fa fa-weibo"></i>
             </a>
           </li>
@@ -242,22 +242,22 @@
             </a>
           </li>
           <li>
-            <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://xuxiancheng.xyz/2020/07/31/散列表浅谈/&title=《散列表浅谈》 — XuXianXheng's Blog&source=引言哈希表是一种非常常用的数据结构(KEY-VALUE)，理论上通过键(KEY)进行CRUD操作数据的为时间复杂度位O(1)。大部分的开发语言如Java、..." data-title="QQ">
+            <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://xuxiancheng.xyz/2017/03/19/深入理解哈希算法、哈希表原理/&title=《深入理解哈希算法、哈希表原理》 — XuXianXheng's Blog&source=哈希表是一种非常常用的数据结构(KEY-VALUE)，理论上通过键(KEY)进行CRUD操作数据的为时间复杂度位O(1)。大部分的开发语言如Java、Go..." data-title="QQ">
               <i class="fa fa-qq"></i>
             </a>
           </li>
           <li>
-            <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://xuxiancheng.xyz/2020/07/31/散列表浅谈/" data-title="Facebook">
+            <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://xuxiancheng.xyz/2017/03/19/深入理解哈希算法、哈希表原理/" data-title="Facebook">
               <i class="fa fa-facebook"></i>
             </a>
           </li>
           <li>
-            <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《散列表浅谈》 — XuXianXheng's Blog&url=http://xuxiancheng.xyz/2020/07/31/散列表浅谈/&via=http://xuxiancheng.xyz" data-title="Twitter">
+            <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《深入理解哈希算法、哈希表原理》 — XuXianXheng's Blog&url=http://xuxiancheng.xyz/2017/03/19/深入理解哈希算法、哈希表原理/&via=http://xuxiancheng.xyz" data-title="Twitter">
               <i class="fa fa-twitter"></i>
             </a>
           </li>
           <li>
-            <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://xuxiancheng.xyz/2020/07/31/散列表浅谈/" data-title="Google+">
+            <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://xuxiancheng.xyz/2017/03/19/深入理解哈希算法、哈希表原理/" data-title="Google+">
               <i class="fa fa-google-plus"></i>
             </a>
           </li>
@@ -267,7 +267,7 @@
 <div class="post-modal wx-share" id="wxShare">
     <a class="close" href="javascript:;" id="wxShare-close">×</a>
     <p>扫一扫，分享到微信</p>
-    <img src="//api.qrserver.com/v1/create-qr-code/?data=http://xuxiancheng.xyz/2020/07/31/散列表浅谈/" alt="微信分享二维码">
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=http://xuxiancheng.xyz/2017/03/19/深入理解哈希算法、哈希表原理/" alt="微信分享二维码">
 </div>
 
 <div class="mask"></div>
@@ -292,18 +292,23 @@
 
     <aside class="post-toc-pos post-toc-top" id="post-toc">
         <nav class="post-toc-wrap">
-            <ol class="post-toc"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#引言"><span class="post-toc-text">引言</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#哈希表为啥这么快"><span class="post-toc-text">哈希表为啥这么快</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#hash冲突问题"><span class="post-toc-text">hash冲突问题</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#hash冲突是什么？"><span class="post-toc-text">hash冲突是什么？</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#如何解决hash冲突？"><span class="post-toc-text">如何解决hash冲突？</span></a></li></ol></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#一次性扩容性能问题"><span class="post-toc-text">一次性扩容性能问题</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#哈希算法常用的应用场景"><span class="post-toc-text">哈希算法常用的应用场景</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#一致性hash算法如何理解"><span class="post-toc-text">一致性hash算法如何理解</span></a></li></ol>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#哈希表为啥这么快"><span class="post-toc-text">哈希表为啥这么快</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#hash冲突问题"><span class="post-toc-text">hash冲突问题</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#hash冲突是什么？"><span class="post-toc-text">hash冲突是什么？</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#如何解决hash冲突？"><span class="post-toc-text">如何解决hash冲突？</span></a></li></ol></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#一次性扩容性能问题"><span class="post-toc-text">一次性扩容性能问题</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#哈希算法常用的应用场景"><span class="post-toc-text">哈希算法常用的应用场景</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#一致性hash算法如何理解"><span class="post-toc-text">一致性hash算法如何理解</span></a></li></ol>
         </nav>
     </aside>
     
 
 <nav id="article-nav">
   
-  
-    <a href="/2020/07/30/谈一谈我对架构设计的理解/" id="article-nav-older" class="article-nav-link-wrap">
-      <span class="article-nav-title">谈一谈我对架构设计的理解</span>
-      <i class="fa fa-hand-o-right" aria-hidden="true"></i>
+    <a href="/2019/07/30/谈一谈我对架构设计的理解/" id="article-nav-newer" class="article-nav-link-wrap">
+
+      <span class="article-nav-title">
+        <i class="fa fa-hand-o-left" aria-hidden="true"></i>
+        
+          谈一谈我对架构设计的理解
+        
+      </span>
     </a>
+  
   
 </nav>
 

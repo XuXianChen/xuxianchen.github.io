@@ -8,19 +8,19 @@
   
     <meta name="keywords" content="MinHow,XuXianCheng's Blog">
   
-  <meta name="description" content="前言可以说，任何软件都有一个架构，一般大型互联网公司还会专门设有架构师的职位。那么我们有没有想过这个问题，架构到底是什么？为什么我们需要去做架构设计？如果没有架构设计的话我们软件开发与维护的过程中会遇到什么问题？要回答这些问题，我们可以在下面的文章中慢慢的讲述。">
+  <meta name="description" content="日常的开发过程中，经常提到架构一词。那么我们有没有想过，架构到底是什么？为什么需要架构设计？系统演进过程中，如果没有架构设计，系统会变成什么样？下面针对这些问题一一道来。">
 <meta name="keywords" content="架构设计">
 <meta property="og:type" content="article">
 <meta property="og:title" content="谈一谈我对架构设计的理解">
-<meta property="og:url" content="http://xuxiancheng.xyz/2020/07/30/谈一谈我对架构设计的理解/index.html">
+<meta property="og:url" content="http://xuxiancheng.xyz/2019/07/30/谈一谈我对架构设计的理解/index.html">
 <meta property="og:site_name" content="XuXianXheng&#39;s Blog">
-<meta property="og:description" content="前言可以说，任何软件都有一个架构，一般大型互联网公司还会专门设有架构师的职位。那么我们有没有想过这个问题，架构到底是什么？为什么我们需要去做架构设计？如果没有架构设计的话我们软件开发与维护的过程中会遇到什么问题？要回答这些问题，我们可以在下面的文章中慢慢的讲述。">
+<meta property="og:description" content="日常的开发过程中，经常提到架构一词。那么我们有没有想过，架构到底是什么？为什么需要架构设计？系统演进过程中，如果没有架构设计，系统会变成什么样？下面针对这些问题一一道来。">
 <meta property="og:locale" content="chinese">
 <meta property="og:image" content="http://xuxiancheng.xyz/images/mysql.png">
-<meta property="og:updated_time" content="2020-09-17T02:20:08.278Z">
+<meta property="og:updated_time" content="2020-09-17T03:16:17.067Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="谈一谈我对架构设计的理解">
-<meta name="twitter:description" content="前言可以说，任何软件都有一个架构，一般大型互联网公司还会专门设有架构师的职位。那么我们有没有想过这个问题，架构到底是什么？为什么我们需要去做架构设计？如果没有架构设计的话我们软件开发与维护的过程中会遇到什么问题？要回答这些问题，我们可以在下面的文章中慢慢的讲述。">
+<meta name="twitter:description" content="日常的开发过程中，经常提到架构一词。那么我们有没有想过，架构到底是什么？为什么需要架构设计？系统演进过程中，如果没有架构设计，系统会变成什么样？下面针对这些问题一一道来。">
 <meta name="twitter:image" content="http://xuxiancheng.xyz/images/mysql.png">
   
   
@@ -125,7 +125,7 @@
       <ul>
           
         <li>
-          <i class="fa fa-calendar"></i>  2020-07-30
+          <i class="fa fa-calendar"></i>  2019-07-30
         </li>
         <li>
           <i class="fa fa-eye"></i>
@@ -141,7 +141,7 @@
     <div class="article-entry post-content" itemprop="articleBody">
       
             
-            <h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>可以说，任何软件都有一个架构，一般大型互联网公司还会专门设有架构师的职位。那么我们有没有想过这个问题，架构到底是什么？为什么我们需要去做架构设计？如果没有架构设计的话我们软件开发与维护的过程中会遇到什么问题？要回答这些问题，我们可以在下面的文章中慢慢的讲述。</p>
+            <p>日常的开发过程中，经常提到<strong>架构</strong>一词。那么我们有没有想过，架构到底是什么？为什么需要架构设计？系统演进过程中，如果没有架构设计，系统会变成什么样？下面针对这些问题一一道来。</p>
 <a id="more"></a>
 
 <h3 id="首先，软件架构到底是指什么？"><a href="#首先，软件架构到底是指什么？" class="headerlink" title="首先，软件架构到底是指什么？"></a>首先，软件架构到底是指什么？</h3><p>通常，我们去阅读一本书的时候，我们首先会去翻一翻这本书的目录结构，看一下这本书到底讲的是什么，每个章节作者想表达的主要意思是什么，通过阅读目录让我们对整本书有了一个系统性的认识。软件架构和书本的目录有点类似，但是又有明显的区别。我们可以认为软件架构就是软件或者系统的一个顶层结构。在这里有一个关键点，整个系统的架构会由子系统、模块、组件等元素组成，并且这些元素之间需要互相的合作，从而组成一个新的系统，能完成他们任何一个元素都无法完成的事情。<br>这里顺便讲一下系统、子系统、模块和组件的关联和区别，一个大型系统一般都是由一些的子系统组成的，如现在流行的微服务架构，一个主流的电商的微服务架构的系统，通常都会由用户子系统、订单子系统、商品子系统、库存子系统、支付子系统等构成。而一个子系统通常又会由模块或者组件构成。模块和组件表达的维度不同，模块强调的是子系统如何进行拆分的，而组件侧重的维度则是复用功能。</p>
@@ -170,8 +170,8 @@
 
             <div class="post-copyright">
     <div class="content">
-        <p>最后更新： 2020年09月17日 10:20</p>
-        <p>原始链接： <a class="post-url" href="/2020/07/30/谈一谈我对架构设计的理解/" title="谈一谈我对架构设计的理解">http://xuxiancheng.xyz/2020/07/30/谈一谈我对架构设计的理解/</a></p>
+        <p>最后更新： 2020年09月17日 11:16</p>
+        <p>原始链接： <a class="post-url" href="/2019/07/30/谈一谈我对架构设计的理解/" title="谈一谈我对架构设计的理解">http://xuxiancheng.xyz/2019/07/30/谈一谈我对架构设计的理解/</a></p>
         <footer>
             <a href="http://xuxiancheng.xyz">
                 <img src="/images/logo1.png" alt="xuxiancheng">
@@ -228,7 +228,7 @@
     <div class="post-share-list" id="share-list">
         <ul class="share-icons">
           <li>
-            <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://xuxiancheng.xyz/2020/07/30/谈一谈我对架构设计的理解/&title=《谈一谈我对架构设计的理解》 — XuXianXheng's Blog&pic=images/arch.png" data-title="微博">
+            <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://xuxiancheng.xyz/2019/07/30/谈一谈我对架构设计的理解/&title=《谈一谈我对架构设计的理解》 — XuXianXheng's Blog&pic=images/arch.png" data-title="微博">
               <i class="fa fa-weibo"></i>
             </a>
           </li>
@@ -238,22 +238,22 @@
             </a>
           </li>
           <li>
-            <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://xuxiancheng.xyz/2020/07/30/谈一谈我对架构设计的理解/&title=《谈一谈我对架构设计的理解》 — XuXianXheng's Blog&source=前言可以说，任何软件都有一个架构，一般大型互联网公司还会专门设有架构师的职位。那么我们有没有想过这个问题，架构到底是什么？为什么我们需要去做架构设计？如果..." data-title="QQ">
+            <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://xuxiancheng.xyz/2019/07/30/谈一谈我对架构设计的理解/&title=《谈一谈我对架构设计的理解》 — XuXianXheng's Blog&source=日常的开发过程中，经常提到架构一词。那么我们有没有想过，架构到底是什么？为什么需要架构设计？系统演进过程中，如果没有架构设计，系统会变成什么样？下面针对这..." data-title="QQ">
               <i class="fa fa-qq"></i>
             </a>
           </li>
           <li>
-            <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://xuxiancheng.xyz/2020/07/30/谈一谈我对架构设计的理解/" data-title="Facebook">
+            <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://xuxiancheng.xyz/2019/07/30/谈一谈我对架构设计的理解/" data-title="Facebook">
               <i class="fa fa-facebook"></i>
             </a>
           </li>
           <li>
-            <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《谈一谈我对架构设计的理解》 — XuXianXheng's Blog&url=http://xuxiancheng.xyz/2020/07/30/谈一谈我对架构设计的理解/&via=http://xuxiancheng.xyz" data-title="Twitter">
+            <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《谈一谈我对架构设计的理解》 — XuXianXheng's Blog&url=http://xuxiancheng.xyz/2019/07/30/谈一谈我对架构设计的理解/&via=http://xuxiancheng.xyz" data-title="Twitter">
               <i class="fa fa-twitter"></i>
             </a>
           </li>
           <li>
-            <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://xuxiancheng.xyz/2020/07/30/谈一谈我对架构设计的理解/" data-title="Google+">
+            <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://xuxiancheng.xyz/2019/07/30/谈一谈我对架构设计的理解/" data-title="Google+">
               <i class="fa fa-google-plus"></i>
             </a>
           </li>
@@ -263,7 +263,7 @@
 <div class="post-modal wx-share" id="wxShare">
     <a class="close" href="javascript:;" id="wxShare-close">×</a>
     <p>扫一扫，分享到微信</p>
-    <img src="//api.qrserver.com/v1/create-qr-code/?data=http://xuxiancheng.xyz/2020/07/30/谈一谈我对架构设计的理解/" alt="微信分享二维码">
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=http://xuxiancheng.xyz/2019/07/30/谈一谈我对架构设计的理解/" alt="微信分享二维码">
 </div>
 
 <div class="mask"></div>
@@ -288,23 +288,18 @@
 
     <aside class="post-toc-pos post-toc-top" id="post-toc">
         <nav class="post-toc-wrap">
-            <ol class="post-toc"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#前言"><span class="post-toc-text">前言</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#首先，软件架构到底是指什么？"><span class="post-toc-text">首先，软件架构到底是指什么？</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#其次，架构设计的目的是什么？"><span class="post-toc-text">其次，架构设计的目的是什么？</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#架构设计常用的一些套路"><span class="post-toc-text">架构设计常用的一些套路</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#简单分析一波Mysql的逻辑架构"><span class="post-toc-text">简单分析一波Mysql的逻辑架构</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#结语"><span class="post-toc-text">结语</span></a></li></ol>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#首先，软件架构到底是指什么？"><span class="post-toc-text">首先，软件架构到底是指什么？</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#其次，架构设计的目的是什么？"><span class="post-toc-text">其次，架构设计的目的是什么？</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#架构设计常用的一些套路"><span class="post-toc-text">架构设计常用的一些套路</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#简单分析一波Mysql的逻辑架构"><span class="post-toc-text">简单分析一波Mysql的逻辑架构</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#结语"><span class="post-toc-text">结语</span></a></li></ol>
         </nav>
     </aside>
     
 
 <nav id="article-nav">
   
-    <a href="/2020/07/31/散列表浅谈/" id="article-nav-newer" class="article-nav-link-wrap">
-
-      <span class="article-nav-title">
-        <i class="fa fa-hand-o-left" aria-hidden="true"></i>
-        
-          散列表浅谈
-        
-      </span>
-    </a>
   
+    <a href="/2017/03/19/深入理解哈希算法、哈希表原理/" id="article-nav-older" class="article-nav-link-wrap">
+      <span class="article-nav-title">深入理解哈希算法、哈希表原理</span>
+      <i class="fa fa-hand-o-right" aria-hidden="true"></i>
+    </a>
   
 </nav>
 
