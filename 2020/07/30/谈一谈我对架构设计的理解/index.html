@@ -3,7 +3,7 @@
 <head><meta name="generator" content="Hexo 3.9.0">
   <meta charset="utf-8">
   
-  <title>架构设计浅谈 | XuXianXheng&#39;s Blog</title>
+  <title>谈一谈我对架构设计的理解 | XuXianXheng&#39;s Blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   
     <meta name="keywords" content="MinHow,XuXianCheng's Blog">
@@ -11,17 +11,17 @@
   <meta name="description" content="前言可以说，任何软件都有一个架构，一般大型互联网公司还会专门设有架构师的职位。那么我们有没有想过这个问题，架构到底是什么？为什么我们需要去做架构设计？如果没有架构设计的话我们软件开发与维护的过程中会遇到什么问题？要回答这些问题，我们可以在下面的文章中慢慢的讲述。">
 <meta name="keywords" content="架构设计">
 <meta property="og:type" content="article">
-<meta property="og:title" content="架构设计浅谈">
-<meta property="og:url" content="http://xuxiancheng.xyz/2020/07/30/架构设计浅谈/index.html">
+<meta property="og:title" content="谈一谈我对架构设计的理解">
+<meta property="og:url" content="http://xuxiancheng.xyz/2020/07/30/谈一谈我对架构设计的理解/index.html">
 <meta property="og:site_name" content="XuXianXheng&#39;s Blog">
 <meta property="og:description" content="前言可以说，任何软件都有一个架构，一般大型互联网公司还会专门设有架构师的职位。那么我们有没有想过这个问题，架构到底是什么？为什么我们需要去做架构设计？如果没有架构设计的话我们软件开发与维护的过程中会遇到什么问题？要回答这些问题，我们可以在下面的文章中慢慢的讲述。">
 <meta property="og:locale" content="chinese">
-<meta property="og:image" content="https://img-blog.csdn.net/20180831173911997?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3pfcnlhbg==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70">
-<meta property="og:updated_time" content="2020-09-16T18:27:19.000Z">
+<meta property="og:image" content="http://xuxiancheng.xyz/images/mysql.png">
+<meta property="og:updated_time" content="2020-09-17T02:20:08.278Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="架构设计浅谈">
+<meta name="twitter:title" content="谈一谈我对架构设计的理解">
 <meta name="twitter:description" content="前言可以说，任何软件都有一个架构，一般大型互联网公司还会专门设有架构师的职位。那么我们有没有想过这个问题，架构到底是什么？为什么我们需要去做架构设计？如果没有架构设计的话我们软件开发与维护的过程中会遇到什么问题？要回答这些问题，我们可以在下面的文章中慢慢的讲述。">
-<meta name="twitter:image" content="https://img-blog.csdn.net/20180831173911997?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3pfcnlhbg==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70">
+<meta name="twitter:image" content="http://xuxiancheng.xyz/images/mysql.png">
   
   
     <link rel="icon" href="/favicon.ico">
@@ -112,14 +112,14 @@
     </div>
 </header>
       <div class="outer">
-        <section id="main" class="body-wrap"><article id="post-架构设计浅谈" class="article article-type-post" itemscope itemprop="blogPost">
+        <section id="main" class="body-wrap"><article id="post-谈一谈我对架构设计的理解" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 class="post-title" itemprop="name">
-      架构设计浅谈
+      谈一谈我对架构设计的理解
     </h1>
     <div class="post-title-bar">
       <ul>
@@ -159,7 +159,7 @@
 <li>合并：将各个组件、系统进行组装，就像平高玩具一样，将一些零件最后进行组装，形成一个新的系统。常见的组转方式有：继承、组合、依赖、关联等，这里的一个标准就是尽量的使用耦合较低的组合方式。</li>
 <li>抽象：通过向上的抽象，总结出通用的概念模型，设计过程中尽量面向抽象而不是实现。</li>
 </ul>
-<h3 id="简单分析一波Mysql的逻辑架构"><a href="#简单分析一波Mysql的逻辑架构" class="headerlink" title="简单分析一波Mysql的逻辑架构"></a>简单分析一波Mysql的逻辑架构</h3><p><img src="https://img-blog.csdn.net/20180831173911997?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3pfcnlhbg==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" alt="Image text"></p>
+<h3 id="简单分析一波Mysql的逻辑架构"><a href="#简单分析一波Mysql的逻辑架构" class="headerlink" title="简单分析一波Mysql的逻辑架构"></a>简单分析一波Mysql的逻辑架构</h3><p><img src="http://xuxiancheng.xyz/images/mysql.png" alt="mysql逻辑架构图"></p>
 <ul>
 <li>采用分层的架构设计，每一层内部又进行分层</li>
 <li>每一层又被拆分成不同的子系统和组件，提高系统的复用性，并且简化系统的开发</li>
@@ -170,8 +170,8 @@
 
             <div class="post-copyright">
     <div class="content">
-        <p>最后更新： 2020年09月17日 02:27</p>
-        <p>原始链接： <a class="post-url" href="/2020/07/30/架构设计浅谈/" title="架构设计浅谈">http://xuxiancheng.xyz/2020/07/30/架构设计浅谈/</a></p>
+        <p>最后更新： 2020年09月17日 10:20</p>
+        <p>原始链接： <a class="post-url" href="/2020/07/30/谈一谈我对架构设计的理解/" title="谈一谈我对架构设计的理解">http://xuxiancheng.xyz/2020/07/30/谈一谈我对架构设计的理解/</a></p>
         <footer>
             <a href="http://xuxiancheng.xyz">
                 <img src="/images/logo1.png" alt="xuxiancheng">
@@ -228,7 +228,7 @@
     <div class="post-share-list" id="share-list">
         <ul class="share-icons">
           <li>
-            <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://xuxiancheng.xyz/2020/07/30/架构设计浅谈/&title=《架构设计浅谈》 — XuXianXheng's Blog&pic=/images/banner.jpg" data-title="微博">
+            <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://xuxiancheng.xyz/2020/07/30/谈一谈我对架构设计的理解/&title=《谈一谈我对架构设计的理解》 — XuXianXheng's Blog&pic=images/arch.png" data-title="微博">
               <i class="fa fa-weibo"></i>
             </a>
           </li>
@@ -238,22 +238,22 @@
             </a>
           </li>
           <li>
-            <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://xuxiancheng.xyz/2020/07/30/架构设计浅谈/&title=《架构设计浅谈》 — XuXianXheng's Blog&source=前言可以说，任何软件都有一个架构，一般大型互联网公司还会专门设有架构师的职位。那么我们有没有想过这个问题，架构到底是什么？为什么我们需要去做架构设计？如果..." data-title="QQ">
+            <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://xuxiancheng.xyz/2020/07/30/谈一谈我对架构设计的理解/&title=《谈一谈我对架构设计的理解》 — XuXianXheng's Blog&source=前言可以说，任何软件都有一个架构，一般大型互联网公司还会专门设有架构师的职位。那么我们有没有想过这个问题，架构到底是什么？为什么我们需要去做架构设计？如果..." data-title="QQ">
               <i class="fa fa-qq"></i>
             </a>
           </li>
           <li>
-            <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://xuxiancheng.xyz/2020/07/30/架构设计浅谈/" data-title="Facebook">
+            <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://xuxiancheng.xyz/2020/07/30/谈一谈我对架构设计的理解/" data-title="Facebook">
               <i class="fa fa-facebook"></i>
             </a>
           </li>
           <li>
-            <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《架构设计浅谈》 — XuXianXheng's Blog&url=http://xuxiancheng.xyz/2020/07/30/架构设计浅谈/&via=http://xuxiancheng.xyz" data-title="Twitter">
+            <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《谈一谈我对架构设计的理解》 — XuXianXheng's Blog&url=http://xuxiancheng.xyz/2020/07/30/谈一谈我对架构设计的理解/&via=http://xuxiancheng.xyz" data-title="Twitter">
               <i class="fa fa-twitter"></i>
             </a>
           </li>
           <li>
-            <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://xuxiancheng.xyz/2020/07/30/架构设计浅谈/" data-title="Google+">
+            <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://xuxiancheng.xyz/2020/07/30/谈一谈我对架构设计的理解/" data-title="Google+">
               <i class="fa fa-google-plus"></i>
             </a>
           </li>
@@ -263,7 +263,7 @@
 <div class="post-modal wx-share" id="wxShare">
     <a class="close" href="javascript:;" id="wxShare-close">×</a>
     <p>扫一扫，分享到微信</p>
-    <img src="//api.qrserver.com/v1/create-qr-code/?data=http://xuxiancheng.xyz/2020/07/30/架构设计浅谈/" alt="微信分享二维码">
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=http://xuxiancheng.xyz/2020/07/30/谈一谈我对架构设计的理解/" alt="微信分享二维码">
 </div>
 
 <div class="mask"></div>
@@ -305,11 +305,6 @@
       </span>
     </a>
   
-  
-    <a href="/2019/12/15/JAVA并发队列同步器浅谈/" id="article-nav-older" class="article-nav-link-wrap">
-      <span class="article-nav-title">JAVA队列同步器浅谈</span>
-      <i class="fa fa-hand-o-right" aria-hidden="true"></i>
-    </a>
   
 </nav>
 
@@ -372,7 +367,7 @@
             
         </div>
         <div id="sidebar-menu-box-tags">
-            <a href="/tags/Java并发/" style="font-size: 10px;">Java并发</a> <a href="/tags/架构设计/" style="font-size: 10px;">架构设计</a> <a href="/tags/算法和数据结构/" style="font-size: 10px;">算法和数据结构</a>
+            <a href="/tags/架构设计/" style="font-size: 10px;">架构设计</a> <a href="/tags/算法和数据结构/" style="font-size: 10px;">算法和数据结构</a>
         </div>
     </div>
     <a href="javascript:;" class="sidebar-menu-box-close">&times;</a>
@@ -405,7 +400,7 @@
     <div class="mobile-header-tag-container">
         <span class="title">Tags</span>
         <div id="mobile-header-container-tags">
-            <a href="/tags/Java并发/" style="font-size: 10px;">Java并发</a> <a href="/tags/架构设计/" style="font-size: 10px;">架构设计</a> <a href="/tags/算法和数据结构/" style="font-size: 10px;">算法和数据结构</a>
+            <a href="/tags/架构设计/" style="font-size: 10px;">架构设计</a> <a href="/tags/算法和数据结构/" style="font-size: 10px;">算法和数据结构</a>
         </div>
     </div>
 </div>
