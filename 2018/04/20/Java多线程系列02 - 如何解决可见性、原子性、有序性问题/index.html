@@ -12,7 +12,7 @@
 <meta name="keywords" content="Java">
 <meta property="og:type" content="article">
 <meta property="og:title" content="如何解决可见性、原子性、有序性问题？">
-<meta property="og:url" content="http://xuxiancheng.xyz/2020/09/18/Java多线程系列02 - 如何解决可见性、原子性、有序性问题/index.html">
+<meta property="og:url" content="http://xuxiancheng.xyz/2018/04/20/Java多线程系列02 - 如何解决可见性、原子性、有序性问题/index.html">
 <meta property="og:site_name" content="Allen&#39;s Blog">
 <meta property="og:description" content="从上一篇文章，我们可以知道并发编程中，需要解决三个核心问题就是可见性、原子性、有序性问题。java提供的关键字volatile可以认为是一个轻量级的锁，可以解决有序性和可见性问题，synchronized关键字来实现互斥锁的功能，可以解决有序性、可见性和原子性问题。下面将对其用法进行一一道来。">
 <meta property="og:locale" content="chinese">
@@ -21,7 +21,7 @@
 <meta property="og:image" content="https://p1-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/a7aa980e88994da582ae5060d1c86606~tplv-k3u1fbpfcp-zoom-1.image">
 <meta property="og:image" content="https://p9-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/7f6cdd8f181e423e90717c0e529649ab~tplv-k3u1fbpfcp-zoom-1.image">
 <meta property="og:image" content="https://p6-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/059a189f706b43baac879d090a09c01a~tplv-k3u1fbpfcp-zoom-1.image">
-<meta property="og:updated_time" content="2020-09-18T04:00:34.715Z">
+<meta property="og:updated_time" content="2020-09-18T04:33:56.438Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="如何解决可见性、原子性、有序性问题？">
 <meta name="twitter:description" content="从上一篇文章，我们可以知道并发编程中，需要解决三个核心问题就是可见性、原子性、有序性问题。java提供的关键字volatile可以认为是一个轻量级的锁，可以解决有序性和可见性问题，synchronized关键字来实现互斥锁的功能，可以解决有序性、可见性和原子性问题。下面将对其用法进行一一道来。">
@@ -124,7 +124,7 @@
               </li>
           
         <li>
-          <i class="fa fa-calendar"></i>  2020-09-18
+          <i class="fa fa-calendar"></i>  2018-04-20
         </li>
         <li>
           <i class="fa fa-eye"></i>
@@ -231,8 +231,8 @@
 
             <div class="post-copyright">
     <div class="content">
-        <!-- <p>最后更新： 2020年09月18日 12:00</p> -->
-        <p>原始链接： <a class="post-url" href="/2020/09/18/Java多线程系列02 - 如何解决可见性、原子性、有序性问题/" title="如何解决可见性、原子性、有序性问题？">http://xuxiancheng.xyz/2020/09/18/Java多线程系列02 - 如何解决可见性、原子性、有序性问题/</a></p>
+        <!-- <p>最后更新： 2020年09月18日 12:33</p> -->
+        <p>原始链接： <a class="post-url" href="/2018/04/20/Java多线程系列02 - 如何解决可见性、原子性、有序性问题/" title="如何解决可见性、原子性、有序性问题？">http://xuxiancheng.xyz/2018/04/20/Java多线程系列02 - 如何解决可见性、原子性、有序性问题/</a></p>
         <footer>
             <a href="http://xuxiancheng.xyz">
                 <img src="/images/logo1.png" alt="xuxiancheng">
@@ -289,7 +289,7 @@
     <div class="post-share-list" id="share-list">
         <ul class="share-icons">
           <li>
-            <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://xuxiancheng.xyz/2020/09/18/Java多线程系列02 - 如何解决可见性、原子性、有序性问题/&title=《如何解决可见性、原子性、有序性问题？》 — Allen's Blog&pic=images/muilt_thread_icon.png" data-title="微博">
+            <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://xuxiancheng.xyz/2018/04/20/Java多线程系列02 - 如何解决可见性、原子性、有序性问题/&title=《如何解决可见性、原子性、有序性问题？》 — Allen's Blog&pic=images/muilt_thread_icon.png" data-title="微博">
               <i class="fa fa-weibo"></i>
             </a>
           </li>
@@ -299,23 +299,23 @@
             </a>
           </li>
           <li>
-            <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://xuxiancheng.xyz/2020/09/18/Java多线程系列02 - 如何解决可见性、原子性、有序性问题/&title=《如何解决可见性、原子性、有序性问题？》 — Allen's Blog&source=
+            <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://xuxiancheng.xyz/2018/04/20/Java多线程系列02 - 如何解决可见性、原子性、有序性问题/&title=《如何解决可见性、原子性、有序性问题？》 — Allen's Blog&source=
 从上一篇文章，我们可以知道并发编程中，需要解决三个核心问题就是可见性、原子性、有序性问题。java提供的关键字volatile可以认为是一个轻量级的锁，..." data-title="QQ">
               <i class="fa fa-qq"></i>
             </a>
           </li>
           <li>
-            <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://xuxiancheng.xyz/2020/09/18/Java多线程系列02 - 如何解决可见性、原子性、有序性问题/" data-title="Facebook">
+            <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://xuxiancheng.xyz/2018/04/20/Java多线程系列02 - 如何解决可见性、原子性、有序性问题/" data-title="Facebook">
               <i class="fa fa-facebook"></i>
             </a>
           </li>
           <li>
-            <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《如何解决可见性、原子性、有序性问题？》 — Allen's Blog&url=http://xuxiancheng.xyz/2020/09/18/Java多线程系列02 - 如何解决可见性、原子性、有序性问题/&via=http://xuxiancheng.xyz" data-title="Twitter">
+            <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《如何解决可见性、原子性、有序性问题？》 — Allen's Blog&url=http://xuxiancheng.xyz/2018/04/20/Java多线程系列02 - 如何解决可见性、原子性、有序性问题/&via=http://xuxiancheng.xyz" data-title="Twitter">
               <i class="fa fa-twitter"></i>
             </a>
           </li>
           <li>
-            <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://xuxiancheng.xyz/2020/09/18/Java多线程系列02 - 如何解决可见性、原子性、有序性问题/" data-title="Google+">
+            <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://xuxiancheng.xyz/2018/04/20/Java多线程系列02 - 如何解决可见性、原子性、有序性问题/" data-title="Google+">
               <i class="fa fa-google-plus"></i>
             </a>
           </li>
@@ -325,7 +325,7 @@
 <div class="post-modal wx-share" id="wxShare">
     <a class="close" href="javascript:;" id="wxShare-close">×</a>
     <p>扫一扫，分享到微信</p>
-    <img src="//api.qrserver.com/v1/create-qr-code/?data=http://xuxiancheng.xyz/2020/09/18/Java多线程系列02 - 如何解决可见性、原子性、有序性问题/" alt="微信分享二维码">
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=http://xuxiancheng.xyz/2018/04/20/Java多线程系列02 - 如何解决可见性、原子性、有序性问题/" alt="微信分享二维码">
 </div>
 
 <div class="mask"></div>
@@ -357,18 +357,18 @@
 
 <nav id="article-nav">
   
-    <a href="/2020/09/18/Java内存模型剖析/" id="article-nav-newer" class="article-nav-link-wrap">
+    <a href="/2018/04/23/Java多线程系列03 - Java内存模型剖析/" id="article-nav-newer" class="article-nav-link-wrap">
 
       <span class="article-nav-title">
         <i class="fa fa-hand-o-left" aria-hidden="true"></i>
         
-          Java内存模型剖析
+          Java多线程系列03 - Java内存模型剖析
         
       </span>
     </a>
   
   
-    <a href="/2020/09/18/Java多线程系列01 - 并发编程总览/" id="article-nav-older" class="article-nav-link-wrap">
+    <a href="/2018/04/18/Java多线程系列01 - 并发编程总览/" id="article-nav-older" class="article-nav-link-wrap">
       <span class="article-nav-title">Java多线程系列02 - 如何解决可见性、原子性、有序性问题</span>
       <i class="fa fa-hand-o-right" aria-hidden="true"></i>
     </a>
