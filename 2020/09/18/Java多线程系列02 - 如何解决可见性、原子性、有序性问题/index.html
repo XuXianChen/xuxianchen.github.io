@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="utf-8">
+  
+  <title>如何解决可见性、原子性、有序性问题？ | Allen&#39;s Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  
+    <meta name="keywords" content="xuxiancheng,风一般的男子">
+  
+  <meta name="description" content="从上一篇文章，我们可以知道并发编程中，需要解决三个核心问题就是可见性、原子性、有序性问题。java提供的关键字volatile可以认为是一个轻量级的锁，可以解决有序性和可见性问题，synchronized关键字来实现互斥锁的功能，可以解决有序性、可见性和原子性问题。下面将对其用法进行一一道来。">
+<meta name="keywords" content="Java">
+<meta property="og:type" content="article">
+<meta property="og:title" content="如何解决可见性、原子性、有序性问题？">
+<meta property="og:url" content="http://xuxiancheng.xyz/2020/09/18/Java多线程系列02 - 如何解决可见性、原子性、有序性问题/index.html">
+<meta property="og:site_name" content="Allen&#39;s Blog">
+<meta property="og:description" content="从上一篇文章，我们可以知道并发编程中，需要解决三个核心问题就是可见性、原子性、有序性问题。java提供的关键字volatile可以认为是一个轻量级的锁，可以解决有序性和可见性问题，synchronized关键字来实现互斥锁的功能，可以解决有序性、可见性和原子性问题。下面将对其用法进行一一道来。">
+<meta property="og:locale" content="chinese">
+<meta property="og:image" content="https://p9-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/426b3d04834f417190d9784a914c3cbb~tplv-k3u1fbpfcp-zoom-1.image">
+<meta property="og:image" content="https://p1-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/4f10493920e84c2cbc0e58b6ab01ecc2~tplv-k3u1fbpfcp-zoom-1.image">
+<meta property="og:image" content="https://p1-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/a7aa980e88994da582ae5060d1c86606~tplv-k3u1fbpfcp-zoom-1.image">
+<meta property="og:image" content="https://p9-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/7f6cdd8f181e423e90717c0e529649ab~tplv-k3u1fbpfcp-zoom-1.image">
+<meta property="og:image" content="https://p6-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/059a189f706b43baac879d090a09c01a~tplv-k3u1fbpfcp-zoom-1.image">
+<meta property="og:updated_time" content="2020-09-18T04:00:34.715Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="如何解决可见性、原子性、有序性问题？">
+<meta name="twitter:description" content="从上一篇文章，我们可以知道并发编程中，需要解决三个核心问题就是可见性、原子性、有序性问题。java提供的关键字volatile可以认为是一个轻量级的锁，可以解决有序性和可见性问题，synchronized关键字来实现互斥锁的功能，可以解决有序性、可见性和原子性问题。下面将对其用法进行一一道来。">
+<meta name="twitter:image" content="https://p9-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/426b3d04834f417190d9784a914c3cbb~tplv-k3u1fbpfcp-zoom-1.image">
+  
+  
+    <link rel="icon" href="images/logo1.png">
+  
+  <link href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="/css/style.css">
+  <script src="/js/pace.min.js"></script>
+  
+
+  
+  
+
+</head>
+</html>
+<body>
+  <div id="container">
+      <header id="header">
+    <div id="banner"></div>
+    <div id="header-outer">
+        <div id="header-menu" class="header-menu-pos animated">
+            <div class="header-menu-container">
+                <a href="/" class="left">
+                    <span class="site-title">风一般的男子</span>
+                </a>
+                <nav id="header-menu-nav" class="right">
+                    
+                    <a  href="/">
+                        <i class="fa fa-home"></i>
+                        <span>Home</span>
+                    </a>
+                    
+                    <a  href="/archives">
+                        <i class="fa fa-archive"></i>
+                        <span>Archives</span>
+                    </a>
+                    
+                    <a  href="/about">
+                        <i class="fa fa-user"></i>
+                        <span>About</span>
+                    </a>
+                    
+                </nav>
+                <a class="mobile-header-menu-button">
+                    <i class="fa fa-bars"></i>
+                </a>
+            </div>
+        </div>
+        <div id="header-row">
+            <div id="logo">
+                <a href="/">
+                    <img src="/images/logo1.png" alt="logo">
+                </a>
+            </div>
+            <div class="header-info">
+                <div id="header-title">
+                    
+                    <h2>
+                        风一般的男子
+                    </h2>
+                    
+                </div>
+                <div id="header-description">
+                    
+                    <h3>
+                        一个专注于 服务端 技术的博客网站
+                    </h3>
+                    
+                </div>
+            </div>
+            <nav class="header-nav">
+                <div class="social">
+                    
+                </div>
+            </nav>
+        </div>
+    </div>
+</header>
+      <div class="outer">
+        <section id="main" class="body-wrap"><article id="post-Java多线程系列02 - 如何解决可见性、原子性、有序性问题" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 class="post-title" itemprop="name">
+      如何解决可见性、原子性、有序性问题？
+    </h1>
+    <div class="post-title-bar">
+      <ul>
+          
+              <li>
+                  <i class="fa fa-book"></i>
+                  
+                      <a href="/categories/编程语言/">编程语言</a>
+                  
+              </li>
+          
+        <li>
+          <i class="fa fa-calendar"></i>  2020-09-18
+        </li>
+        <li>
+          <i class="fa fa-eye"></i>
+          <span id="busuanzi_value_page_pv"></span>
+        </li>
+      </ul>
+    </div>
+  
+
+          
+      </header>
+    
+    <div class="article-entry post-content" itemprop="articleBody">
+      
+            
+            <blockquote>
+<p>从上一篇文章，我们可以知道并发编程中，需要解决三个核心问题就是可见性、原子性、有序性问题。java提供的关键字volatile可以认为是一个轻量级的锁，可以解决有序性和可见性问题，synchronized关键字来实现互斥锁的功能，可以解决有序性、可见性和原子性问题。下面将对其用法进行一一道来。</p>
+</blockquote>
+<a id="more"></a>
+
+<h2 id="volatile如何保证可见性的？"><a href="#volatile如何保证可见性的？" class="headerlink" title="volatile如何保证可见性的？"></a>volatile如何保证可见性的？</h2><p>volatile是如何保证可见性的呢？让我们在X86处理器下通过工具获取JIT编译器生成的汇编指令来查看volatile进行写操作时候，CPU会发生什么事情？Java代码如下:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">instance = <span class="keyword">new</span> Singleton();</span><br></pre></td></tr></table></figure>
+
+<p>转换成汇编代码如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">0x01a3de1d: movb $0×0,0×1104800(%esi);0x01a3de24: lock addl $0×0,(%esp);</span><br></pre></td></tr></table></figure>
+
+<p>通过查阅相关资料，Lock前缀的指令会引发两件事情：</p>
+<ul>
+<li>将当前处理器缓存行的数据写回到内存。</li>
+<li>写会内存的操作会使得其他CPU里缓存了该内存地址的数据失效。</li>
+</ul>
+<p>通过这两条指令就能保证缓存一致性，即数据的可见性。</p>
+<h2 id="volatile如何保证有序性？"><a href="#volatile如何保证有序性？" class="headerlink" title="volatile如何保证有序性？"></a>volatile如何保证有序性？</h2><p>先来看一个经典的double check导致空指针的案例，如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Singleton</span></span>&#123;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">private</span> Object instance;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">public</span> Object <span class="title">getInstance</span><span class="params">()</span> </span>&#123;</span><br><span class="line">      <span class="keyword">if</span>(instance == <span class="keyword">null</span>) &#123;</span><br><span class="line">          <span class="keyword">synchronized</span>(Singleton.class) &#123;</span><br><span class="line">          	<span class="keyword">if</span>(instance == <span class="keyword">null</span>) &#123;</span><br><span class="line">            	<span class="comment">// 指令1：在内存开辟一块内存空间，用于存储该对象</span></span><br><span class="line">                <span class="comment">// 指令2：对象初始化</span></span><br><span class="line">                <span class="comment">// 指令3：将初始化的对象地址赋值给intance引用</span></span><br><span class="line">            	instance = <span class="keyword">new</span> Object();</span><br><span class="line">            &#125;</span><br><span class="line">          &#125;</span><br><span class="line">      &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>如上图，正常情况下，我们认为指令1-&gt;指令2-&gt;指令3会顺序的执行，但是编译器可能会对指令进行重排序，变成指令1-&gt;指令3-&gt;指令2执行，单线程这个是没有问题的，但是多线程情况下，线程1执行了指令1-&gt;指令3，线程2恰好刚进入函数，获取到了一个没有初始化的对象，然后使用该对象的时候可能就会报空指针一样。解决方案非常的简单，加一个volatile关键字修饰即可，如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Singleton</span></span>&#123;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">volatile</span> Object instance;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">public</span> Object <span class="title">getInstance</span><span class="params">()</span> </span>&#123;</span><br><span class="line">      <span class="keyword">if</span>(instance == <span class="keyword">null</span>) &#123;</span><br><span class="line">          <span class="keyword">synchronized</span>(Singleton.class) &#123;</span><br><span class="line">          	<span class="keyword">if</span>(instance == <span class="keyword">null</span>) &#123;</span><br><span class="line">            	instance = <span class="keyword">new</span> Object();</span><br><span class="line">            &#125;</span><br><span class="line">          &#125;</span><br><span class="line">      &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>为什么加上一个volatile修饰词就可以保证不会出现空指针呢？因为volatile修饰的成员变量在初始化的时候，JVM会该变量前后加上内存屏障（一种特殊），从而禁止编译器对其进行重排序。</p>
+<h2 id="利用volatile实现优雅的关闭线程"><a href="#利用volatile实现优雅的关闭线程" class="headerlink" title="利用volatile实现优雅的关闭线程"></a>利用volatile实现优雅的关闭线程</h2><p>通常，线程执行完成或者出现异常，线程就会自动进行关闭回收。如果我们希望在一个线程里面，主动的去中断其他线程，该如何实现呢？Java提供的destroy()方法会直接将线程杀死，太粗暴了，有时候我们希望线程能够完成一些善后的操作才结束线程，所以我们可以考虑自己去实现一个中断位的方式，如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MyThread</span> <span class="keyword">implements</span> <span class="title">Runnable</span> </span>&#123;</span><br><span class="line">       </span><br><span class="line">        <span class="keyword">private</span> <span class="keyword">volatile</span> <span class="keyword">boolean</span> flag = <span class="keyword">false</span>;</span><br><span class="line">        </span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">            <span class="keyword">while</span> (!flag) &#123;</span><br><span class="line">                System.out.println(<span class="string">"do somethings"</span>);</span><br><span class="line">                <span class="keyword">try</span> &#123;</span><br><span class="line">                    Thread.sleep(<span class="number">1000</span>);</span><br><span class="line">                &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">                    <span class="comment">// 恢复线程中断位</span></span><br><span class="line">                    Thread.currentThread().interrupt();</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">destroy</span><span class="params">()</span> </span>&#123;</span><br><span class="line">            flag = <span class="keyword">true</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="synchronized基本用法"><a href="#synchronized基本用法" class="headerlink" title="synchronized基本用法"></a>synchronized基本用法</h2><p><strong>锁模型</strong></p>
+<p>最简单的锁模型，锁对象和临界区资源是1:1的关系，通过这种方式保证一个时间节点，只有一个线程能进入临界区，其他线程都在等待获取锁。<br><img src="https://p9-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/426b3d04834f417190d9784a914c3cbb~tplv-k3u1fbpfcp-zoom-1.image" alt></p>
+<p>锁对象和临界区资源是n:1的关系，这种情况下，需要特别注意死锁问题，如果有多个锁的情况，建议使用Lock相关实现类，Lock实现类针对死锁做了相关优化，如锁超时机制，可被中断的锁等。<br><img src="https://p1-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/4f10493920e84c2cbc0e58b6ab01ecc2~tplv-k3u1fbpfcp-zoom-1.image" alt></p>
+<p><strong>synchronized里面的锁对象</strong></p>
+<p>synchronized关键字使用非常简单，没有显式的展示加锁和解锁操作，也可以看成是java编译器的语法糖，因为编译后的字节码会在临界区的前后加上monitorEnter和monitorExit指令，其实就是加锁和解锁的操作。</p>
+<ul>
+<li>静态方法，锁对象是类对象</li>
+<li>普通方法，锁对象是当前对象<strong>this</strong></li>
+<li>代码块，锁对象是传入的对象</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">SynchronizedDemo</span></span>&#123;</span><br><span class="line">  <span class="comment">// 经典锁对象的范式</span></span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">final</span> Object lock = <span class="keyword">new</span> Object();</span><br><span class="line">  </span><br><span class="line">  <span class="comment">// 锁对象为：SynchronizedDemo.class，是一个全局锁</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">synchronized</span> <span class="keyword">void</span> <span class="title">func</span><span class="params">()</span> </span>&#123;...&#125;</span><br><span class="line">  </span><br><span class="line">  <span class="comment">// 锁对象为：this</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">synchronized</span> <span class="keyword">void</span> <span class="title">func</span><span class="params">()</span> </span>&#123;...&#125;</span><br><span class="line">  </span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">func</span><span class="params">()</span> </span>&#123;</span><br><span class="line">  	<span class="comment">//	锁对象：lock</span></span><br><span class="line">  	<span class="keyword">synchronized</span>(lock) &#123;...&#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="锁存储：Java对象头组成剖析"><a href="#锁存储：Java对象头组成剖析" class="headerlink" title="锁存储：Java对象头组成剖析"></a>锁存储：Java对象头组成剖析</h2><p>在HotSpot虚拟机里面，对象在堆内存中的存储布局可以划分为三个部分：对象头、实例数据和对其补充。</p>
+<p>锁的相关数据是存储在对象头里面的，属于对象运行时数据。Java对象头存储的运行时数据有：对象哈希码(HashCode)，GC分代年龄，锁标记位，偏向锁，偏向线程ID，偏向时间戳等，如图所示：<br><img src="https://p1-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/a7aa980e88994da582ae5060d1c86606~tplv-k3u1fbpfcp-zoom-1.image" alt></p>
+<p>其实，对于我们后端开发程序员而言，不用去纠结对象头锁具体是怎么存储的，比如多少个字节啊，具体是什么数据结构呀，我们只需要掌握，锁相关数据其实就是存储在锁对象的对象头里面，里面存储了锁的指针，偏向锁线程id等信息即可。</p>
+<h2 id="synchronized锁升级以及比较"><a href="#synchronized锁升级以及比较" class="headerlink" title="synchronized锁升级以及比较"></a>synchronized锁升级以及比较</h2><p>Java 1.6 对synchronized进行了性能优化，这才有了锁升级的概率。synchronized的锁分为三类，偏向锁，轻量级锁和重量级锁。synchronized的锁状态为：无锁状态 -&gt; 偏向锁状态 -&gt; 轻量级锁状态 -&gt; 重量级锁状态，并且锁只有升级，但是不会出现降级的情况。下面将对其进行详细的介绍：</p>
+<p><strong>偏向锁</strong></p>
+<p>通过研究发现，大多数的情况下，锁不会出现多线程竞争的情况，而且总是由一个线程多次获取到锁，为了让线程获取锁的成本更低，java引入了偏向锁的概率。</p>
+<p>当一个线程访问同步代码块获取锁时，会在锁对象（前面讲的this，类对象，lock）的对象头里面记录获取到的锁的线程ID，即偏向线程ID。</p>
+<p>以后该线程进入同步代码块时，只需要简单的判断一下锁对象头里面是否存储着该线程的偏向线程ID即可，如果是，则表示线程获取到锁。如果否，则需要判断一下当前锁是否为偏向锁，如果不是偏向锁，则使用CAS修改锁对象的对象头，将偏向线程ID设置为当前线程；如果是偏向锁，则尝试使用CAS将对象头的偏向锁指向当前线程。</p>
+<p>偏向锁使用了一种等待竞争出现才会释放锁的机制，即如果没有锁竞争，偏向线程将一直持有锁。所以当其他线程尝试获取偏向锁时，持有偏向锁的线程才会释放锁。但是偏向锁的撤销需要等到全局安全点（就是当前线程没有正在执行的字节码）。它会首先暂停拥有偏向锁的线程，让你后检查持有偏向锁的线程是否活着。如果线程不处于活动状态，直接将对象头设置为无锁状态。如果线程活着，JVM会遍历栈帧中的锁记录，栈帧中的锁记录和对象头要么偏向于其他线程，要么恢复到无锁状态或者标记对象不适合作为偏向锁从而进行锁升级操作。偏向锁的获取和撤销过程如下图：<img src="https://p9-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/7f6cdd8f181e423e90717c0e529649ab~tplv-k3u1fbpfcp-zoom-1.image" alt></p>
+<p><strong>轻量级锁</strong></p>
+<blockquote>
+<p><strong>加锁</strong>： 线程在执行同步块之前，JVM会先在当前线程的栈桢中创建用于存储锁记录的空间，并将对象头中的Mark Word复制到锁记录中。然后线程尝试使用 CAS将对象头中的Mark Word替换为指向锁记录的指针。如果成功，当前线程获得锁，如果失 败，表示其他线程竞争锁，当前线程便尝试使用自旋来获取锁。</p>
+</blockquote>
+<blockquote>
+<p><strong>解锁</strong>轻量级解锁时，会使用原子的CAS操作将Displaced Mark Word替换回到对象头，如果成功，则表示没有竞争发生。如果失败，表示当前锁存在竞争，锁就会膨胀成重量级锁。</p>
+</blockquote>
+<p><img src="https://p6-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/059a189f706b43baac879d090a09c01a~tplv-k3u1fbpfcp-zoom-1.image" alt></p>
+<p>总的来说，轻量级锁使用循环CAS的方式来进行加锁和解锁，虽然不会导致线程阻塞，但是会对CPU的性能造成较大对消耗，当循环次数到底一定的量时，就会自动的膨胀为重量级锁。</p>
+<p><strong>锁比较</strong></p>
+<table>
+<thead>
+<tr>
+<th>锁</th>
+<th>优点</th>
+<th>缺点</th>
+<th>适应场景</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>偏向锁</td>
+<td>加锁和解锁都不需要额外的消耗和执行同步方法差别不大</td>
+<td>如果线程存在线程竞争，会带来额外锁撤销的消耗</td>
+<td>单线程场景</td>
+</tr>
+<tr>
+<td>轻量级锁</td>
+<td>线程不会阻塞，提高响应时间</td>
+<td>自旋会消耗CPU</td>
+<td>追求响应时间</td>
+</tr>
+<tr>
+<td>重量级锁</td>
+<td>不会自旋，不会消耗CPU</td>
+<td>线程阻塞，响应时间缓慢</td>
+<td>追求吞吐量</td>
+</tr>
+</tbody></table>
+<h2 id="结语"><a href="#结语" class="headerlink" title="结语"></a>结语</h2><p>synchronized其实是对操作系统的monitor（管程）的实现，能够保证单进程的情况下，解决程序的原子性问题。synchronized将加锁和解锁操作进行了隐藏，可以让我们写同步代码非常方便，但是也会带来问题，就是可能会出现死锁的现象，所有当被保护的资源和锁存在1:N的关系时，一定要特别注意，最好是使用Lock相关实现类，利用其超时、可被中断的相关机制。</p>
+<p>参考《Java并发编程的艺术》</p>
+
+            <div class="post-copyright">
+    <div class="content">
+        <!-- <p>最后更新： 2020年09月18日 12:00</p> -->
+        <p>原始链接： <a class="post-url" href="/2020/09/18/Java多线程系列02 - 如何解决可见性、原子性、有序性问题/" title="如何解决可见性、原子性、有序性问题？">http://xuxiancheng.xyz/2020/09/18/Java多线程系列02 - 如何解决可见性、原子性、有序性问题/</a></p>
+        <footer>
+            <a href="http://xuxiancheng.xyz">
+                <img src="/images/logo1.png" alt="xuxiancheng">
+                xuxiancheng
+            </a>
+        </footer>
+    </div>
+</div>
+
+      
+        
+            
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;">赏</a>
+</div>
+
+<div id="reward" class="post-modal reward-lay">
+    <a class="close" href="javascript:;" id="reward-close">×</a>
+    <span class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        请我吃糖~
+        <i class="icon icon-quote-right"></i>
+    </span>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="/images/wechat_code.jpg" alt="打赏二维码">
+        </div>
+        <div class="reward-select">
+            
+            <label class="reward-select-item checked" data-id="wechat" data-wechat="/images/wechat_code.jpg">
+                <img class="reward-select-item-wechat" src="/images/wechat.png" alt="微信">
+            </label>
+            
+            
+            <label class="reward-select-item" data-id="alipay" data-alipay="/images/alipay_code.jpg">
+                <img class="reward-select-item-alipay" src="/images/alipay.png" alt="支付宝">
+            </label>
+            
+        </div>
+    </div>
+</div>
+
+
+        
+    </div>
+    <footer class="article-footer">
+        
+        
+<div class="post-share">
+    <a href="javascript:;" id="share-sub" class="post-share-fab">
+        <i class="fa fa-share-alt"></i>
+    </a>
+    <div class="post-share-list" id="share-list">
+        <ul class="share-icons">
+          <li>
+            <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://xuxiancheng.xyz/2020/09/18/Java多线程系列02 - 如何解决可见性、原子性、有序性问题/&title=《如何解决可见性、原子性、有序性问题？》 — Allen's Blog&pic=images/muilt_thread_icon.png" data-title="微博">
+              <i class="fa fa-weibo"></i>
+            </a>
+          </li>
+          <li>
+            <a class="weixin share-sns" id="wxFab" href="javascript:;" data-title="微信">
+              <i class="fa fa-weixin"></i>
+            </a>
+          </li>
+          <li>
+            <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://xuxiancheng.xyz/2020/09/18/Java多线程系列02 - 如何解决可见性、原子性、有序性问题/&title=《如何解决可见性、原子性、有序性问题？》 — Allen's Blog&source=
+从上一篇文章，我们可以知道并发编程中，需要解决三个核心问题就是可见性、原子性、有序性问题。java提供的关键字volatile可以认为是一个轻量级的锁，..." data-title="QQ">
+              <i class="fa fa-qq"></i>
+            </a>
+          </li>
+          <li>
+            <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://xuxiancheng.xyz/2020/09/18/Java多线程系列02 - 如何解决可见性、原子性、有序性问题/" data-title="Facebook">
+              <i class="fa fa-facebook"></i>
+            </a>
+          </li>
+          <li>
+            <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《如何解决可见性、原子性、有序性问题？》 — Allen's Blog&url=http://xuxiancheng.xyz/2020/09/18/Java多线程系列02 - 如何解决可见性、原子性、有序性问题/&via=http://xuxiancheng.xyz" data-title="Twitter">
+              <i class="fa fa-twitter"></i>
+            </a>
+          </li>
+          <li>
+            <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://xuxiancheng.xyz/2020/09/18/Java多线程系列02 - 如何解决可见性、原子性、有序性问题/" data-title="Google+">
+              <i class="fa fa-google-plus"></i>
+            </a>
+          </li>
+        </ul>
+     </div>
+</div>
+<div class="post-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;" id="wxShare-close">×</a>
+    <p>扫一扫，分享到微信</p>
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=http://xuxiancheng.xyz/2020/09/18/Java多线程系列02 - 如何解决可见性、原子性、有序性问题/" alt="微信分享二维码">
+</div>
+
+<div class="mask"></div>
+
+        
+        <ul class="article-footer-menu">
+            
+            
+  <li class="article-footer-tags">
+    <i class="fa fa-tags"></i>
+      
+    <a href="/tags/Java/" class="color5">Java</a>
+      
+  </li>
+
+        </ul>
+        
+    </footer>
+  </div>
+</article>
+
+
+    <aside class="post-toc-pos post-toc-top" id="post-toc">
+        <nav class="post-toc-wrap">
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#volatile如何保证可见性的？"><span class="post-toc-text">volatile如何保证可见性的？</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#volatile如何保证有序性？"><span class="post-toc-text">volatile如何保证有序性？</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#利用volatile实现优雅的关闭线程"><span class="post-toc-text">利用volatile实现优雅的关闭线程</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#synchronized基本用法"><span class="post-toc-text">synchronized基本用法</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#锁存储：Java对象头组成剖析"><span class="post-toc-text">锁存储：Java对象头组成剖析</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#synchronized锁升级以及比较"><span class="post-toc-text">synchronized锁升级以及比较</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#结语"><span class="post-toc-text">结语</span></a></li></ol>
+        </nav>
+    </aside>
+    
+
+<nav id="article-nav">
+  
+    <a href="/2020/09/18/Java内存模型剖析/" id="article-nav-newer" class="article-nav-link-wrap">
+
+      <span class="article-nav-title">
+        <i class="fa fa-hand-o-left" aria-hidden="true"></i>
+        
+          Java内存模型剖析
+        
+      </span>
+    </a>
+  
+  
+    <a href="/2020/09/18/Java多线程系列01 - 并发编程总览/" id="article-nav-older" class="article-nav-link-wrap">
+      <span class="article-nav-title">Java多线程系列02 - 如何解决可见性、原子性、有序性问题</span>
+      <i class="fa fa-hand-o-right" aria-hidden="true"></i>
+    </a>
+  
+</nav>
+
+
+
+    
+</section>
+        
+      </div>
+      <footer id="footer">
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+      <p>
+        Powered by  <a href="http://hexo.io/" target="_blank">Hexo</a>
+        Theme <a href="//github.com/wongminho/hexo-theme-miho" target="_blank">MiHo</a>
+      &copy; 2020 xuxiancheng<br>
+      </p>
+    </div>
+  </div>
+</footer>
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<script src="//cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+<script>
+  var mihoConfig = {
+      root: "http://xuxiancheng.xyz",
+      animate: true,
+      isHome: false,
+      share: true,
+      reward: 1
+  }
+</script>
+<div class="sidebar">
+    <div id="sidebar-search" title="Search">
+        <i class="fa fa-search"></i>
+    </div>
+    <div id="sidebar-category" title="Categories">
+        <i class="fa fa-book"></i>
+    </div>
+    <div id="sidebar-tag" title="Tags">
+        <i class="fa fa-tags"></i>
+    </div>
+    <div id="sidebar-top">
+        <span class="sidebar-top-icon"><i class="fa fa-angle-up"></i></span>
+    </div>
+</div>
+<div class="sidebar-menu-box" id="sidebar-menu-box">
+    <div class="sidebar-menu-box-container">
+        <div id="sidebar-menu-box-categories">
+            <a class="category-link" href="/categories/Java/">Java</a><a class="category-link" href="/categories/编程语言/">编程语言</a><a class="category-link" href="/categories/计算机基础/">计算机基础</a><a class="category-link" href="/categories/软件工程/">软件工程</a>
+        </div>
+        <div id="sidebar-menu-box-tags">
+            <a href="/tags/Java/" style="font-size: 20px;">Java</a> <a href="/tags/java并发编程/" style="font-size: 10px;">java并发编程</a> <a href="/tags/架构设计/" style="font-size: 10px;">架构设计</a> <a href="/tags/算法和数据结构/" style="font-size: 10px;">算法和数据结构</a>
+        </div>
+    </div>
+    <a href="javascript:;" class="sidebar-menu-box-close">&times;</a>
+</div>
+<div class="mobile-header-menu-nav" id="mobile-header-menu-nav">
+    <div class="mobile-header-menu-container">
+        <span class="title">Menus</span>
+        <ul class="mobile-header-menu-navbar">
+            
+            <li>
+                <a  href="/">
+                    <i class="fa fa-home"></i><span>Home</span>
+                </a>
+            </li>
+            
+            <li>
+                <a  href="/archives">
+                    <i class="fa fa-archive"></i><span>Archives</span>
+                </a>
+            </li>
+            
+            <li>
+                <a  href="/about">
+                    <i class="fa fa-user"></i><span>About</span>
+                </a>
+            </li>
+            
+        </ul>
+    </div>
+    <div class="mobile-header-tag-container">
+        <span class="title">Tags</span>
+        <div id="mobile-header-container-tags">
+            <a href="/tags/Java/" style="font-size: 20px;">Java</a> <a href="/tags/java并发编程/" style="font-size: 10px;">java并发编程</a> <a href="/tags/架构设计/" style="font-size: 10px;">架构设计</a> <a href="/tags/算法和数据结构/" style="font-size: 10px;">算法和数据结构</a>
+        </div>
+    </div>
+</div>
+<div class="search-wrap">
+    <span class="search-close">&times;</span>
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+            <i class="icon icon-lg icon-chevron-left"></i>
+        </a>
+        <input class="search-field" placeholder="Search..." id="keywords">
+        <a id="search-submit" href="javascript:;">
+            <i class="fa fa-search"></i>
+        </a>
+    <div class="search-container" id="search-container">
+        <ul class="search-result" id="search-result">
+        </ul>
+    </div>
+</div>
+
+<div id="search-tpl">
+    <li class="search-result-item">
+        <a href="{url}" class="search-item-li">
+            <span class="search-item-li-title" title="{title}">{title}</span>
+        </a>
+    </li>
+</div>
+<script src="/js/search.js"></script>
+<script src="/js/main.js"></script>
+
+
+  <script src="//cdn.bootcss.com/particles.js/2.0.0/particles.min.js"></script>
+  <div id="particles"></div>
+  <script src="/js/particles.js"></script>
+
+
+
+
+
+
+
+  <link rel="stylesheet" href="//cdn.bootcss.com/animate.css/3.5.0/animate.min.css">
+  <script src="//cdn.bootcss.com/scrollReveal.js/3.0.5/scrollreveal.js"></script>
+  <script src="/js/animate.js"></script>
+
+
+  <script src="/js/pop-img.js"></script>
+  <script>
+     $(".article-entry p img").popImg();
+  </script>
+
+  </div>
+</body>
+</html>
