@@ -8,19 +8,19 @@
   
     <meta name="keywords" content="xuxiancheng,风一般的男子">
   
-  <meta name="description" content="关于多线程的诞生可以参考计算机发展史，并发编程是基于多线程的基础上，为了提升性能而产生的一种编程模式。提升性能主要有两个方向，一是系统的吞吐量，二是系统响应时间。">
+  <meta name="description" content="关于多线程的诞生可以参考计算机发展史，并发编程是基于多线程的基础上，为了提升性能而产生的一种编程模式。通常提升性能主要有两个指标需要关注，一是系统的吞吐量，二是系统响应时间。">
 <meta name="keywords" content="java并发编程">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Java多线程系列01 - 并发编程总览">
 <meta property="og:url" content="http://xuxiancheng.xyz/2018/04/18/Java多线程系列01 - 并发编程总览/index.html">
 <meta property="og:site_name" content="Allen&#39;s Blog">
-<meta property="og:description" content="关于多线程的诞生可以参考计算机发展史，并发编程是基于多线程的基础上，为了提升性能而产生的一种编程模式。提升性能主要有两个方向，一是系统的吞吐量，二是系统响应时间。">
+<meta property="og:description" content="关于多线程的诞生可以参考计算机发展史，并发编程是基于多线程的基础上，为了提升性能而产生的一种编程模式。通常提升性能主要有两个指标需要关注，一是系统的吞吐量，二是系统响应时间。">
 <meta property="og:locale" content="chinese">
 <meta property="og:image" content="http://xuxiancheng.xyz/images/muilt_thread.png">
-<meta property="og:updated_time" content="2020-09-18T04:43:56.417Z">
+<meta property="og:updated_time" content="2020-09-18T06:12:37.872Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Java多线程系列01 - 并发编程总览">
-<meta name="twitter:description" content="关于多线程的诞生可以参考计算机发展史，并发编程是基于多线程的基础上，为了提升性能而产生的一种编程模式。提升性能主要有两个方向，一是系统的吞吐量，二是系统响应时间。">
+<meta name="twitter:description" content="关于多线程的诞生可以参考计算机发展史，并发编程是基于多线程的基础上，为了提升性能而产生的一种编程模式。通常提升性能主要有两个指标需要关注，一是系统的吞吐量，二是系统响应时间。">
 <meta name="twitter:image" content="http://xuxiancheng.xyz/images/muilt_thread.png">
   
   
@@ -137,7 +137,7 @@
       
             
             <blockquote>
-<p>关于多线程的诞生可以参考计算机发展史，并发编程是基于多线程的基础上，为了提升性能而产生的一种编程模式。提升性能主要有两个方向，一是系统的吞吐量，二是系统响应时间。</p>
+<p>关于多线程的诞生可以参考计算机发展史，并发编程是基于多线程的基础上，为了提升性能而产生的一种编程模式。通常提升性能主要有两个指标需要关注，一是系统的吞吐量，二是系统响应时间。</p>
 </blockquote>
 <a id="more"></a>
 
@@ -152,26 +152,33 @@
 </ul>
 <h2 id="并发编程基础"><a href="#并发编程基础" class="headerlink" title="并发编程基础"></a>并发编程基础</h2><p>计算机发展过程中，CPU、内存和IO有很大的速度差(CPU&gt;内存&gt;IO)，并且目前无法解决，根据木桶理论，IO性能将成为计算机性能的瓶颈。 </p>
 <h3 id="BUG的来源"><a href="#BUG的来源" class="headerlink" title="BUG的来源"></a>BUG的来源</h3><ul>
-<li><p><strong>可见性</strong><br>为了优化程序性能，计算机体系结构引入了缓存，CPU读写数据不会直接操作内存，而是读写缓存，多核CPU的情况下，每一颗CPU的缓存数据对其CPU是不可见的。而解决这一问题最直接的方法就是禁用缓存。</p>
+<li><p><strong>可见性</strong><br>为了优化程序性能，计算机体系结构引入了缓存，CPU读写数据不会直接操作内存，而是读写缓存，多核CPU的情况下，每一颗CPU的缓存数据对其CPU是不可见的。而解决这一问题最直接的方法就是禁用缓存， 但是直接禁用又会造成性能问题，所以将禁用缓存的操作交给程序员去实现，程序员可以根据特点的业务场景去禁用缓存，具体如何实现参考java内存模型章节。</p>
 </li>
-<li><p><strong>有序性</strong><br>为了更好的利用缓存，编译器会针对程序指令进行重排序的优化，多线程条件下会导致有序性问题。</p>
+<li><p><strong>有序性</strong><br>为了更好的利用缓存，CPU、编译器会针对程序指令进行重排序的优化，但是保证单线程情况执行结果一致，多线程情况下提供保障，所以多线程条件下会导致有序性问题。</p>
 </li>
-<li><p><strong>原子性</strong><br>分时操作系统提出了线程的概率，通过给线程分配时间片的方式提高CPU的利用率。原子性问题是指一个程序执行是一个不可分割的，而多线程切换会导致原子性问题，解决原子性问题只要保证一个时间点程序只有一个线程执行，并且没有执行完成其他。</p>
+<li><p><strong>原子性</strong><br>分时操作系统提出了线程的概率，通过给线程分配时间片共用CPU的方式提供CPU的利用率。原子性问题是指一个程序执行是一个不可分割的，多线程条件下，线程切换会让程序存在共享竞争问题，即导致原子性问题，解决原子性问题的方法通常是使用互斥锁。</p>
 </li>
 </ul>
-<h3 id="Java内存模型"><a href="#Java内存模型" class="headerlink" title="Java内存模型"></a>Java内存模型</h3><p>解决可见性问题最直接的方式就是禁用缓存，但是如果完全禁用缓存就会导致性能问题；同理，有序性问题亦是如此。所以合理的禁用缓存和禁止指令重排序可以让程序正确执行的同时，保证程序的性能。如何才是合理的呢？这只有程序员才知道，java提出了内存模型的概率，可以让程序员自主操作，主要有final、synchronized、volatile关键字，还有happens-before原则。关于内存模型具体介绍课参考《深入理解java虚拟机》内存模型的介绍，这里就不赘述，java内存模型可以花好几篇文章来介绍了。</p>
-<h3 id="解决原子性问题：互斥锁"><a href="#解决原子性问题：互斥锁" class="headerlink" title="解决原子性问题：互斥锁"></a>解决原子性问题：互斥锁</h3><p>使用面向对象的思想，可以将锁看成是一个对象，有自己的成员变量和成员方法，java实现锁的功能有synchronized和Lock实现类。<br>成员变量有：1、锁对象 2、被保护的资源；<br>成员方法有：1、加锁 2、解锁</p>
+<h3 id="Java内存模型"><a href="#Java内存模型" class="headerlink" title="Java内存模型"></a>Java内存模型</h3><p>解决可见性问题最直接的方式就是禁用缓存，但是如果完全禁用缓存就会导致性能问题；同理，有序性问题亦是如此。所以合理的禁用缓存和禁止指令重排序可以让程序正确执行的同时，保证程序的性能。如何才是合理的呢？这只有程序员才知道，java提出了内存模型的概率，可以让程序员自主操作，主要有final、synchronized、volatile关键字，还有happens-before原则等，java内存模型后续单独来讲解。</p>
+<h3 id="解决原子性问题：互斥锁"><a href="#解决原子性问题：互斥锁" class="headerlink" title="解决原子性问题：互斥锁"></a>解决原子性问题：互斥锁</h3><p>Java实现锁的功能有synchronized和Lock实现类。使用面向对象的思想，可以将锁看成是一个对象，有自己的成员变量和成员方法，下面是对锁模型的一个抽象：</p>
+<ul>
+<li>成员变量有：1、锁对象 2、被保护的资源；</li>
+<li>成员方法有：1、加锁 2、解锁</li>
+</ul>
 <h3 id="死锁"><a href="#死锁" class="headerlink" title="死锁"></a>死锁</h3><p>多线程场景下，使用锁可以解决原子性问题，但是如果使用的不合理，可能会出现死锁问题，一般线上出现死锁问题没有特别好的办法，通常都需要重启应用，所以需要掌握死锁相关原理，并且在写程序时需要特别注意规避死锁问题。</p>
 <h3 id="死锁发生的4个必要条件为："><a href="#死锁发生的4个必要条件为：" class="headerlink" title="死锁发生的4个必要条件为："></a>死锁发生的4个必要条件为：</h3><ul>
 <li><strong>互斥条件</strong>，使用锁就会有互斥，所以没有办法规避</li>
 <li><strong>占用且等待条件</strong>，资源被占用的情况下，其他资源需要获取资源就需要等待</li>
 <li><strong>不可抢占条件</strong>，资源被占用的情况下，其他线程不可抢占</li>
-<li><strong>循环条件</strong>，多个线程都在等待对方持有的锁，形成循环等待<h3 id="优化思路"><a href="#优化思路" class="headerlink" title="优化思路"></a>优化思路</h3>Lock的实现类就是对synchronized的补充，合理使用可以有效的避免死锁问题。</li>
+<li><strong>循环条件</strong>，多个线程都在等待对方持有的锁，形成循环等待</li>
+</ul>
+<h3 id="实际应用中，如何规避死锁问题"><a href="#实际应用中，如何规避死锁问题" class="headerlink" title="实际应用中，如何规避死锁问题"></a>实际应用中，如何规避死锁问题</h3><p>避免死锁，其实只需要破坏上面4个条件中的一个即可，互斥条件是没办法规避的，可以从其他方面进行。Lock的实现类就是对synchronized的补充，合理使用可以有效的避免死锁问题。</p>
+<ul>
 <li><strong>持有锁超时机制</strong></li>
 <li><strong>获取锁线程可被中断</strong></li>
 <li><strong>获取锁顺序一致性</strong></li>
 </ul>
-<h3 id="线程状态"><a href="#线程状态" class="headerlink" title="线程状态"></a>线程状态</h3><p>线程状态看似简单，但是如果出现并发问题，内存溢出等问题，通过jstack进行排查问题时，很重要的一点就是分析线程的状态。</p>
+<h3 id="线程状态"><a href="#线程状态" class="headerlink" title="线程状态"></a>线程状态</h3><p>线程状态看似简单，但是如果出现并发问题，内存溢出等问题，通过jstack进行stack dump排查问题时，很重要的一点就是分析线程的状态。</p>
 <ul>
 <li><strong>NEW(新建)</strong></li>
 <li><strong>RUNNABLE(等待运行、运行中)</strong></li>
@@ -188,7 +195,7 @@
 
             <div class="post-copyright">
     <div class="content">
-        <!-- <p>最后更新： 2020年09月18日 12:43</p> -->
+        <!-- <p>最后更新： 2020年09月18日 14:12</p> -->
         <p>原始链接： <a class="post-url" href="/2018/04/18/Java多线程系列01 - 并发编程总览/" title="Java多线程系列01 - 并发编程总览">http://xuxiancheng.xyz/2018/04/18/Java多线程系列01 - 并发编程总览/</a></p>
         <footer>
             <a href="http://xuxiancheng.xyz">
@@ -257,7 +264,7 @@
           </li>
           <li>
             <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://xuxiancheng.xyz/2018/04/18/Java多线程系列01 - 并发编程总览/&title=《Java多线程系列01 - 并发编程总览》 — Allen's Blog&source=
-关于多线程的诞生可以参考计算机发展史，并发编程是基于多线程的基础上，为了提升性能而产生的一种编程模式。提升性能主要有两个方向，一是系统的吞吐量，二是系统..." data-title="QQ">
+关于多线程的诞生可以参考计算机发展史，并发编程是基于多线程的基础上，为了提升性能而产生的一种编程模式。通常提升性能主要有两个指标需要关注，一是系统的吞吐..." data-title="QQ">
               <i class="fa fa-qq"></i>
             </a>
           </li>
@@ -307,7 +314,7 @@
 
     <aside class="post-toc-pos post-toc-top" id="post-toc">
         <nav class="post-toc-wrap">
-            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#明确三个核心"><span class="post-toc-text">明确三个核心</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#并发编程基础"><span class="post-toc-text">并发编程基础</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#BUG的来源"><span class="post-toc-text">BUG的来源</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#Java内存模型"><span class="post-toc-text">Java内存模型</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#解决原子性问题：互斥锁"><span class="post-toc-text">解决原子性问题：互斥锁</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#死锁"><span class="post-toc-text">死锁</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#死锁发生的4个必要条件为："><span class="post-toc-text">死锁发生的4个必要条件为：</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#优化思路"><span class="post-toc-text">优化思路</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#线程状态"><span class="post-toc-text">线程状态</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#JUC"><span class="post-toc-text">JUC</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#结语"><span class="post-toc-text">结语</span></a></li></ol>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#明确三个核心"><span class="post-toc-text">明确三个核心</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#并发编程基础"><span class="post-toc-text">并发编程基础</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#BUG的来源"><span class="post-toc-text">BUG的来源</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#Java内存模型"><span class="post-toc-text">Java内存模型</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#解决原子性问题：互斥锁"><span class="post-toc-text">解决原子性问题：互斥锁</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#死锁"><span class="post-toc-text">死锁</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#死锁发生的4个必要条件为："><span class="post-toc-text">死锁发生的4个必要条件为：</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#实际应用中，如何规避死锁问题"><span class="post-toc-text">实际应用中，如何规避死锁问题</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#线程状态"><span class="post-toc-text">线程状态</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#JUC"><span class="post-toc-text">JUC</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#结语"><span class="post-toc-text">结语</span></a></li></ol>
         </nav>
     </aside>
     

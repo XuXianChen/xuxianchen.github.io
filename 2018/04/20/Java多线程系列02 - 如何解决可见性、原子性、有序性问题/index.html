@@ -8,24 +8,24 @@
   
     <meta name="keywords" content="xuxiancheng,风一般的男子">
   
-  <meta name="description" content="从上一篇文章，我们可以知道并发编程中，需要解决三个核心问题就是可见性、原子性、有序性问题。java提供的关键字volatile可以认为是一个轻量级的锁，可以解决有序性和可见性问题，synchronized关键字来实现互斥锁的功能，可以解决有序性、可见性和原子性问题。下面将对其用法进行一一道来。">
+  <meta name="description" content="从上一篇文章，我们可以知道并发编程中，需要解决三个核心问题就是可见性、原子性、有序性问题。java提供的关键字volatile可以认为是一个轻量级的锁，可以解决有序性和可见性问题，synchronized关键字来实现互斥锁的功能，可以解决有序性、可见性和原子性问题。">
 <meta name="keywords" content="java并发编程">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Java多线程系列02 - 如何解决可见性、原子性、有序性问题">
 <meta property="og:url" content="http://xuxiancheng.xyz/2018/04/20/Java多线程系列02 - 如何解决可见性、原子性、有序性问题/index.html">
 <meta property="og:site_name" content="Allen&#39;s Blog">
-<meta property="og:description" content="从上一篇文章，我们可以知道并发编程中，需要解决三个核心问题就是可见性、原子性、有序性问题。java提供的关键字volatile可以认为是一个轻量级的锁，可以解决有序性和可见性问题，synchronized关键字来实现互斥锁的功能，可以解决有序性、可见性和原子性问题。下面将对其用法进行一一道来。">
+<meta property="og:description" content="从上一篇文章，我们可以知道并发编程中，需要解决三个核心问题就是可见性、原子性、有序性问题。java提供的关键字volatile可以认为是一个轻量级的锁，可以解决有序性和可见性问题，synchronized关键字来实现互斥锁的功能，可以解决有序性、可见性和原子性问题。">
 <meta property="og:locale" content="chinese">
-<meta property="og:image" content="https://p9-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/426b3d04834f417190d9784a914c3cbb~tplv-k3u1fbpfcp-zoom-1.image">
-<meta property="og:image" content="https://p1-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/4f10493920e84c2cbc0e58b6ab01ecc2~tplv-k3u1fbpfcp-zoom-1.image">
-<meta property="og:image" content="https://p1-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/a7aa980e88994da582ae5060d1c86606~tplv-k3u1fbpfcp-zoom-1.image">
+<meta property="og:image" content="http://xuxiancheng.xyz/images/lock_model.png">
+<meta property="og:image" content="http://xuxiancheng.xyz/images/lock_model_2.png">
+<meta property="og:image" content="http://xuxiancheng.xyz/images/lock_model_3.png">
 <meta property="og:image" content="https://p9-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/7f6cdd8f181e423e90717c0e529649ab~tplv-k3u1fbpfcp-zoom-1.image">
-<meta property="og:image" content="https://p6-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/059a189f706b43baac879d090a09c01a~tplv-k3u1fbpfcp-zoom-1.image">
-<meta property="og:updated_time" content="2020-09-18T04:37:16.460Z">
+<meta property="og:image" content="http://xuxiancheng.xyz/images/lock_model_4.png">
+<meta property="og:updated_time" content="2020-09-18T06:17:58.428Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Java多线程系列02 - 如何解决可见性、原子性、有序性问题">
-<meta name="twitter:description" content="从上一篇文章，我们可以知道并发编程中，需要解决三个核心问题就是可见性、原子性、有序性问题。java提供的关键字volatile可以认为是一个轻量级的锁，可以解决有序性和可见性问题，synchronized关键字来实现互斥锁的功能，可以解决有序性、可见性和原子性问题。下面将对其用法进行一一道来。">
-<meta name="twitter:image" content="https://p9-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/426b3d04834f417190d9784a914c3cbb~tplv-k3u1fbpfcp-zoom-1.image">
+<meta name="twitter:description" content="从上一篇文章，我们可以知道并发编程中，需要解决三个核心问题就是可见性、原子性、有序性问题。java提供的关键字volatile可以认为是一个轻量级的锁，可以解决有序性和可见性问题，synchronized关键字来实现互斥锁的功能，可以解决有序性、可见性和原子性问题。">
+<meta name="twitter:image" content="http://xuxiancheng.xyz/images/lock_model.png">
   
   
     <link rel="icon" href="images/logo1.png">
@@ -141,7 +141,7 @@
       
             
             <blockquote>
-<p>从上一篇文章，我们可以知道并发编程中，需要解决三个核心问题就是可见性、原子性、有序性问题。java提供的关键字volatile可以认为是一个轻量级的锁，可以解决有序性和可见性问题，synchronized关键字来实现互斥锁的功能，可以解决有序性、可见性和原子性问题。下面将对其用法进行一一道来。</p>
+<p>从上一篇文章，我们可以知道并发编程中，需要解决三个核心问题就是可见性、原子性、有序性问题。java提供的关键字volatile可以认为是一个轻量级的锁，可以解决有序性和可见性问题，synchronized关键字来实现互斥锁的功能，可以解决有序性、可见性和原子性问题。</p>
 </blockquote>
 <a id="more"></a>
 
@@ -163,13 +163,13 @@
 <p>如上图，正常情况下，我们认为指令1-&gt;指令2-&gt;指令3会顺序的执行，但是编译器可能会对指令进行重排序，变成指令1-&gt;指令3-&gt;指令2执行，单线程这个是没有问题的，但是多线程情况下，线程1执行了指令1-&gt;指令3，线程2恰好刚进入函数，获取到了一个没有初始化的对象，然后使用该对象的时候可能就会报空指针一样。解决方案非常的简单，加一个volatile关键字修饰即可，如下：</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Singleton</span></span>&#123;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">volatile</span> Object instance;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">public</span> Object <span class="title">getInstance</span><span class="params">()</span> </span>&#123;</span><br><span class="line">      <span class="keyword">if</span>(instance == <span class="keyword">null</span>) &#123;</span><br><span class="line">          <span class="keyword">synchronized</span>(Singleton.class) &#123;</span><br><span class="line">          	<span class="keyword">if</span>(instance == <span class="keyword">null</span>) &#123;</span><br><span class="line">            	instance = <span class="keyword">new</span> Object();</span><br><span class="line">            &#125;</span><br><span class="line">          &#125;</span><br><span class="line">      &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<p>为什么加上一个volatile修饰词就可以保证不会出现空指针呢？因为volatile修饰的成员变量在初始化的时候，JVM会该变量前后加上内存屏障（一种特殊），从而禁止编译器对其进行重排序。</p>
+<p>为什么加上一个volatile修饰词就可以保证不会出现空指针呢？因为volatile修饰的成员变量在初始化的时候，JVM会该变量前后加上内存屏障（一种特殊的指令），禁止编译器对其进行重排序。</p>
 <h2 id="利用volatile实现优雅的关闭线程"><a href="#利用volatile实现优雅的关闭线程" class="headerlink" title="利用volatile实现优雅的关闭线程"></a>利用volatile实现优雅的关闭线程</h2><p>通常，线程执行完成或者出现异常，线程就会自动进行关闭回收。如果我们希望在一个线程里面，主动的去中断其他线程，该如何实现呢？Java提供的destroy()方法会直接将线程杀死，太粗暴了，有时候我们希望线程能够完成一些善后的操作才结束线程，所以我们可以考虑自己去实现一个中断位的方式，如下：</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MyThread</span> <span class="keyword">implements</span> <span class="title">Runnable</span> </span>&#123;</span><br><span class="line">       </span><br><span class="line">        <span class="keyword">private</span> <span class="keyword">volatile</span> <span class="keyword">boolean</span> flag = <span class="keyword">false</span>;</span><br><span class="line">        </span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">            <span class="keyword">while</span> (!flag) &#123;</span><br><span class="line">                System.out.println(<span class="string">"do somethings"</span>);</span><br><span class="line">                <span class="keyword">try</span> &#123;</span><br><span class="line">                    Thread.sleep(<span class="number">1000</span>);</span><br><span class="line">                &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">                    <span class="comment">// 恢复线程中断位</span></span><br><span class="line">                    Thread.currentThread().interrupt();</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">destroy</span><span class="params">()</span> </span>&#123;</span><br><span class="line">            flag = <span class="keyword">true</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
 
 <h2 id="synchronized基本用法"><a href="#synchronized基本用法" class="headerlink" title="synchronized基本用法"></a>synchronized基本用法</h2><p><strong>锁模型</strong></p>
-<p>最简单的锁模型，锁对象和临界区资源是1:1的关系，通过这种方式保证一个时间节点，只有一个线程能进入临界区，其他线程都在等待获取锁。<br><img src="https://p9-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/426b3d04834f417190d9784a914c3cbb~tplv-k3u1fbpfcp-zoom-1.image" alt></p>
-<p>锁对象和临界区资源是n:1的关系，这种情况下，需要特别注意死锁问题，如果有多个锁的情况，建议使用Lock相关实现类，Lock实现类针对死锁做了相关优化，如锁超时机制，可被中断的锁等。<br><img src="https://p1-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/4f10493920e84c2cbc0e58b6ab01ecc2~tplv-k3u1fbpfcp-zoom-1.image" alt></p>
+<p>最简单的锁模型，锁对象和临界区资源是1:1的关系，通过这种方式保证一个时间节点，只有一个线程能进入临界区，其他线程都在等待获取锁。<br><img src="http://xuxiancheng.xyz/images/lock_model.png" alt></p>
+<p>锁对象和临界区资源是n:1的关系，这种情况下，需要特别注意死锁问题，如果有多个锁的情况，建议使用Lock相关实现类，Lock实现类针对死锁做了相关优化，如锁超时机制，可被中断的锁等。<br><img src="http://xuxiancheng.xyz/images/lock_model_2.png" alt></p>
 <p><strong>synchronized里面的锁对象</strong></p>
 <p>synchronized关键字使用非常简单，没有显式的展示加锁和解锁操作，也可以看成是java编译器的语法糖，因为编译后的字节码会在临界区的前后加上monitorEnter和monitorExit指令，其实就是加锁和解锁的操作。</p>
 <ul>
@@ -180,7 +180,7 @@
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">SynchronizedDemo</span></span>&#123;</span><br><span class="line">  <span class="comment">// 经典锁对象的范式</span></span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">final</span> Object lock = <span class="keyword">new</span> Object();</span><br><span class="line">  </span><br><span class="line">  <span class="comment">// 锁对象为：SynchronizedDemo.class，是一个全局锁</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">synchronized</span> <span class="keyword">void</span> <span class="title">func</span><span class="params">()</span> </span>&#123;...&#125;</span><br><span class="line">  </span><br><span class="line">  <span class="comment">// 锁对象为：this</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">synchronized</span> <span class="keyword">void</span> <span class="title">func</span><span class="params">()</span> </span>&#123;...&#125;</span><br><span class="line">  </span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">func</span><span class="params">()</span> </span>&#123;</span><br><span class="line">  	<span class="comment">//	锁对象：lock</span></span><br><span class="line">  	<span class="keyword">synchronized</span>(lock) &#123;...&#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <h2 id="锁存储：Java对象头组成剖析"><a href="#锁存储：Java对象头组成剖析" class="headerlink" title="锁存储：Java对象头组成剖析"></a>锁存储：Java对象头组成剖析</h2><p>在HotSpot虚拟机里面，对象在堆内存中的存储布局可以划分为三个部分：对象头、实例数据和对其补充。</p>
-<p>锁的相关数据是存储在对象头里面的，属于对象运行时数据。Java对象头存储的运行时数据有：对象哈希码(HashCode)，GC分代年龄，锁标记位，偏向锁，偏向线程ID，偏向时间戳等，如图所示：<br><img src="https://p1-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/a7aa980e88994da582ae5060d1c86606~tplv-k3u1fbpfcp-zoom-1.image" alt></p>
+<p>锁的相关数据是存储在对象头里面的，属于对象运行时数据。Java对象头存储的运行时数据有：对象哈希码(HashCode)，GC分代年龄，锁标记位，偏向锁，偏向线程ID，偏向时间戳等，如图所示：<br><img src="http://xuxiancheng.xyz/images/lock_model_3.png" alt></p>
 <p>其实，对于我们后端开发程序员而言，不用去纠结对象头锁具体是怎么存储的，比如多少个字节啊，具体是什么数据结构呀，我们只需要掌握，锁相关数据其实就是存储在锁对象的对象头里面，里面存储了锁的指针，偏向锁线程id等信息即可。</p>
 <h2 id="synchronized锁升级以及比较"><a href="#synchronized锁升级以及比较" class="headerlink" title="synchronized锁升级以及比较"></a>synchronized锁升级以及比较</h2><p>Java 1.6 对synchronized进行了性能优化，这才有了锁升级的概率。synchronized的锁分为三类，偏向锁，轻量级锁和重量级锁。synchronized的锁状态为：无锁状态 -&gt; 偏向锁状态 -&gt; 轻量级锁状态 -&gt; 重量级锁状态，并且锁只有升级，但是不会出现降级的情况。下面将对其进行详细的介绍：</p>
 <p><strong>偏向锁</strong></p>
@@ -195,7 +195,7 @@
 <blockquote>
 <p><strong>解锁</strong>轻量级解锁时，会使用原子的CAS操作将Displaced Mark Word替换回到对象头，如果成功，则表示没有竞争发生。如果失败，表示当前锁存在竞争，锁就会膨胀成重量级锁。</p>
 </blockquote>
-<p><img src="https://p6-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/059a189f706b43baac879d090a09c01a~tplv-k3u1fbpfcp-zoom-1.image" alt></p>
+<p><img src="http://xuxiancheng.xyz/images/lock_model_4.png" alt></p>
 <p>总的来说，轻量级锁使用循环CAS的方式来进行加锁和解锁，虽然不会导致线程阻塞，但是会对CPU的性能造成较大对消耗，当循环次数到底一定的量时，就会自动的膨胀为重量级锁。</p>
 <p><strong>锁比较</strong></p>
 <table>
@@ -231,7 +231,7 @@
 
             <div class="post-copyright">
     <div class="content">
-        <!-- <p>最后更新： 2020年09月18日 12:37</p> -->
+        <!-- <p>最后更新： 2020年09月18日 14:17</p> -->
         <p>原始链接： <a class="post-url" href="/2018/04/20/Java多线程系列02 - 如何解决可见性、原子性、有序性问题/" title="Java多线程系列02 - 如何解决可见性、原子性、有序性问题">http://xuxiancheng.xyz/2018/04/20/Java多线程系列02 - 如何解决可见性、原子性、有序性问题/</a></p>
         <footer>
             <a href="http://xuxiancheng.xyz">
