@@ -9,7 +9,7 @@
     <meta name="keywords" content="xuxiancheng,风一般的男子">
   
   <meta name="description" content="Java内存模型(Java Memory Model,简称JMM)屏蔽了不同平台对内存访问的差异，从而让Java语言对内存的操作一致性。通过定义共享变量的访问规则，控制共享内存变量在内存中的读取操作来实现。">
-<meta name="keywords" content="Java">
+<meta name="keywords" content="java并发编程">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Java多线程系列03 - Java内存模型剖析">
 <meta property="og:url" content="http://xuxiancheng.xyz/2018/04/23/Java多线程系列03 - Java内存模型剖析/index.html">
@@ -17,7 +17,7 @@
 <meta property="og:description" content="Java内存模型(Java Memory Model,简称JMM)屏蔽了不同平台对内存访问的差异，从而让Java语言对内存的操作一致性。通过定义共享变量的访问规则，控制共享内存变量在内存中的读取操作来实现。">
 <meta property="og:locale" content="chinese">
 <meta property="og:image" content="https://p9-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/4783c22e847749f69e490085131c563d~tplv-k3u1fbpfcp-zoom-1.image">
-<meta property="og:updated_time" content="2020-09-18T04:33:56.460Z">
+<meta property="og:updated_time" content="2020-09-18T04:37:16.473Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Java多线程系列03 - Java内存模型剖析">
 <meta name="twitter:description" content="Java内存模型(Java Memory Model,简称JMM)屏蔽了不同平台对内存访问的差异，从而让Java语言对内存的操作一致性。通过定义共享变量的访问规则，控制共享内存变量在内存中的读取操作来实现。">
@@ -115,7 +115,7 @@
               <li>
                   <i class="fa fa-book"></i>
                   
-                      <a href="/categories/编程语言/">编程语言</a>
+                      <a href="/categories/Java/">Java</a>
                   
               </li>
           
@@ -183,7 +183,7 @@
 
             <div class="post-copyright">
     <div class="content">
-        <!-- <p>最后更新： 2020年09月18日 12:33</p> -->
+        <!-- <p>最后更新： 2020年09月18日 12:37</p> -->
         <p>原始链接： <a class="post-url" href="/2018/04/23/Java多线程系列03 - Java内存模型剖析/" title="Java多线程系列03 - Java内存模型剖析">http://xuxiancheng.xyz/2018/04/23/Java多线程系列03 - Java内存模型剖析/</a></p>
         <footer>
             <a href="http://xuxiancheng.xyz">
@@ -289,7 +289,7 @@ Java内存模型(Java Memory Model,简称JMM)屏蔽了不同平台对内存访�
   <li class="article-footer-tags">
     <i class="fa fa-tags"></i>
       
-    <a href="/tags/Java/" class="color5">Java</a>
+    <a href="/tags/java并发编程/" class="color4">java并发编程</a>
       
   </li>
 
@@ -314,14 +314,14 @@ Java内存模型(Java Memory Model,简称JMM)屏蔽了不同平台对内存访�
       <span class="article-nav-title">
         <i class="fa fa-hand-o-left" aria-hidden="true"></i>
         
-          Java并发编程实战
+          Java多线程系列04 - Java并发编程实战
         
       </span>
     </a>
   
   
     <a href="/2018/04/20/Java多线程系列02 - 如何解决可见性、原子性、有序性问题/" id="article-nav-older" class="article-nav-link-wrap">
-      <span class="article-nav-title">如何解决可见性、原子性、有序性问题？</span>
+      <span class="article-nav-title">Java多线程系列02 - 如何解决可见性、原子性、有序性问题</span>
       <i class="fa fa-hand-o-right" aria-hidden="true"></i>
     </a>
   
@@ -383,10 +383,10 @@ Java内存模型(Java Memory Model,简称JMM)屏蔽了不同平台对内存访�
 <div class="sidebar-menu-box" id="sidebar-menu-box">
     <div class="sidebar-menu-box-container">
         <div id="sidebar-menu-box-categories">
-            <a class="category-link" href="/categories/Java/">Java</a><a class="category-link" href="/categories/编程语言/">编程语言</a><a class="category-link" href="/categories/计算机基础/">计算机基础</a><a class="category-link" href="/categories/软件工程/">软件工程</a>
+            <a class="category-link" href="/categories/Java/">Java</a><a class="category-link" href="/categories/计算机基础/">计算机基础</a><a class="category-link" href="/categories/软件工程/">软件工程</a>
         </div>
         <div id="sidebar-menu-box-tags">
-            <a href="/tags/Java/" style="font-size: 20px;">Java</a> <a href="/tags/java并发编程/" style="font-size: 10px;">java并发编程</a> <a href="/tags/架构设计/" style="font-size: 10px;">架构设计</a> <a href="/tags/算法和数据结构/" style="font-size: 10px;">算法和数据结构</a>
+            <a href="/tags/java并发编程/" style="font-size: 20px;">java并发编程</a> <a href="/tags/架构设计/" style="font-size: 10px;">架构设计</a> <a href="/tags/算法和数据结构/" style="font-size: 10px;">算法和数据结构</a>
         </div>
     </div>
     <a href="javascript:;" class="sidebar-menu-box-close">&times;</a>
@@ -419,7 +419,7 @@ Java内存模型(Java Memory Model,简称JMM)屏蔽了不同平台对内存访�
     <div class="mobile-header-tag-container">
         <span class="title">Tags</span>
         <div id="mobile-header-container-tags">
-            <a href="/tags/Java/" style="font-size: 20px;">Java</a> <a href="/tags/java并发编程/" style="font-size: 10px;">java并发编程</a> <a href="/tags/架构设计/" style="font-size: 10px;">架构设计</a> <a href="/tags/算法和数据结构/" style="font-size: 10px;">算法和数据结构</a>
+            <a href="/tags/java并发编程/" style="font-size: 20px;">java并发编程</a> <a href="/tags/架构设计/" style="font-size: 10px;">架构设计</a> <a href="/tags/算法和数据结构/" style="font-size: 10px;">算法和数据结构</a>
         </div>
     </div>
 </div>

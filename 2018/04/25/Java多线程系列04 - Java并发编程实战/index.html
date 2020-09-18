@@ -3,15 +3,15 @@
 <head><meta name="generator" content="Hexo 3.9.0">
   <meta charset="utf-8">
   
-  <title>Java并发编程实战 | Allen&#39;s Blog</title>
+  <title>Java多线程系列04 - Java并发编程实战 | Allen&#39;s Blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   
     <meta name="keywords" content="xuxiancheng,风一般的男子">
   
   <meta name="description" content="Java并发编程领域的知识非常的多，也非常的杂，但是可以抽象成三个方面：分工、同步/协作和互斥（保证线程安全）三个核心。">
-<meta name="keywords" content="Java">
+<meta name="keywords" content="java并发编程">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Java并发编程实战">
+<meta property="og:title" content="Java多线程系列04 - Java并发编程实战">
 <meta property="og:url" content="http://xuxiancheng.xyz/2018/04/25/Java多线程系列04 - Java并发编程实战/index.html">
 <meta property="og:site_name" content="Allen&#39;s Blog">
 <meta property="og:description" content="Java并发编程领域的知识非常的多，也非常的杂，但是可以抽象成三个方面：分工、同步/协作和互斥（保证线程安全）三个核心。">
@@ -20,9 +20,9 @@
 <meta property="og:image" content="https://p6-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/5a1a103c922d479c9c2b6200d5386df6~tplv-k3u1fbpfcp-zoom-1.image">
 <meta property="og:image" content="https://p1-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/b92e123254f74bac92a1e16773bdbd91~tplv-k3u1fbpfcp-zoom-1.image">
 <meta property="og:image" content="https://p6-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/af270461515c4c079e24fb807e2b637c~tplv-k3u1fbpfcp-zoom-1.image">
-<meta property="og:updated_time" content="2020-09-18T04:33:56.455Z">
+<meta property="og:updated_time" content="2020-09-18T04:37:16.466Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Java并发编程实战">
+<meta name="twitter:title" content="Java多线程系列04 - Java并发编程实战">
 <meta name="twitter:description" content="Java并发编程领域的知识非常的多，也非常的杂，但是可以抽象成三个方面：分工、同步/协作和互斥（保证线程安全）三个核心。">
 <meta name="twitter:image" content="https://p6-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/2be56848f55945c38c76d614679e7db3~tplv-k3u1fbpfcp-zoom-1.image">
   
@@ -110,7 +110,7 @@
         
   
     <h1 class="post-title" itemprop="name">
-      Java并发编程实战
+      Java多线程系列04 - Java并发编程实战
     </h1>
     <div class="post-title-bar">
       <ul>
@@ -118,7 +118,7 @@
               <li>
                   <i class="fa fa-book"></i>
                   
-                      <a href="/categories/编程语言/">编程语言</a>
+                      <a href="/categories/Java/">Java</a>
                   
               </li>
           
@@ -228,8 +228,8 @@
 
             <div class="post-copyright">
     <div class="content">
-        <!-- <p>最后更新： 2020年09月18日 12:33</p> -->
-        <p>原始链接： <a class="post-url" href="/2018/04/25/Java多线程系列04 - Java并发编程实战/" title="Java并发编程实战">http://xuxiancheng.xyz/2018/04/25/Java多线程系列04 - Java并发编程实战/</a></p>
+        <!-- <p>最后更新： 2020年09月18日 12:37</p> -->
+        <p>原始链接： <a class="post-url" href="/2018/04/25/Java多线程系列04 - Java并发编程实战/" title="Java多线程系列04 - Java并发编程实战">http://xuxiancheng.xyz/2018/04/25/Java多线程系列04 - Java并发编程实战/</a></p>
         <footer>
             <a href="http://xuxiancheng.xyz">
                 <img src="/images/logo1.png" alt="xuxiancheng">
@@ -286,7 +286,7 @@
     <div class="post-share-list" id="share-list">
         <ul class="share-icons">
           <li>
-            <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://xuxiancheng.xyz/2018/04/25/Java多线程系列04 - Java并发编程实战/&title=《Java并发编程实战》 — Allen's Blog&pic=images/muilt_thread_icon.png" data-title="微博">
+            <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://xuxiancheng.xyz/2018/04/25/Java多线程系列04 - Java并发编程实战/&title=《Java多线程系列04 - Java并发编程实战》 — Allen's Blog&pic=images/muilt_thread_icon.png" data-title="微博">
               <i class="fa fa-weibo"></i>
             </a>
           </li>
@@ -296,7 +296,7 @@
             </a>
           </li>
           <li>
-            <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://xuxiancheng.xyz/2018/04/25/Java多线程系列04 - Java并发编程实战/&title=《Java并发编程实战》 — Allen's Blog&source=
+            <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://xuxiancheng.xyz/2018/04/25/Java多线程系列04 - Java并发编程实战/&title=《Java多线程系列04 - Java并发编程实战》 — Allen's Blog&source=
 Java并发编程领域的知识非常的多，也非常的杂，但是可以抽象成三个方面：分工、同步/协作和互斥（保证线程安全）三个核心。
 " data-title="QQ">
               <i class="fa fa-qq"></i>
@@ -308,7 +308,7 @@ Java并发编程领域的知识非常的多，也非常的杂，但是可以抽�
             </a>
           </li>
           <li>
-            <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《Java并发编程实战》 — Allen's Blog&url=http://xuxiancheng.xyz/2018/04/25/Java多线程系列04 - Java并发编程实战/&via=http://xuxiancheng.xyz" data-title="Twitter">
+            <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《Java多线程系列04 - Java并发编程实战》 — Allen's Blog&url=http://xuxiancheng.xyz/2018/04/25/Java多线程系列04 - Java并发编程实战/&via=http://xuxiancheng.xyz" data-title="Twitter">
               <i class="fa fa-twitter"></i>
             </a>
           </li>
@@ -335,7 +335,7 @@ Java并发编程领域的知识非常的多，也非常的杂，但是可以抽�
   <li class="article-footer-tags">
     <i class="fa fa-tags"></i>
       
-    <a href="/tags/Java/" class="color5">Java</a>
+    <a href="/tags/java并发编程/" class="color4">java并发编程</a>
       
   </li>
 
@@ -429,10 +429,10 @@ Java并发编程领域的知识非常的多，也非常的杂，但是可以抽�
 <div class="sidebar-menu-box" id="sidebar-menu-box">
     <div class="sidebar-menu-box-container">
         <div id="sidebar-menu-box-categories">
-            <a class="category-link" href="/categories/Java/">Java</a><a class="category-link" href="/categories/编程语言/">编程语言</a><a class="category-link" href="/categories/计算机基础/">计算机基础</a><a class="category-link" href="/categories/软件工程/">软件工程</a>
+            <a class="category-link" href="/categories/Java/">Java</a><a class="category-link" href="/categories/计算机基础/">计算机基础</a><a class="category-link" href="/categories/软件工程/">软件工程</a>
         </div>
         <div id="sidebar-menu-box-tags">
-            <a href="/tags/Java/" style="font-size: 20px;">Java</a> <a href="/tags/java并发编程/" style="font-size: 10px;">java并发编程</a> <a href="/tags/架构设计/" style="font-size: 10px;">架构设计</a> <a href="/tags/算法和数据结构/" style="font-size: 10px;">算法和数据结构</a>
+            <a href="/tags/java并发编程/" style="font-size: 20px;">java并发编程</a> <a href="/tags/架构设计/" style="font-size: 10px;">架构设计</a> <a href="/tags/算法和数据结构/" style="font-size: 10px;">算法和数据结构</a>
         </div>
     </div>
     <a href="javascript:;" class="sidebar-menu-box-close">&times;</a>
@@ -465,7 +465,7 @@ Java并发编程领域的知识非常的多，也非常的杂，但是可以抽�
     <div class="mobile-header-tag-container">
         <span class="title">Tags</span>
         <div id="mobile-header-container-tags">
-            <a href="/tags/Java/" style="font-size: 20px;">Java</a> <a href="/tags/java并发编程/" style="font-size: 10px;">java并发编程</a> <a href="/tags/架构设计/" style="font-size: 10px;">架构设计</a> <a href="/tags/算法和数据结构/" style="font-size: 10px;">算法和数据结构</a>
+            <a href="/tags/java并发编程/" style="font-size: 20px;">java并发编程</a> <a href="/tags/架构设计/" style="font-size: 10px;">架构设计</a> <a href="/tags/算法和数据结构/" style="font-size: 10px;">算法和数据结构</a>
         </div>
     </div>
 </div>
