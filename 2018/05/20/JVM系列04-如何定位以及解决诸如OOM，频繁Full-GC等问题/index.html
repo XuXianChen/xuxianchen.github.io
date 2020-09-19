@@ -3,21 +3,22 @@
 <head><meta name="generator" content="Hexo 3.9.0">
   <meta charset="utf-8">
   
-  <title>Archives: 2018 | Allen&#39;s Blog</title>
+  <title>JVM系列04 - 如何定位以及解决诸如OOM，频繁Full GC等问题 | Allen&#39;s Blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   
     <meta name="keywords" content="xuxiancheng,风一般的男子">
   
   <meta name="description" content="Allen&apos;s Blog">
-<meta name="keywords" content="后端, JAVA, java, Spring, 设计模式, mybatis, mysql, Mysql, oracle, springcloud, springboot">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Allen&#39;s Blog">
-<meta property="og:url" content="http://xuxiancheng.xyz/archives/2018/index.html">
+<meta name="keywords" content="jvm">
+<meta property="og:type" content="article">
+<meta property="og:title" content="JVM系列04 - 如何定位以及解决诸如OOM，频繁Full GC等问题">
+<meta property="og:url" content="http://xuxiancheng.xyz/2018/05/20/JVM系列04-如何定位以及解决诸如OOM，频繁Full-GC等问题/index.html">
 <meta property="og:site_name" content="Allen&#39;s Blog">
 <meta property="og:description" content="Allen&apos;s Blog">
 <meta property="og:locale" content="chinese">
+<meta property="og:updated_time" content="2020-09-19T10:26:53.737Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Allen&#39;s Blog">
+<meta name="twitter:title" content="JVM系列04 - 如何定位以及解决诸如OOM，频繁Full GC等问题">
 <meta name="twitter:description" content="Allen&apos;s Blog">
   
   
@@ -97,35 +98,146 @@
     </div>
 </header>
       <div class="outer">
-        <section id="main" class="body-wrap">
-  
-  
+        <section id="main" class="body-wrap"><article id="post-JVM系列04-如何定位以及解决诸如OOM，频繁Full-GC等问题" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-inner">
     
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2018" class="archive-year">2018</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2018/05/20/JVM系列04-如何定位以及解决诸如OOM，频繁Full-GC等问题/" class="archive-article-date">
-  <time datetime="2018-05-20T14:20:34.000Z" itemprop="datePublished">05-20</time>
-</a>
-      
+      <header class="article-header">
+        
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2018/05/20/JVM系列04-如何定位以及解决诸如OOM，频繁Full-GC等问题/"  >JVM系列04 - 如何定位以及解决诸如OOM，频繁Full GC等问题</a>
+    <h1 class="post-title" itemprop="name">
+      JVM系列04 - 如何定位以及解决诸如OOM，频繁Full GC等问题
     </h1>
+    <div class="post-title-bar">
+      <ul>
+          
+              <li>
+                  <i class="fa fa-book"></i>
+                  
+                      <a href="/categories/Java/">Java</a>
+                  
+              </li>
+          
+        <li>
+          <i class="fa fa-calendar"></i>  2018-05-20
+        </li>
+        <li>
+          <i class="fa fa-eye"></i>
+          <span id="busuanzi_value_page_pv"></span>
+        </li>
+      </ul>
+    </div>
   
 
-    </header>
+          
+      </header>
+    
+    <div class="article-entry post-content" itemprop="articleBody">
       
-        <div class="archive-post-footer">
+            
+            
+            <div class="post-copyright">
+    <div class="content">
+        <!-- <p>最后更新： 2020年09月19日 18:26</p> -->
+        <p>原始链接： <a class="post-url" href="/2018/05/20/JVM系列04-如何定位以及解决诸如OOM，频繁Full-GC等问题/" title="JVM系列04 - 如何定位以及解决诸如OOM，频繁Full GC等问题">http://xuxiancheng.xyz/2018/05/20/JVM系列04-如何定位以及解决诸如OOM，频繁Full-GC等问题/</a></p>
+        <footer>
+            <a href="http://xuxiancheng.xyz">
+                <img src="/images/logo1.png" alt="xuxiancheng">
+                xuxiancheng
+            </a>
+        </footer>
+    </div>
+</div>
+
+      
+        
+            
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;">赏</a>
+</div>
+
+<div id="reward" class="post-modal reward-lay">
+    <a class="close" href="javascript:;" id="reward-close">×</a>
+    <span class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        请我吃糖~
+        <i class="icon icon-quote-right"></i>
+    </span>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="/images/wechat_code.jpg" alt="打赏二维码">
+        </div>
+        <div class="reward-select">
+            
+            <label class="reward-select-item checked" data-id="wechat" data-wechat="/images/wechat_code.jpg">
+                <img class="reward-select-item-wechat" src="/images/wechat.png" alt="微信">
+            </label>
+            
+            
+            <label class="reward-select-item" data-id="alipay" data-alipay="/images/alipay_code.jpg">
+                <img class="reward-select-item-alipay" src="/images/alipay.png" alt="支付宝">
+            </label>
+            
+        </div>
+    </div>
+</div>
+
+
+        
+    </div>
+    <footer class="article-footer">
+        
+        
+<div class="post-share">
+    <a href="javascript:;" id="share-sub" class="post-share-fab">
+        <i class="fa fa-share-alt"></i>
+    </a>
+    <div class="post-share-list" id="share-list">
+        <ul class="share-icons">
+          <li>
+            <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://xuxiancheng.xyz/2018/05/20/JVM系列04-如何定位以及解决诸如OOM，频繁Full-GC等问题/&title=《JVM系列04 - 如何定位以及解决诸如OOM，频繁Full GC等问题》 — Allen's Blog&pic=images/jvm_icon.png" data-title="微博">
+              <i class="fa fa-weibo"></i>
+            </a>
+          </li>
+          <li>
+            <a class="weixin share-sns" id="wxFab" href="javascript:;" data-title="微信">
+              <i class="fa fa-weixin"></i>
+            </a>
+          </li>
+          <li>
+            <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://xuxiancheng.xyz/2018/05/20/JVM系列04-如何定位以及解决诸如OOM，频繁Full-GC等问题/&title=《JVM系列04 - 如何定位以及解决诸如OOM，频繁Full GC等问题》 — Allen's Blog&source=Allen's Blog" data-title="QQ">
+              <i class="fa fa-qq"></i>
+            </a>
+          </li>
+          <li>
+            <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://xuxiancheng.xyz/2018/05/20/JVM系列04-如何定位以及解决诸如OOM，频繁Full-GC等问题/" data-title="Facebook">
+              <i class="fa fa-facebook"></i>
+            </a>
+          </li>
+          <li>
+            <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《JVM系列04 - 如何定位以及解决诸如OOM，频繁Full GC等问题》 — Allen's Blog&url=http://xuxiancheng.xyz/2018/05/20/JVM系列04-如何定位以及解决诸如OOM，频繁Full-GC等问题/&via=http://xuxiancheng.xyz" data-title="Twitter">
+              <i class="fa fa-twitter"></i>
+            </a>
+          </li>
+          <li>
+            <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://xuxiancheng.xyz/2018/05/20/JVM系列04-如何定位以及解决诸如OOM，频繁Full-GC等问题/" data-title="Google+">
+              <i class="fa fa-google-plus"></i>
+            </a>
+          </li>
+        </ul>
+     </div>
+</div>
+<div class="post-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;" id="wxShare-close">×</a>
+    <p>扫一扫，分享到微信</p>
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=http://xuxiancheng.xyz/2018/05/20/JVM系列04-如何定位以及解决诸如OOM，频繁Full-GC等问题/" alt="微信分享二维码">
+</div>
+
+<div class="mask"></div>
+
+        
+        <ul class="article-footer-menu">
+            
             
   <li class="article-footer-tags">
     <i class="fa fa-tags"></i>
@@ -134,240 +246,37 @@
       
   </li>
 
-        </div>
-      
+        </ul>
+        
+    </footer>
   </div>
 </article>
 
+
+
+<nav id="article-nav">
   
+    <a href="/2019/07/30/谈一谈我对架构设计的理解/" id="article-nav-newer" class="article-nav-link-wrap">
+
+      <span class="article-nav-title">
+        <i class="fa fa-hand-o-left" aria-hidden="true"></i>
+        
+          谈一谈我对架构设计的理解
+        
+      </span>
+    </a>
+  
+  
+    <a href="/2018/05/16/JVM系列03-类加载/" id="article-nav-older" class="article-nav-link-wrap">
+      <span class="article-nav-title">JVM系列03 - 类加载</span>
+      <i class="fa fa-hand-o-right" aria-hidden="true"></i>
+    </a>
+  
+</nav>
+
+
+
     
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2018/05/16/JVM系列03-类加载/" class="archive-article-date">
-  <time datetime="2018-05-16T15:15:24.000Z" itemprop="datePublished">05-16</time>
-</a>
-      
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2018/05/16/JVM系列03-类加载/"  >JVM系列03 - 类加载</a>
-    </h1>
-  
-
-    </header>
-      
-        <div class="archive-post-footer">
-            
-  <li class="article-footer-tags">
-    <i class="fa fa-tags"></i>
-      
-    <a href="/tags/jvm/" class="color4">jvm</a>
-      
-  </li>
-
-        </div>
-      
-  </div>
-</article>
-
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2018/05/13/JVM系列02-垃圾回收器/" class="archive-article-date">
-  <time datetime="2018-05-13T15:45:54.000Z" itemprop="datePublished">05-13</time>
-</a>
-      
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2018/05/13/JVM系列02-垃圾回收器/"  >JVM系列02 - 垃圾回收器</a>
-    </h1>
-  
-
-    </header>
-      
-        <div class="archive-post-footer">
-            
-  <li class="article-footer-tags">
-    <i class="fa fa-tags"></i>
-      
-    <a href="/tags/jvm/" class="color4">jvm</a>
-      
-  </li>
-
-        </div>
-      
-  </div>
-</article>
-
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2018/05/09/JVM系列01-内存管理/" class="archive-article-date">
-  <time datetime="2018-05-09T14:31:54.000Z" itemprop="datePublished">05-09</time>
-</a>
-      
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2018/05/09/JVM系列01-内存管理/"  >JVM系列01 - 内存管理</a>
-    </h1>
-  
-
-    </header>
-      
-        <div class="archive-post-footer">
-            
-  <li class="article-footer-tags">
-    <i class="fa fa-tags"></i>
-      
-    <a href="/tags/jvm/" class="color4">jvm</a>
-      
-  </li>
-
-        </div>
-      
-  </div>
-</article>
-
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2018/04/25/Java多线程系列04 - Java并发编程实战/" class="archive-article-date">
-  <time datetime="2018-04-25T13:55:00.000Z" itemprop="datePublished">04-25</time>
-</a>
-      
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2018/04/25/Java多线程系列04 - Java并发编程实战/"  >Java多线程系列04 - Java并发编程实战</a>
-    </h1>
-  
-
-    </header>
-      
-        <div class="archive-post-footer">
-            
-  <li class="article-footer-tags">
-    <i class="fa fa-tags"></i>
-      
-    <a href="/tags/java并发编程/" class="color4">java并发编程</a>
-      
-  </li>
-
-        </div>
-      
-  </div>
-</article>
-
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2018/04/23/Java多线程系列03 - Java内存模型剖析/" class="archive-article-date">
-  <time datetime="2018-04-23T14:16:00.000Z" itemprop="datePublished">04-23</time>
-</a>
-      
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2018/04/23/Java多线程系列03 - Java内存模型剖析/"  >Java多线程系列03 - Java内存模型剖析</a>
-    </h1>
-  
-
-    </header>
-      
-        <div class="archive-post-footer">
-            
-  <li class="article-footer-tags">
-    <i class="fa fa-tags"></i>
-      
-    <a href="/tags/java并发编程/" class="color4">java并发编程</a>
-      
-  </li>
-
-        </div>
-      
-  </div>
-</article>
-
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2018/04/20/Java多线程系列02 - 如何解决可见性、原子性、有序性问题/" class="archive-article-date">
-  <time datetime="2018-04-20T15:12:00.000Z" itemprop="datePublished">04-20</time>
-</a>
-      
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2018/04/20/Java多线程系列02 - 如何解决可见性、原子性、有序性问题/"  >Java多线程系列02 - 如何解决可见性、原子性、有序性问题</a>
-    </h1>
-  
-
-    </header>
-      
-        <div class="archive-post-footer">
-            
-  <li class="article-footer-tags">
-    <i class="fa fa-tags"></i>
-      
-    <a href="/tags/java并发编程/" class="color4">java并发编程</a>
-      
-  </li>
-
-        </div>
-      
-  </div>
-</article>
-
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2018/04/18/Java多线程系列01 - 并发编程总览/" class="archive-article-date">
-  <time datetime="2018-04-18T03:42:00.000Z" itemprop="datePublished">04-18</time>
-</a>
-      
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2018/04/18/Java多线程系列01 - 并发编程总览/"  >Java多线程系列01 - 并发编程总览</a>
-    </h1>
-  
-
-    </header>
-      
-        <div class="archive-post-footer">
-            
-  <li class="article-footer-tags">
-    <i class="fa fa-tags"></i>
-      
-    <a href="/tags/java并发编程/" class="color4">java并发编程</a>
-      
-  </li>
-
-        </div>
-      
-  </div>
-</article>
-
-  
-  
-    </div></section>
-  
-
 </section>
         
       </div>

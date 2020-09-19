@@ -161,6 +161,263 @@
 
 
   
+    <article id="post-JVM系列04-如何定位以及解决诸如OOM，频繁Full-GC等问题" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/05/20/JVM系列04-如何定位以及解决诸如OOM，频繁Full-GC等问题/"  >JVM系列04 - 如何定位以及解决诸如OOM，频繁Full GC等问题</a>
+    </h1>
+  
+
+          
+              <span class="header-cate">
+                <i class="fa fa-map-marker"></i>
+                  
+                  <a href="/categories/Java/">Java</a>
+                  
+              </span>
+          
+      </header>
+    
+    <div class="article-entry " itemprop="articleBody">
+      
+        <div class="article-img">
+            <a href="/2018/05/20/JVM系列04-如何定位以及解决诸如OOM，频繁Full-GC等问题/" >
+                
+                <img src="http://xuxiancheng.xyz/images/jvm_icon.png" alt="JVM系列04 - 如何定位以及解决诸如OOM，频繁Full GC等问题" title="JVM系列04 - 如何定位以及解决诸如OOM，频繁Full GC等问题">
+                
+            </a>
+        </div>
+        <div class="article-feed">
+            <p>
+                
+            </p>
+        </div>
+      
+        
+    </div>
+    <footer class="article-footer">
+        
+        <ul class="article-footer-menu">
+            
+                <li><i class="fa fa-calendar"></i>2018-05-20</li>
+            
+            
+  <li class="article-footer-tags">
+    <i class="fa fa-tags"></i>
+      
+    <a href="/tags/jvm/" class="color4">jvm</a>
+      
+  </li>
+
+        </ul>
+        
+            <a href="/2018/05/20/JVM系列04-如何定位以及解决诸如OOM，频繁Full-GC等问题/#more" class="article-more-link" >more&gt;&gt;</a>
+        
+    </footer>
+  </div>
+</article>
+
+
+  
+    <article id="post-JVM系列03-类加载" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/05/16/JVM系列03-类加载/"  >JVM系列03 - 类加载</a>
+    </h1>
+  
+
+          
+              <span class="header-cate">
+                <i class="fa fa-map-marker"></i>
+                  
+                  <a href="/categories/Java/">Java</a>
+                  
+              </span>
+          
+      </header>
+    
+    <div class="article-entry " itemprop="articleBody">
+      
+        <div class="article-img">
+            <a href="/2018/05/16/JVM系列03-类加载/" >
+                
+                <img src="http://xuxiancheng.xyz/images/jvm_icon.png" alt="JVM系列03 - 类加载" title="JVM系列03 - 类加载">
+                
+            </a>
+        </div>
+        <div class="article-feed">
+            <p>
+                
+JVM向程序员屏蔽了操作系统、硬件等不同底层操作，实现了Java语言跨平台的特性。而Class文件屏蔽了不同的语言与JVM的交互，如Java、kotlin、scala等语言都需要编译成字节码才能在JVM中运行，JVM并不关心是何种语言。
+
+什么时候触发类加载？
+当程序遇到new关键字，而对应的类没有加载过
+读取一个类的静态字段时（但是特别注意如果是被final修饰是不会...
+            </p>
+        </div>
+      
+        
+    </div>
+    <footer class="article-footer">
+        
+        <ul class="article-footer-menu">
+            
+                <li><i class="fa fa-calendar"></i>2018-05-16</li>
+            
+            
+  <li class="article-footer-tags">
+    <i class="fa fa-tags"></i>
+      
+    <a href="/tags/jvm/" class="color4">jvm</a>
+      
+  </li>
+
+        </ul>
+        
+            <a href="/2018/05/16/JVM系列03-类加载/#more" class="article-more-link" >more&gt;&gt;</a>
+        
+    </footer>
+  </div>
+</article>
+
+
+  
+    <article id="post-JVM系列02-垃圾回收器" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/05/13/JVM系列02-垃圾回收器/"  >JVM系列02 - 垃圾回收器</a>
+    </h1>
+  
+
+          
+              <span class="header-cate">
+                <i class="fa fa-map-marker"></i>
+                  
+                  <a href="/categories/Java/">Java</a>
+                  
+              </span>
+          
+      </header>
+    
+    <div class="article-entry " itemprop="articleBody">
+      
+        <div class="article-img">
+            <a href="/2018/05/13/JVM系列02-垃圾回收器/" >
+                
+                <img src="http://xuxiancheng.xyz/images/jvm_icon.png" alt="JVM系列02 - 垃圾回收器" title="JVM系列02 - 垃圾回收器">
+                
+            </a>
+        </div>
+        <div class="article-feed">
+            <p>
+                <blockquote>
+<p>上一篇文章讲解了内存如何分配问题，这一篇讲一下内存如何回收。</p>
+</blockquote>
+            </p>
+        </div>
+      
+        
+    </div>
+    <footer class="article-footer">
+        
+        <ul class="article-footer-menu">
+            
+                <li><i class="fa fa-calendar"></i>2018-05-13</li>
+            
+            
+  <li class="article-footer-tags">
+    <i class="fa fa-tags"></i>
+      
+    <a href="/tags/jvm/" class="color4">jvm</a>
+      
+  </li>
+
+        </ul>
+        
+            <a href="/2018/05/13/JVM系列02-垃圾回收器/#more" class="article-more-link" >more&gt;&gt;</a>
+        
+    </footer>
+  </div>
+</article>
+
+
+  
+    <article id="post-JVM系列01-内存管理" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/05/09/JVM系列01-内存管理/"  >JVM系列01 - 内存管理</a>
+    </h1>
+  
+
+          
+              <span class="header-cate">
+                <i class="fa fa-map-marker"></i>
+                  
+                  <a href="/categories/Java/">Java</a>
+                  
+              </span>
+          
+      </header>
+    
+    <div class="article-entry " itemprop="articleBody">
+      
+        <div class="article-img">
+            <a href="/2018/05/09/JVM系列01-内存管理/" >
+                
+                <img src="http://xuxiancheng.xyz/images/jvm_icon.png" alt="JVM系列01 - 内存管理" title="JVM系列01 - 内存管理">
+                
+            </a>
+        </div>
+        <div class="article-feed">
+            <p>
+                <blockquote>
+<p>Java语言这么流行最主要的原因之一就是：自动分配内存，自动回收内存，即JVM的内存管理机制。而C、C++类的语言内存的分配和回收都是由程序员控制的，很容易出现内存溢出、内存泄漏等问题。内存自动分配和回收机制方便管理的同时，也带来了新的问题，如果出现内存泄漏问题，排查起来就会异常艰辛，所以我们需要对JVM相关技术有一定的了解。</p>
+</blockquote>
+            </p>
+        </div>
+      
+        
+    </div>
+    <footer class="article-footer">
+        
+        <ul class="article-footer-menu">
+            
+                <li><i class="fa fa-calendar"></i>2018-05-09</li>
+            
+            
+  <li class="article-footer-tags">
+    <i class="fa fa-tags"></i>
+      
+    <a href="/tags/jvm/" class="color4">jvm</a>
+      
+  </li>
+
+        </ul>
+        
+            <a href="/2018/05/09/JVM系列01-内存管理/#more" class="article-more-link" >more&gt;&gt;</a>
+        
+    </footer>
+  </div>
+</article>
+
+
+  
     <article id="post-Java多线程系列04 - Java并发编程实战" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -353,135 +610,11 @@
 
 
   
-    <article id="post-Java多线程系列01 - 并发编程总览" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/04/18/Java多线程系列01 - 并发编程总览/"  >Java多线程系列01 - 并发编程总览</a>
-    </h1>
-  
-
-          
-              <span class="header-cate">
-                <i class="fa fa-map-marker"></i>
-                  
-                  <a href="/categories/Java/">Java</a>
-                  
-              </span>
-          
-      </header>
-    
-    <div class="article-entry " itemprop="articleBody">
-      
-        <div class="article-img">
-            <a href="/2018/04/18/Java多线程系列01 - 并发编程总览/" >
-                
-                <img src="http://xuxiancheng.xyz/images/muilt_thread_icon.png" alt="Java多线程系列01 - 并发编程总览" title="Java多线程系列01 - 并发编程总览">
-                
-            </a>
-        </div>
-        <div class="article-feed">
-            <p>
-                <blockquote>
-<p>关于多线程的诞生可以参考计算机发展史，并发编程是基于多线程的基础上，为了提升性能而产生的一种编程模式。通常提升性能主要有两个指标需要关注，一是系统的吞吐量，二是系统响应时间。</p>
-</blockquote>
-            </p>
-        </div>
-      
-        
-    </div>
-    <footer class="article-footer">
-        
-        <ul class="article-footer-menu">
-            
-                <li><i class="fa fa-calendar"></i>2018-04-18</li>
-            
-            
-  <li class="article-footer-tags">
-    <i class="fa fa-tags"></i>
-      
-    <a href="/tags/java并发编程/" class="color4">java并发编程</a>
-      
-  </li>
-
-        </ul>
-        
-            <a href="/2018/04/18/Java多线程系列01 - 并发编程总览/#more" class="article-more-link" >more&gt;&gt;</a>
-        
-    </footer>
-  </div>
-</article>
 
 
-  
-    <article id="post-深入理解哈希算法、哈希表原理" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/03/19/深入理解哈希算法、哈希表原理/"  >深入理解哈希算法、哈希表原理</a>
-    </h1>
-  
-
-          
-              <span class="header-cate">
-                <i class="fa fa-map-marker"></i>
-                  
-                  <a href="/categories/计算机基础/">计算机基础</a>
-                  
-              </span>
-          
-      </header>
-    
-    <div class="article-entry " itemprop="articleBody">
-      
-        <div class="article-img">
-            <a href="/2017/03/19/深入理解哈希算法、哈希表原理/" >
-                
-                <img src="http://xuxiancheng.xyz/images/hashIcon.png" alt="深入理解哈希算法、哈希表原理" title="深入理解哈希算法、哈希表原理">
-                
-            </a>
-        </div>
-        <div class="article-feed">
-            <p>
-                <blockquote>
-<p>哈希表是一种k-v的数据结构，理论上查询的时间复杂度位O(1)。在大部分的开发语言如Java、Go、C#的集合库都有实现。哈希算法应用也非常广泛，如加密、分布式场景数据分片、生成唯一标识、P2P协议验证数据的完整性等。通常哈希表和哈希算法都是结合在一起使用。</p>
-</blockquote>
-            </p>
-        </div>
-      
-        
-    </div>
-    <footer class="article-footer">
-        
-        <ul class="article-footer-menu">
-            
-                <li><i class="fa fa-calendar"></i>2017-03-19</li>
-            
-            
-  <li class="article-footer-tags">
-    <i class="fa fa-tags"></i>
-      
-    <a href="/tags/算法和数据结构/" class="color3">算法和数据结构</a>
-      
-  </li>
-
-        </ul>
-        
-            <a href="/2017/03/19/深入理解哈希算法、哈希表原理/#more" class="article-more-link" >more&gt;&gt;</a>
-        
-    </footer>
-  </div>
-</article>
-
-
-  
-
+  <nav id="page-nav">
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/">Next >></a>
+  </nav>
 </section>
         
       </div>
@@ -538,7 +671,7 @@
             <a class="category-link" href="/categories/Java/">Java</a><a class="category-link" href="/categories/计算机基础/">计算机基础</a><a class="category-link" href="/categories/软件工程/">软件工程</a>
         </div>
         <div id="sidebar-menu-box-tags">
-            <a href="/tags/java并发编程/" style="font-size: 20px;">java并发编程</a> <a href="/tags/架构设计/" style="font-size: 10px;">架构设计</a> <a href="/tags/算法和数据结构/" style="font-size: 10px;">算法和数据结构</a>
+            <a href="/tags/java并发编程/" style="font-size: 20px;">java并发编程</a> <a href="/tags/jvm/" style="font-size: 20px;">jvm</a> <a href="/tags/架构设计/" style="font-size: 10px;">架构设计</a> <a href="/tags/算法和数据结构/" style="font-size: 10px;">算法和数据结构</a>
         </div>
     </div>
     <a href="javascript:;" class="sidebar-menu-box-close">&times;</a>
@@ -571,7 +704,7 @@
     <div class="mobile-header-tag-container">
         <span class="title">Tags</span>
         <div id="mobile-header-container-tags">
-            <a href="/tags/java并发编程/" style="font-size: 20px;">java并发编程</a> <a href="/tags/架构设计/" style="font-size: 10px;">架构设计</a> <a href="/tags/算法和数据结构/" style="font-size: 10px;">算法和数据结构</a>
+            <a href="/tags/java并发编程/" style="font-size: 20px;">java并发编程</a> <a href="/tags/jvm/" style="font-size: 20px;">jvm</a> <a href="/tags/架构设计/" style="font-size: 10px;">架构设计</a> <a href="/tags/算法和数据结构/" style="font-size: 10px;">算法和数据结构</a>
         </div>
     </div>
 </div>

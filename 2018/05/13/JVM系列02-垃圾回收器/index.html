@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="utf-8">
+  
+  <title>JVM系列02 - 垃圾回收器 | Allen&#39;s Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  
+    <meta name="keywords" content="xuxiancheng,风一般的男子">
+  
+  <meta name="description" content="上一篇文章讲解了内存如何分配问题，这一篇讲一下内存如何回收。">
+<meta name="keywords" content="jvm">
+<meta property="og:type" content="article">
+<meta property="og:title" content="JVM系列02 - 垃圾回收器">
+<meta property="og:url" content="http://xuxiancheng.xyz/2018/05/13/JVM系列02-垃圾回收器/index.html">
+<meta property="og:site_name" content="Allen&#39;s Blog">
+<meta property="og:description" content="上一篇文章讲解了内存如何分配问题，这一篇讲一下内存如何回收。">
+<meta property="og:locale" content="chinese">
+<meta property="og:updated_time" content="2020-09-19T02:35:24.458Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="JVM系列02 - 垃圾回收器">
+<meta name="twitter:description" content="上一篇文章讲解了内存如何分配问题，这一篇讲一下内存如何回收。">
+  
+  
+    <link rel="icon" href="images/logo1.png">
+  
+  <link href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="/css/style.css">
+  <script src="/js/pace.min.js"></script>
+  
+
+  
+  
+
+</head>
+</html>
+<body>
+  <div id="container">
+      <header id="header">
+    <div id="banner"></div>
+    <div id="header-outer">
+        <div id="header-menu" class="header-menu-pos animated">
+            <div class="header-menu-container">
+                <a href="/" class="left">
+                    <span class="site-title">风一般的男子</span>
+                </a>
+                <nav id="header-menu-nav" class="right">
+                    
+                    <a  href="/">
+                        <i class="fa fa-home"></i>
+                        <span>Home</span>
+                    </a>
+                    
+                    <a  href="/archives">
+                        <i class="fa fa-archive"></i>
+                        <span>Archives</span>
+                    </a>
+                    
+                    <a  href="/about">
+                        <i class="fa fa-user"></i>
+                        <span>About</span>
+                    </a>
+                    
+                </nav>
+                <a class="mobile-header-menu-button">
+                    <i class="fa fa-bars"></i>
+                </a>
+            </div>
+        </div>
+        <div id="header-row">
+            <div id="logo">
+                <a href="/">
+                    <img src="/images/logo1.png" alt="logo">
+                </a>
+            </div>
+            <div class="header-info">
+                <div id="header-title">
+                    
+                    <h2>
+                        风一般的男子
+                    </h2>
+                    
+                </div>
+                <div id="header-description">
+                    
+                    <h3>
+                        一个专注于 服务端 技术的博客网站
+                    </h3>
+                    
+                </div>
+            </div>
+            <nav class="header-nav">
+                <div class="social">
+                    
+                </div>
+            </nav>
+        </div>
+    </div>
+</header>
+      <div class="outer">
+        <section id="main" class="body-wrap"><article id="post-JVM系列02-垃圾回收器" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 class="post-title" itemprop="name">
+      JVM系列02 - 垃圾回收器
+    </h1>
+    <div class="post-title-bar">
+      <ul>
+          
+              <li>
+                  <i class="fa fa-book"></i>
+                  
+                      <a href="/categories/Java/">Java</a>
+                  
+              </li>
+          
+        <li>
+          <i class="fa fa-calendar"></i>  2018-05-13
+        </li>
+        <li>
+          <i class="fa fa-eye"></i>
+          <span id="busuanzi_value_page_pv"></span>
+        </li>
+      </ul>
+    </div>
+  
+
+          
+      </header>
+    
+    <div class="article-entry post-content" itemprop="articleBody">
+      
+            
+            <blockquote>
+<p>上一篇文章讲解了内存如何分配问题，这一篇讲一下内存如何回收。</p>
+</blockquote>
+<a id="more"></a>
+
+<h3 id="什么样的对象是可以被回收的？"><a href="#什么样的对象是可以被回收的？" class="headerlink" title="什么样的对象是可以被回收的？"></a>什么样的对象是可以被回收的？</h3><h4 id="引用计数算法"><a href="#引用计数算法" class="headerlink" title="引用计数算法"></a>引用计数算法</h4><p>每一个对象都有一个对应的引用计数器，当有地方引用时候，计数器加一；而当有地方的引用失效时，引用减一，当引用计数器为零时，认为当前对象可以被回收。</p>
+<p>优点：实现起来简单高效</p>
+<p>缺陷：无法解决循环引用的问题，可能导致内存泄漏</p>
+<h4 id="可达性分析算法"><a href="#可达性分析算法" class="headerlink" title="可达性分析算法"></a>可达性分析算法</h4><p>可达性分析算法基本的思路就是通过一系列的称为”GC Roots“的根对象作为起始节点，通过这些节点，根据引用关系向下搜索，如果搜索过程中没有某个对象不和任何的GC Roots相关联，可以认为该对象是不可达的，则证明此对象是不可能被使用的。JVM采用的正是这种可达性分析算法。</p>
+<h4 id="引用的分类"><a href="#引用的分类" class="headerlink" title="引用的分类"></a>引用的分类</h4><p>背景：如果我们希望描述一类对象：如果内存空间还足够的时候，就将这些对象保存中，如果内存空间很紧张的时候，就回收这些对象。</p>
+<ul>
+<li>强引用：只要强引用还在，对象永远不会回收。</li>
+<li>软引用：描述一些还有用，但是非必须的对象，在系统发生OOM前，触发这部分数据的回收。</li>
+<li>弱引用：描述非必须对象，比软引用更弱一些，被弱引用关联的对象只能生存到下一次垃圾收集发生为止。</li>
+<li>虚引用：最弱的一种引用，对内存回收没有影响，只是回收时GC会收到一个系统通知。</li>
+</ul>
+<h3 id="什么时候触发垃圾回收？"><a href="#什么时候触发垃圾回收？" class="headerlink" title="什么时候触发垃圾回收？"></a>什么时候触发垃圾回收？</h3><ul>
+<li>程序调用System.gc()可以建议JVM进行垃圾回收，但是并不代表JVM立马就会进行垃圾回收的操作</li>
+<li>JVM自身决定，原则是当内存不足时触发垃圾回收。首先说一下，gc什么时候触发Minor GC，对象分配优先在Eden进行，当Eden内存空间不足的时候，触发。其次，当老年带空间不足时，触发Full GC。</li>
+</ul>
+<h4 id="对象逃逸"><a href="#对象逃逸" class="headerlink" title="对象逃逸"></a>对象逃逸</h4><p>GC在进行垃圾回收的时候，会调用finalize（）方法，这个时候如果给对象指定对应的引用，对象就会逃逸，但是限制只能逃逸一次。</p>
+<h3 id="对象如何回收？"><a href="#对象如何回收？" class="headerlink" title="对象如何回收？"></a>对象如何回收？</h3><p>可以认为，堆内存分代策略是数据存储的一种策略（数据结构），而下面介绍的三种算法时针对不同的分代区域采用的回收算法（算法），其目的是平衡时间复杂度和空间复杂度，从而提升程序性能。</p>
+<h4 id="分代收集"><a href="#分代收集" class="headerlink" title="分代收集"></a>分代收集</h4><p>分代收集的背景：</p>
+<ul>
+<li>大部分的对象都是朝生晚死</li>
+<li>熬过垃圾收集次数越多的对象越难被收集</li>
+</ul>
+<p>在这种背景之下，采用分代策略，对不同的区域有针对性的采取不同的回收算法。通常，分为Minor GC（新生代回收）、Major GC（老年代GC）、Full GC（整个Heap的GC）</p>
+<h4 id="清除算法"><a href="#清除算法" class="headerlink" title="清除算法"></a>清除算法</h4><ul>
+<li>标记-清除算法：分为标记数据的过程，以及清除数据的过程，会造成空间碎片。</li>
+<li>标记-复制算法：将内存分为两块相同大小的区域，一块存储对象，一块为空，回收时将无法回收的对象直接复制到空的区域，并顺序排列，空间复杂度较高，当然实际操作时候两块区域不会是1：1这样，如HotSpot的新生代就是这种算法，但是默认比例是8：1：1.</li>
+<li>标记-整理算法：标记清除算法的基础之上，最后还有一个空间整理的过程，时间复杂度较高。</li>
+</ul>
+<h3 id="常见的垃圾回收机以及原理"><a href="#常见的垃圾回收机以及原理" class="headerlink" title="常见的垃圾回收机以及原理"></a>常见的垃圾回收机以及原理</h3><h4 id="新生代收集器"><a href="#新生代收集器" class="headerlink" title="新生代收集器"></a>新生代收集器</h4><ul>
+<li>Serial，单线程的收集器，回收收集的时候会触发”Stop the world“</li>
+<li>ParNew，Serial收集器的多线程版本，除了JDK9+以外，只能与CMS配合使用，可以让垃圾回收和用户线程基本上同时运行。</li>
+<li>Parallel Scavenge，基于标记-复制算法实现的收集器，能够并行的执行收集操作，其目的主要是为了提高吞吐量。</li>
+</ul>
+<h4 id="老年代收集器"><a href="#老年代收集器" class="headerlink" title="老年代收集器"></a>老年代收集器</h4><ul>
+<li>CMS：获取最短时间收集为目标的收集器，基于标记-清除算法</li>
+<li>Serial Old（MSC），单线程的收集器，使用标记-整理算法</li>
+<li>Parallel Old，Parallel Scavenge的老年版本，多线程并发，基于标记整理算法实现</li>
+</ul>
+<h4 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h4><ul>
+<li>G1，一个全面的垃圾收集器，不需要和其他垃圾收集器进行配合。主要面向服务端应用的垃圾收集器，java 9 成为服务端模式下的默认垃圾回收器。</li>
+</ul>
+<p>参考 《深入理解Java虚拟机》</p>
+
+            <div class="post-copyright">
+    <div class="content">
+        <!-- <p>最后更新： 2020年09月19日 10:35</p> -->
+        <p>原始链接： <a class="post-url" href="/2018/05/13/JVM系列02-垃圾回收器/" title="JVM系列02 - 垃圾回收器">http://xuxiancheng.xyz/2018/05/13/JVM系列02-垃圾回收器/</a></p>
+        <footer>
+            <a href="http://xuxiancheng.xyz">
+                <img src="/images/logo1.png" alt="xuxiancheng">
+                xuxiancheng
+            </a>
+        </footer>
+    </div>
+</div>
+
+      
+        
+            
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;">赏</a>
+</div>
+
+<div id="reward" class="post-modal reward-lay">
+    <a class="close" href="javascript:;" id="reward-close">×</a>
+    <span class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        请我吃糖~
+        <i class="icon icon-quote-right"></i>
+    </span>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="/images/wechat_code.jpg" alt="打赏二维码">
+        </div>
+        <div class="reward-select">
+            
+            <label class="reward-select-item checked" data-id="wechat" data-wechat="/images/wechat_code.jpg">
+                <img class="reward-select-item-wechat" src="/images/wechat.png" alt="微信">
+            </label>
+            
+            
+            <label class="reward-select-item" data-id="alipay" data-alipay="/images/alipay_code.jpg">
+                <img class="reward-select-item-alipay" src="/images/alipay.png" alt="支付宝">
+            </label>
+            
+        </div>
+    </div>
+</div>
+
+
+        
+    </div>
+    <footer class="article-footer">
+        
+        
+<div class="post-share">
+    <a href="javascript:;" id="share-sub" class="post-share-fab">
+        <i class="fa fa-share-alt"></i>
+    </a>
+    <div class="post-share-list" id="share-list">
+        <ul class="share-icons">
+          <li>
+            <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://xuxiancheng.xyz/2018/05/13/JVM系列02-垃圾回收器/&title=《JVM系列02 - 垃圾回收器》 — Allen's Blog&pic=images/jvm_icon.png" data-title="微博">
+              <i class="fa fa-weibo"></i>
+            </a>
+          </li>
+          <li>
+            <a class="weixin share-sns" id="wxFab" href="javascript:;" data-title="微信">
+              <i class="fa fa-weixin"></i>
+            </a>
+          </li>
+          <li>
+            <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://xuxiancheng.xyz/2018/05/13/JVM系列02-垃圾回收器/&title=《JVM系列02 - 垃圾回收器》 — Allen's Blog&source=
+上一篇文章讲解了内存如何分配问题，这一篇讲一下内存如何回收。
+" data-title="QQ">
+              <i class="fa fa-qq"></i>
+            </a>
+          </li>
+          <li>
+            <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://xuxiancheng.xyz/2018/05/13/JVM系列02-垃圾回收器/" data-title="Facebook">
+              <i class="fa fa-facebook"></i>
+            </a>
+          </li>
+          <li>
+            <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《JVM系列02 - 垃圾回收器》 — Allen's Blog&url=http://xuxiancheng.xyz/2018/05/13/JVM系列02-垃圾回收器/&via=http://xuxiancheng.xyz" data-title="Twitter">
+              <i class="fa fa-twitter"></i>
+            </a>
+          </li>
+          <li>
+            <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://xuxiancheng.xyz/2018/05/13/JVM系列02-垃圾回收器/" data-title="Google+">
+              <i class="fa fa-google-plus"></i>
+            </a>
+          </li>
+        </ul>
+     </div>
+</div>
+<div class="post-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;" id="wxShare-close">×</a>
+    <p>扫一扫，分享到微信</p>
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=http://xuxiancheng.xyz/2018/05/13/JVM系列02-垃圾回收器/" alt="微信分享二维码">
+</div>
+
+<div class="mask"></div>
+
+        
+        <ul class="article-footer-menu">
+            
+            
+  <li class="article-footer-tags">
+    <i class="fa fa-tags"></i>
+      
+    <a href="/tags/jvm/" class="color4">jvm</a>
+      
+  </li>
+
+        </ul>
+        
+    </footer>
+  </div>
+</article>
+
+
+    <aside class="post-toc-pos post-toc-top" id="post-toc">
+        <nav class="post-toc-wrap">
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#什么样的对象是可以被回收的？"><span class="post-toc-text">什么样的对象是可以被回收的？</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#引用计数算法"><span class="post-toc-text">引用计数算法</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#可达性分析算法"><span class="post-toc-text">可达性分析算法</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#引用的分类"><span class="post-toc-text">引用的分类</span></a></li></ol></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#什么时候触发垃圾回收？"><span class="post-toc-text">什么时候触发垃圾回收？</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#对象逃逸"><span class="post-toc-text">对象逃逸</span></a></li></ol></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#对象如何回收？"><span class="post-toc-text">对象如何回收？</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#分代收集"><span class="post-toc-text">分代收集</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#清除算法"><span class="post-toc-text">清除算法</span></a></li></ol></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#常见的垃圾回收机以及原理"><span class="post-toc-text">常见的垃圾回收机以及原理</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#新生代收集器"><span class="post-toc-text">新生代收集器</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#老年代收集器"><span class="post-toc-text">老年代收集器</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#其他"><span class="post-toc-text">其他</span></a></li></ol></li></ol>
+        </nav>
+    </aside>
+    
+
+<nav id="article-nav">
+  
+    <a href="/2018/05/16/JVM系列03-类加载/" id="article-nav-newer" class="article-nav-link-wrap">
+
+      <span class="article-nav-title">
+        <i class="fa fa-hand-o-left" aria-hidden="true"></i>
+        
+          JVM系列03 - 类加载
+        
+      </span>
+    </a>
+  
+  
+    <a href="/2018/05/09/JVM系列01-内存管理/" id="article-nav-older" class="article-nav-link-wrap">
+      <span class="article-nav-title">JVM系列01 - 内存管理</span>
+      <i class="fa fa-hand-o-right" aria-hidden="true"></i>
+    </a>
+  
+</nav>
+
+
+
+    
+</section>
+        
+      </div>
+      <footer id="footer">
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+      <p>
+        Powered by  <a href="http://hexo.io/" target="_blank">Hexo</a>
+        Theme <a href="//github.com/wongminho/hexo-theme-miho" target="_blank">MiHo</a>
+      &copy; 2020 xuxiancheng<br>
+      </p>
+    </div>
+  </div>
+</footer>
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<script src="//cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+<script>
+  var mihoConfig = {
+      root: "http://xuxiancheng.xyz",
+      animate: true,
+      isHome: false,
+      share: true,
+      reward: 1
+  }
+</script>
+<div class="sidebar">
+    <div id="sidebar-search" title="Search">
+        <i class="fa fa-search"></i>
+    </div>
+    <div id="sidebar-category" title="Categories">
+        <i class="fa fa-book"></i>
+    </div>
+    <div id="sidebar-tag" title="Tags">
+        <i class="fa fa-tags"></i>
+    </div>
+    <div id="sidebar-top">
+        <span class="sidebar-top-icon"><i class="fa fa-angle-up"></i></span>
+    </div>
+</div>
+<div class="sidebar-menu-box" id="sidebar-menu-box">
+    <div class="sidebar-menu-box-container">
+        <div id="sidebar-menu-box-categories">
+            <a class="category-link" href="/categories/Java/">Java</a><a class="category-link" href="/categories/计算机基础/">计算机基础</a><a class="category-link" href="/categories/软件工程/">软件工程</a>
+        </div>
+        <div id="sidebar-menu-box-tags">
+            <a href="/tags/java并发编程/" style="font-size: 20px;">java并发编程</a> <a href="/tags/jvm/" style="font-size: 20px;">jvm</a> <a href="/tags/架构设计/" style="font-size: 10px;">架构设计</a> <a href="/tags/算法和数据结构/" style="font-size: 10px;">算法和数据结构</a>
+        </div>
+    </div>
+    <a href="javascript:;" class="sidebar-menu-box-close">&times;</a>
+</div>
+<div class="mobile-header-menu-nav" id="mobile-header-menu-nav">
+    <div class="mobile-header-menu-container">
+        <span class="title">Menus</span>
+        <ul class="mobile-header-menu-navbar">
+            
+            <li>
+                <a  href="/">
+                    <i class="fa fa-home"></i><span>Home</span>
+                </a>
+            </li>
+            
+            <li>
+                <a  href="/archives">
+                    <i class="fa fa-archive"></i><span>Archives</span>
+                </a>
+            </li>
+            
+            <li>
+                <a  href="/about">
+                    <i class="fa fa-user"></i><span>About</span>
+                </a>
+            </li>
+            
+        </ul>
+    </div>
+    <div class="mobile-header-tag-container">
+        <span class="title">Tags</span>
+        <div id="mobile-header-container-tags">
+            <a href="/tags/java并发编程/" style="font-size: 20px;">java并发编程</a> <a href="/tags/jvm/" style="font-size: 20px;">jvm</a> <a href="/tags/架构设计/" style="font-size: 10px;">架构设计</a> <a href="/tags/算法和数据结构/" style="font-size: 10px;">算法和数据结构</a>
+        </div>
+    </div>
+</div>
+<div class="search-wrap">
+    <span class="search-close">&times;</span>
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+            <i class="icon icon-lg icon-chevron-left"></i>
+        </a>
+        <input class="search-field" placeholder="Search..." id="keywords">
+        <a id="search-submit" href="javascript:;">
+            <i class="fa fa-search"></i>
+        </a>
+    <div class="search-container" id="search-container">
+        <ul class="search-result" id="search-result">
+        </ul>
+    </div>
+</div>
+
+<div id="search-tpl">
+    <li class="search-result-item">
+        <a href="{url}" class="search-item-li">
+            <span class="search-item-li-title" title="{title}">{title}</span>
+        </a>
+    </li>
+</div>
+<script src="/js/search.js"></script>
+<script src="/js/main.js"></script>
+
+
+  <script src="//cdn.bootcss.com/particles.js/2.0.0/particles.min.js"></script>
+  <div id="particles"></div>
+  <script src="/js/particles.js"></script>
+
+
+
+
+
+
+
+  <link rel="stylesheet" href="//cdn.bootcss.com/animate.css/3.5.0/animate.min.css">
+  <script src="//cdn.bootcss.com/scrollReveal.js/3.0.5/scrollreveal.js"></script>
+  <script src="/js/animate.js"></script>
+
+
+  <script src="/js/pop-img.js"></script>
+  <script>
+     $(".article-entry p img").popImg();
+  </script>
+
+  </div>
+</body>
+</html>

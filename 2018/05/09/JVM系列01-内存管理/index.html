@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="utf-8">
+  
+  <title>JVM系列01 - 内存管理 | Allen&#39;s Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  
+    <meta name="keywords" content="xuxiancheng,风一般的男子">
+  
+  <meta name="description" content="Java语言这么流行最主要的原因之一就是：自动分配内存，自动回收内存，即JVM的内存管理机制。而C、C++类的语言内存的分配和回收都是由程序员控制的，很容易出现内存溢出、内存泄漏等问题。内存自动分配和回收机制方便管理的同时，也带来了新的问题，如果出现内存泄漏问题，排查起来就会异常艰辛，所以我们需要对JVM相关技术有一定的了解。">
+<meta name="keywords" content="jvm">
+<meta property="og:type" content="article">
+<meta property="og:title" content="JVM系列01 - 内存管理">
+<meta property="og:url" content="http://xuxiancheng.xyz/2018/05/09/JVM系列01-内存管理/index.html">
+<meta property="og:site_name" content="Allen&#39;s Blog">
+<meta property="og:description" content="Java语言这么流行最主要的原因之一就是：自动分配内存，自动回收内存，即JVM的内存管理机制。而C、C++类的语言内存的分配和回收都是由程序员控制的，很容易出现内存溢出、内存泄漏等问题。内存自动分配和回收机制方便管理的同时，也带来了新的问题，如果出现内存泄漏问题，排查起来就会异常艰辛，所以我们需要对JVM相关技术有一定的了解。">
+<meta property="og:locale" content="chinese">
+<meta property="og:image" content="http://xuxiancheng.xyz/images/jvm_mem_1.png">
+<meta property="og:updated_time" content="2020-09-19T02:35:11.453Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="JVM系列01 - 内存管理">
+<meta name="twitter:description" content="Java语言这么流行最主要的原因之一就是：自动分配内存，自动回收内存，即JVM的内存管理机制。而C、C++类的语言内存的分配和回收都是由程序员控制的，很容易出现内存溢出、内存泄漏等问题。内存自动分配和回收机制方便管理的同时，也带来了新的问题，如果出现内存泄漏问题，排查起来就会异常艰辛，所以我们需要对JVM相关技术有一定的了解。">
+<meta name="twitter:image" content="http://xuxiancheng.xyz/images/jvm_mem_1.png">
+  
+  
+    <link rel="icon" href="images/logo1.png">
+  
+  <link href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="/css/style.css">
+  <script src="/js/pace.min.js"></script>
+  
+
+  
+  
+
+</head>
+</html>
+<body>
+  <div id="container">
+      <header id="header">
+    <div id="banner"></div>
+    <div id="header-outer">
+        <div id="header-menu" class="header-menu-pos animated">
+            <div class="header-menu-container">
+                <a href="/" class="left">
+                    <span class="site-title">风一般的男子</span>
+                </a>
+                <nav id="header-menu-nav" class="right">
+                    
+                    <a  href="/">
+                        <i class="fa fa-home"></i>
+                        <span>Home</span>
+                    </a>
+                    
+                    <a  href="/archives">
+                        <i class="fa fa-archive"></i>
+                        <span>Archives</span>
+                    </a>
+                    
+                    <a  href="/about">
+                        <i class="fa fa-user"></i>
+                        <span>About</span>
+                    </a>
+                    
+                </nav>
+                <a class="mobile-header-menu-button">
+                    <i class="fa fa-bars"></i>
+                </a>
+            </div>
+        </div>
+        <div id="header-row">
+            <div id="logo">
+                <a href="/">
+                    <img src="/images/logo1.png" alt="logo">
+                </a>
+            </div>
+            <div class="header-info">
+                <div id="header-title">
+                    
+                    <h2>
+                        风一般的男子
+                    </h2>
+                    
+                </div>
+                <div id="header-description">
+                    
+                    <h3>
+                        一个专注于 服务端 技术的博客网站
+                    </h3>
+                    
+                </div>
+            </div>
+            <nav class="header-nav">
+                <div class="social">
+                    
+                </div>
+            </nav>
+        </div>
+    </div>
+</header>
+      <div class="outer">
+        <section id="main" class="body-wrap"><article id="post-JVM系列01-内存管理" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 class="post-title" itemprop="name">
+      JVM系列01 - 内存管理
+    </h1>
+    <div class="post-title-bar">
+      <ul>
+          
+              <li>
+                  <i class="fa fa-book"></i>
+                  
+                      <a href="/categories/Java/">Java</a>
+                  
+              </li>
+          
+        <li>
+          <i class="fa fa-calendar"></i>  2018-05-09
+        </li>
+        <li>
+          <i class="fa fa-eye"></i>
+          <span id="busuanzi_value_page_pv"></span>
+        </li>
+      </ul>
+    </div>
+  
+
+          
+      </header>
+    
+    <div class="article-entry post-content" itemprop="articleBody">
+      
+            
+            <blockquote>
+<p>Java语言这么流行最主要的原因之一就是：自动分配内存，自动回收内存，即JVM的内存管理机制。而C、C++类的语言内存的分配和回收都是由程序员控制的，很容易出现内存溢出、内存泄漏等问题。内存自动分配和回收机制方便管理的同时，也带来了新的问题，如果出现内存泄漏问题，排查起来就会异常艰辛，所以我们需要对JVM相关技术有一定的了解。</p>
+</blockquote>
+<a id="more"></a>
+
+<h2 id="为什么需要学习JVM？"><a href="#为什么需要学习JVM？" class="headerlink" title="为什么需要学习JVM？"></a>为什么需要学习JVM？</h2><ul>
+<li>系统出现OOM，频繁Full GC的时候不会束手无策，可以有针对性的进行排查和处理。</li>
+<li>通过JVM调优，可以优化程序性能。</li>
+<li>Java中的类库，很多事基于JVM优化实现的，如一些语法糖，类加载器等。</li>
+<li>面试官喜欢问，嘿嘿，你要是一直不跳槽的话，当我没说。</li>
+</ul>
+<h2 id="运行时数据区域划分"><a href="#运行时数据区域划分" class="headerlink" title="运行时数据区域划分"></a>运行时数据区域划分</h2><p>JVM在启动到销毁的过程中，会将运行中的程序的内存划分为不同的区域，并且每个区域的生命周期也不一下，如下图所示。<br><img src="http://xuxiancheng.xyz/images/jvm_mem_1.png" alt="1.1 运行时数据区域"></p>
+<h3 id="程序计数器"><a href="#程序计数器" class="headerlink" title="程序计数器"></a>程序计数器</h3><p>程序计数器是线程私有的，每一个线程的工作内存中都会有一个程序计数器，是JVM中为一个没有定义OOM的区域。可以理解为程序的行号记录器，记录程序执行的行数，方便程序的跳转等指令的执行。</p>
+<h3 id="虚拟机栈、本地方法栈"><a href="#虚拟机栈、本地方法栈" class="headerlink" title="虚拟机栈、本地方法栈"></a>虚拟机栈、本地方法栈</h3><p>线程私有的区域，生命周期和线程相同。每个方法执行时，都会创建一个栈帧，用于存储局部变量、操作数栈、动态连接、方法出口等信息。</p>
+<p>每一个方法被调用到执行完毕的过程，就对应着这个方法的栈帧在虚拟机栈或者本地方法栈中出栈到入栈的过程。</p>
+<p>如果线程请求的栈深度大于虚拟机所允许的深度，将会抛出StackOverflowError；如果Java虚拟机栈容量可以动态扩展，当栈扩展到无法申请到足够的内存的时候就会抛出OutOfMemoryError异常。</p>
+<h3 id="Java堆（Heap）"><a href="#Java堆（Heap）" class="headerlink" title="Java堆（Heap）"></a>Java堆（Heap）</h3><p>线程共享的区域，生命周期和JVM进程相同。几乎所有的对象实例和数组都在堆上分配，堆内存是GC回收的最主要的区域。从内存回收的角度来看，现代垃圾收集器大部分都是基于分代收集器理论设计的，所以堆内存经常出现”新生代”、”老年带”、”永久代”、”Eden”、”From Survivor”、”To Survivor”等概念。</p>
+<p>堆内存在物理上可以设计为使用不连续的内存空间，但是在逻辑上应该是连续的，这点就像我们用磁盘去存储文件一样，并不考虑每个文件都连续存放。但对于大对象（典型的如数组），多数虚拟机实现处于简单、存储高效的考虑，很可能会要求连续的存储空间。</p>
+<p>堆可以设置为大小固定的，也可以设置为大小可扩展的，-Xms，-Xmx，-Xmn，如果在堆内存上无法完成实例的分配，并且堆无法再扩展的时候，JVM将会抛出OutOfMemoryError的异常。</p>
+<h3 id="方法区（Method-Area）"><a href="#方法区（Method-Area）" class="headerlink" title="方法区（Method Area）"></a>方法区（Method Area）</h3><p>方法区是线程共享的区域，和JVM进程的生命周期相同，用于存储已被虚拟机加载的类型信息、常量、静态变量、即时编译器编译后的代码缓存等数据。当常量池无法申请到内存时，会抛出OutOfMemoryError异常。</p>
+<h3 id="直接内存（Direct-Memory）"><a href="#直接内存（Direct-Memory）" class="headerlink" title="直接内存（Direct Memory）"></a>直接内存（Direct Memory）</h3><p>直接内存并不是运行时数据区的一部分，也不是JVM规范中定义的内存区域，但是这部分内存也被频繁的使用，而且也可能导致OutOfMemoryError异常出现。</p>
+<p>NIO可以直接调用Native函数进行堆外内的分配，然后通过一个存储在堆内存的DirectByteBuffer对象作为这块内存的引用进行操作，而不需要来回的在堆和native堆进行数据的复制。</p>
+<p>直接内存不受堆内存大小的限制，但是肯定会受物理内存的限制，所以一般设置堆内存的大小时候，需要预留一部分内存，而不是设置和物理内存一样大小。</p>
+<h2 id="HotSpot虚拟机对象探秘"><a href="#HotSpot虚拟机对象探秘" class="headerlink" title="HotSpot虚拟机对象探秘"></a>HotSpot虚拟机对象探秘</h2><h3 id="对象的创建流程"><a href="#对象的创建流程" class="headerlink" title="对象的创建流程"></a>对象的创建流程</h3><h4 id="类加载"><a href="#类加载" class="headerlink" title="类加载"></a>类加载</h4><p>当JVM遇到一条new字节码的时候，首先会去检查这个指令对应的参数能否在常量池中定位到一个类的符号引用，并且检查这个符号引用代表的类是否已被加载、解析和初始化过。如果没有，那么首先触发类加载的过程。</p>
+<h4 id="分配内存"><a href="#分配内存" class="headerlink" title="分配内存"></a>分配内存</h4><p>在类检查完毕后，接下里JVM会为对象分配内存，对象所需的内存大小在类加载完毕后便是可以确认的，为对象分配空间的任务便等同于把一块确定大小的内存从堆中划分出来。</p>
+<p>如何从堆中划分内存给对象通常由GC算法决定，使用标记-复制、标记-整理算法的GC的堆通常都是连续的，所以使用简单的”指针碰撞“即可，而使用标记-清除算法的GC的堆通常是不连续的，通常使用”空闲列表“的方式。</p>
+<h4 id="如何保证分配内存操作是线程安全的？"><a href="#如何保证分配内存操作是线程安全的？" class="headerlink" title="如何保证分配内存操作是线程安全的？"></a>如何保证分配内存操作是线程安全的？</h4><ul>
+<li>采用同步的方式，JVM采用的是CAS + 失败重试保证线程安全。</li>
+<li>内存的分配动作按照线程划分到不同的空间中进行，即每一个线程在Java堆中预先分配一小块内存，即本地线程分配缓冲区（Thread Local Allocation Buffer），哪一个线程要分配内存，就在哪一个线程的本地缓冲区中分配，只有本地缓存区使用完了，分配新的缓冲区时才需要同步锁定。</li>
+</ul>
+<h4 id="对象头初始化"><a href="#对象头初始化" class="headerlink" title="对象头初始化"></a>对象头初始化</h4><p>分配完内存后，JVM需要对对象头进行初始化，如对象的类型元数据信息、对象的hashCode（对象的哈希码会延迟到真正调用Object::hashCode（）方法时才计算）、对象的GC分代年龄等信息。</p>
+<h4 id="执行构造函数"><a href="#执行构造函数" class="headerlink" title="执行构造函数"></a>执行构造函数</h4><h3 id="对象的内存布局"><a href="#对象的内存布局" class="headerlink" title="对象的内存布局"></a>对象的内存布局</h3><p>在HotSpot虚拟机中，对象在堆内存中可以划分为三个部分: 对象头(Header)、实例数据(Instance Data)和对象对其(Padding)。</p>
+<p>对象头主要包括两部分的信息:</p>
+<ul>
+<li>对象自身运行时数据（Mark Word），如hashCode、GC分代年龄、锁状态标记、线程持有的锁、偏向线程ID、偏向时间戳等。</li>
+<li>类型指针，即指向它的类型元数据的指针。</li>
+</ul>
+<h3 id="对象的访问定位"><a href="#对象的访问定位" class="headerlink" title="对象的访问定位"></a>对象的访问定位</h3><p>创建对象自然是为了后续使用该对象，通常使用栈上的reference数据来操作具体的对象，这里的reference分为句柄和指针，通常的HotSpot使用的是指针的方式。</p>
+<p>参考 《深入理解Java虚拟机》</p>
+
+            <div class="post-copyright">
+    <div class="content">
+        <!-- <p>最后更新： 2020年09月19日 10:35</p> -->
+        <p>原始链接： <a class="post-url" href="/2018/05/09/JVM系列01-内存管理/" title="JVM系列01 - 内存管理">http://xuxiancheng.xyz/2018/05/09/JVM系列01-内存管理/</a></p>
+        <footer>
+            <a href="http://xuxiancheng.xyz">
+                <img src="/images/logo1.png" alt="xuxiancheng">
+                xuxiancheng
+            </a>
+        </footer>
+    </div>
+</div>
+
+      
+        
+            
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;">赏</a>
+</div>
+
+<div id="reward" class="post-modal reward-lay">
+    <a class="close" href="javascript:;" id="reward-close">×</a>
+    <span class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        请我吃糖~
+        <i class="icon icon-quote-right"></i>
+    </span>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="/images/wechat_code.jpg" alt="打赏二维码">
+        </div>
+        <div class="reward-select">
+            
+            <label class="reward-select-item checked" data-id="wechat" data-wechat="/images/wechat_code.jpg">
+                <img class="reward-select-item-wechat" src="/images/wechat.png" alt="微信">
+            </label>
+            
+            
+            <label class="reward-select-item" data-id="alipay" data-alipay="/images/alipay_code.jpg">
+                <img class="reward-select-item-alipay" src="/images/alipay.png" alt="支付宝">
+            </label>
+            
+        </div>
+    </div>
+</div>
+
+
+        
+    </div>
+    <footer class="article-footer">
+        
+        
+<div class="post-share">
+    <a href="javascript:;" id="share-sub" class="post-share-fab">
+        <i class="fa fa-share-alt"></i>
+    </a>
+    <div class="post-share-list" id="share-list">
+        <ul class="share-icons">
+          <li>
+            <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://xuxiancheng.xyz/2018/05/09/JVM系列01-内存管理/&title=《JVM系列01 - 内存管理》 — Allen's Blog&pic=images/jvm_icon.png" data-title="微博">
+              <i class="fa fa-weibo"></i>
+            </a>
+          </li>
+          <li>
+            <a class="weixin share-sns" id="wxFab" href="javascript:;" data-title="微信">
+              <i class="fa fa-weixin"></i>
+            </a>
+          </li>
+          <li>
+            <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://xuxiancheng.xyz/2018/05/09/JVM系列01-内存管理/&title=《JVM系列01 - 内存管理》 — Allen's Blog&source=
+Java语言这么流行最主要的原因之一就是：自动分配内存，自动回收内存，即JVM的内存管理机制。而C、C++类的语言内存的分配和回收都是由程序员控制的，很..." data-title="QQ">
+              <i class="fa fa-qq"></i>
+            </a>
+          </li>
+          <li>
+            <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://xuxiancheng.xyz/2018/05/09/JVM系列01-内存管理/" data-title="Facebook">
+              <i class="fa fa-facebook"></i>
+            </a>
+          </li>
+          <li>
+            <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《JVM系列01 - 内存管理》 — Allen's Blog&url=http://xuxiancheng.xyz/2018/05/09/JVM系列01-内存管理/&via=http://xuxiancheng.xyz" data-title="Twitter">
+              <i class="fa fa-twitter"></i>
+            </a>
+          </li>
+          <li>
+            <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://xuxiancheng.xyz/2018/05/09/JVM系列01-内存管理/" data-title="Google+">
+              <i class="fa fa-google-plus"></i>
+            </a>
+          </li>
+        </ul>
+     </div>
+</div>
+<div class="post-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;" id="wxShare-close">×</a>
+    <p>扫一扫，分享到微信</p>
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=http://xuxiancheng.xyz/2018/05/09/JVM系列01-内存管理/" alt="微信分享二维码">
+</div>
+
+<div class="mask"></div>
+
+        
+        <ul class="article-footer-menu">
+            
+            
+  <li class="article-footer-tags">
+    <i class="fa fa-tags"></i>
+      
+    <a href="/tags/jvm/" class="color4">jvm</a>
+      
+  </li>
+
+        </ul>
+        
+    </footer>
+  </div>
+</article>
+
+
+    <aside class="post-toc-pos post-toc-top" id="post-toc">
+        <nav class="post-toc-wrap">
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#为什么需要学习JVM？"><span class="post-toc-text">为什么需要学习JVM？</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#运行时数据区域划分"><span class="post-toc-text">运行时数据区域划分</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#程序计数器"><span class="post-toc-text">程序计数器</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#虚拟机栈、本地方法栈"><span class="post-toc-text">虚拟机栈、本地方法栈</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#Java堆（Heap）"><span class="post-toc-text">Java堆（Heap）</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#方法区（Method-Area）"><span class="post-toc-text">方法区（Method Area）</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#直接内存（Direct-Memory）"><span class="post-toc-text">直接内存（Direct Memory）</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#HotSpot虚拟机对象探秘"><span class="post-toc-text">HotSpot虚拟机对象探秘</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#对象的创建流程"><span class="post-toc-text">对象的创建流程</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#类加载"><span class="post-toc-text">类加载</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#分配内存"><span class="post-toc-text">分配内存</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#如何保证分配内存操作是线程安全的？"><span class="post-toc-text">如何保证分配内存操作是线程安全的？</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#对象头初始化"><span class="post-toc-text">对象头初始化</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#执行构造函数"><span class="post-toc-text">执行构造函数</span></a></li></ol></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#对象的内存布局"><span class="post-toc-text">对象的内存布局</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#对象的访问定位"><span class="post-toc-text">对象的访问定位</span></a></li></ol></li></ol>
+        </nav>
+    </aside>
+    
+
+<nav id="article-nav">
+  
+    <a href="/2018/05/13/JVM系列02-垃圾回收器/" id="article-nav-newer" class="article-nav-link-wrap">
+
+      <span class="article-nav-title">
+        <i class="fa fa-hand-o-left" aria-hidden="true"></i>
+        
+          JVM系列02 - 垃圾回收器
+        
+      </span>
+    </a>
+  
+  
+    <a href="/2018/04/25/Java多线程系列04 - Java并发编程实战/" id="article-nav-older" class="article-nav-link-wrap">
+      <span class="article-nav-title">Java多线程系列04 - Java并发编程实战</span>
+      <i class="fa fa-hand-o-right" aria-hidden="true"></i>
+    </a>
+  
+</nav>
+
+
+
+    
+</section>
+        
+      </div>
+      <footer id="footer">
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+      <p>
+        Powered by  <a href="http://hexo.io/" target="_blank">Hexo</a>
+        Theme <a href="//github.com/wongminho/hexo-theme-miho" target="_blank">MiHo</a>
+      &copy; 2020 xuxiancheng<br>
+      </p>
+    </div>
+  </div>
+</footer>
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<script src="//cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+<script>
+  var mihoConfig = {
+      root: "http://xuxiancheng.xyz",
+      animate: true,
+      isHome: false,
+      share: true,
+      reward: 1
+  }
+</script>
+<div class="sidebar">
+    <div id="sidebar-search" title="Search">
+        <i class="fa fa-search"></i>
+    </div>
+    <div id="sidebar-category" title="Categories">
+        <i class="fa fa-book"></i>
+    </div>
+    <div id="sidebar-tag" title="Tags">
+        <i class="fa fa-tags"></i>
+    </div>
+    <div id="sidebar-top">
+        <span class="sidebar-top-icon"><i class="fa fa-angle-up"></i></span>
+    </div>
+</div>
+<div class="sidebar-menu-box" id="sidebar-menu-box">
+    <div class="sidebar-menu-box-container">
+        <div id="sidebar-menu-box-categories">
+            <a class="category-link" href="/categories/Java/">Java</a><a class="category-link" href="/categories/计算机基础/">计算机基础</a><a class="category-link" href="/categories/软件工程/">软件工程</a>
+        </div>
+        <div id="sidebar-menu-box-tags">
+            <a href="/tags/java并发编程/" style="font-size: 20px;">java并发编程</a> <a href="/tags/jvm/" style="font-size: 20px;">jvm</a> <a href="/tags/架构设计/" style="font-size: 10px;">架构设计</a> <a href="/tags/算法和数据结构/" style="font-size: 10px;">算法和数据结构</a>
+        </div>
+    </div>
+    <a href="javascript:;" class="sidebar-menu-box-close">&times;</a>
+</div>
+<div class="mobile-header-menu-nav" id="mobile-header-menu-nav">
+    <div class="mobile-header-menu-container">
+        <span class="title">Menus</span>
+        <ul class="mobile-header-menu-navbar">
+            
+            <li>
+                <a  href="/">
+                    <i class="fa fa-home"></i><span>Home</span>
+                </a>
+            </li>
+            
+            <li>
+                <a  href="/archives">
+                    <i class="fa fa-archive"></i><span>Archives</span>
+                </a>
+            </li>
+            
+            <li>
+                <a  href="/about">
+                    <i class="fa fa-user"></i><span>About</span>
+                </a>
+            </li>
+            
+        </ul>
+    </div>
+    <div class="mobile-header-tag-container">
+        <span class="title">Tags</span>
+        <div id="mobile-header-container-tags">
+            <a href="/tags/java并发编程/" style="font-size: 20px;">java并发编程</a> <a href="/tags/jvm/" style="font-size: 20px;">jvm</a> <a href="/tags/架构设计/" style="font-size: 10px;">架构设计</a> <a href="/tags/算法和数据结构/" style="font-size: 10px;">算法和数据结构</a>
+        </div>
+    </div>
+</div>
+<div class="search-wrap">
+    <span class="search-close">&times;</span>
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+            <i class="icon icon-lg icon-chevron-left"></i>
+        </a>
+        <input class="search-field" placeholder="Search..." id="keywords">
+        <a id="search-submit" href="javascript:;">
+            <i class="fa fa-search"></i>
+        </a>
+    <div class="search-container" id="search-container">
+        <ul class="search-result" id="search-result">
+        </ul>
+    </div>
+</div>
+
+<div id="search-tpl">
+    <li class="search-result-item">
+        <a href="{url}" class="search-item-li">
+            <span class="search-item-li-title" title="{title}">{title}</span>
+        </a>
+    </li>
+</div>
+<script src="/js/search.js"></script>
+<script src="/js/main.js"></script>
+
+
+  <script src="//cdn.bootcss.com/particles.js/2.0.0/particles.min.js"></script>
+  <div id="particles"></div>
+  <script src="/js/particles.js"></script>
+
+
+
+
+
+
+
+  <link rel="stylesheet" href="//cdn.bootcss.com/animate.css/3.5.0/animate.min.css">
+  <script src="//cdn.bootcss.com/scrollReveal.js/3.0.5/scrollreveal.js"></script>
+  <script src="/js/animate.js"></script>
+
+
+  <script src="/js/pop-img.js"></script>
+  <script>
+     $(".article-entry p img").popImg();
+  </script>
+
+  </div>
+</body>
+</html>
