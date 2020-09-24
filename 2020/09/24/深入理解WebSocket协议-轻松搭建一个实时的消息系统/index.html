@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="utf-8">
+  
+  <title>深入理解WebSocket协议 - 轻松搭建一个实时的消息系统 | Allen&#39;s Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  
+    <meta name="keywords" content="xuxiancheng,风一般的男子">
+  
+  <meta name="description" content="近期的项目中，有一个需求是在一个聊天室内，用户可以实现实时的发送消息给其他的用户。之前遇到类似的需求都是前端通过轮询来实现，实时性比较差，且对服务器造成的压力较大。最后决定使用WebSocket协议来实现实时的全双工的通信。">
+<meta name="keywords" content="网络协议">
+<meta property="og:type" content="article">
+<meta property="og:title" content="深入理解WebSocket协议 - 轻松搭建一个实时的消息系统">
+<meta property="og:url" content="http://xuxiancheng.xyz/2020/09/24/深入理解WebSocket协议-轻松搭建一个实时的消息系统/index.html">
+<meta property="og:site_name" content="Allen&#39;s Blog">
+<meta property="og:description" content="近期的项目中，有一个需求是在一个聊天室内，用户可以实现实时的发送消息给其他的用户。之前遇到类似的需求都是前端通过轮询来实现，实时性比较差，且对服务器造成的压力较大。最后决定使用WebSocket协议来实现实时的全双工的通信。">
+<meta property="og:locale" content="chinese">
+<meta property="og:updated_time" content="2020-09-24T12:54:51.456Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="深入理解WebSocket协议 - 轻松搭建一个实时的消息系统">
+<meta name="twitter:description" content="近期的项目中，有一个需求是在一个聊天室内，用户可以实现实时的发送消息给其他的用户。之前遇到类似的需求都是前端通过轮询来实现，实时性比较差，且对服务器造成的压力较大。最后决定使用WebSocket协议来实现实时的全双工的通信。">
+  
+  
+    <link rel="icon" href="images/logo1.png">
+  
+  <link href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="/css/style.css">
+  <script src="/js/pace.min.js"></script>
+  
+
+  
+  
+
+</head>
+</html>
+<body>
+  <div id="container">
+      <header id="header">
+    <div id="banner"></div>
+    <div id="header-outer">
+        <div id="header-menu" class="header-menu-pos animated">
+            <div class="header-menu-container">
+                <a href="/" class="left">
+                    <span class="site-title">风一般的男子</span>
+                </a>
+                <nav id="header-menu-nav" class="right">
+                    
+                    <a  href="/">
+                        <i class="fa fa-home"></i>
+                        <span>Home</span>
+                    </a>
+                    
+                    <a  href="/archives">
+                        <i class="fa fa-archive"></i>
+                        <span>Archives</span>
+                    </a>
+                    
+                    <a  href="/about">
+                        <i class="fa fa-user"></i>
+                        <span>About</span>
+                    </a>
+                    
+                </nav>
+                <a class="mobile-header-menu-button">
+                    <i class="fa fa-bars"></i>
+                </a>
+            </div>
+        </div>
+        <div id="header-row">
+            <div id="logo">
+                <a href="/">
+                    <img src="/images/logo1.png" alt="logo">
+                </a>
+            </div>
+            <div class="header-info">
+                <div id="header-title">
+                    
+                    <h2>
+                        风一般的男子
+                    </h2>
+                    
+                </div>
+                <div id="header-description">
+                    
+                    <h3>
+                        一个专注于 服务端 技术的博客网站
+                    </h3>
+                    
+                </div>
+            </div>
+            <nav class="header-nav">
+                <div class="social">
+                    
+                </div>
+            </nav>
+        </div>
+    </div>
+</header>
+      <div class="outer">
+        <section id="main" class="body-wrap"><article id="post-深入理解WebSocket协议-轻松搭建一个实时的消息系统" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 class="post-title" itemprop="name">
+      深入理解WebSocket协议 - 轻松搭建一个实时的消息系统
+    </h1>
+    <div class="post-title-bar">
+      <ul>
+          
+              <li>
+                  <i class="fa fa-book"></i>
+                  
+                      <a href="/categories/计算机基础/">计算机基础</a>
+                  
+              </li>
+          
+        <li>
+          <i class="fa fa-calendar"></i>  2020-09-24
+        </li>
+        <li>
+          <i class="fa fa-eye"></i>
+          <span id="busuanzi_value_page_pv"></span>
+        </li>
+      </ul>
+    </div>
+  
+
+          
+      </header>
+    
+    <div class="article-entry post-content" itemprop="articleBody">
+      
+            
+            <blockquote>
+<p>近期的项目中，有一个需求是在一个聊天室内，用户可以实现实时的发送消息给其他的用户。之前遇到类似的需求都是前端通过轮询来实现，实时性比较差，<br>且对服务器造成的压力较大。最后决定使用WebSocket协议来实现实时的全双工的通信。</p>
+</blockquote>
+<a id="more"></a>
+
+<h3 id="WebSocket协议基本原理"><a href="#WebSocket协议基本原理" class="headerlink" title="WebSocket协议基本原理"></a>WebSocket协议基本原理</h3><p>WebSocket协议是HTML5提供的一种浏览器和服务器全双工的网络技术，基于TCP协议，使用Http协议完成握手，后续使用WebSocket协议进行数据交换。</p>
+<p>有如下的一些优点：</p>
+<ul>
+<li>全双工，实时性比较强。</li>
+<li>二进制支持。</li>
+<li>较少的控制开销。</li>
+<li>支持扩展。</li>
+</ul>
+<h4 id="如何建立连接"><a href="#如何建立连接" class="headerlink" title="如何建立连接"></a>如何建立连接</h4><p>1、首先，客户端发起升级协议请求，采用标准的Http协议，只支持GET方法</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">这是我测试的WebSocket协议请求头:</span><br><span class="line">Accept-Encoding: gzip, deflate, br</span><br><span class="line">Accept-Language: zh-CN,zh;q=0.9</span><br><span class="line">Cache-Control: no-cache</span><br><span class="line">Connection: Upgrade</span><br><span class="line">Host: localhost:8080</span><br><span class="line">Origin: file://</span><br><span class="line">Pragma: no-cache</span><br><span class="line">Sec-WebSocket-Extensions: permessage-deflate; client_max_window_bits</span><br><span class="line">Sec-WebSocket-Key: NfC/Uy7GhMD2AZd3+zWv1w==</span><br><span class="line">Sec-WebSocket-Version: 13</span><br><span class="line">Upgrade: websocket</span><br><span class="line">User-Agent: Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/85.0.4183.102 Mobile Safari/537.36</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>Connection: Upgrade 表示需要升级协议</li>
+<li>Upgrade: websocket 表示升级后的协议使用websocket</li>
+<li>Sec-WebSocket-Version: 13 表示WebSocket的版本</li>
+<li>Sec-WebSocket-Key: NfC/Uy7GhMD2AZd3+zWv1w== 与响应中的Sec-WebSocket-Accept配套，提供基本的安全保障</li>
+</ul>
+<p>2、然后，服务端进行响应，同意协议升级，返回状态码<strong>101</strong>表示协议切换成功</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">WebSocket协议响应</span><br><span class="line">Connection: upgrade</span><br><span class="line">Date: Thu, 24 Sep 2020 07:34:35 GMT</span><br><span class="line">Sec-WebSocket-Accept: 9le/qSz1Ezi6COUi2bpTudV+KXM=</span><br><span class="line">Sec-WebSocket-Extensions: permessage-deflate;client_max_window_bits=15</span><br><span class="line">Upgrade: websocket</span><br></pre></td></tr></table></figure>
+
+<p>3、返回<strong>101</strong>即表示连接建立成功了，接下来就可以进行数据的传输，数据的传输过程中使用数据帧进行，数据帧具体的格式很复杂，这里就不展开了。</p>
+<h4 id="数据传输"><a href="#数据传输" class="headerlink" title="数据传输"></a>数据传输</h4><p>首先，WebSocket的消息可能会被分成多个数据帧进行传输，通过FIN标志来识别是不是最后一帧，并且通过opcode来表示操作类型，0x08表示连接断开等。</p>
+<h4 id="连接保持"><a href="#连接保持" class="headerlink" title="连接保持"></a>连接保持</h4><p>通常，为了性能考虑，WebSocket协议在一段时间没有数据传输的时候，会自动的断开连接。如果在某个特定的场景下，需要一直保持连接的话，有以下几种方法：</p>
+<ul>
+<li>客户端在收到连接关闭时间通知后，触发连接断开提示，让用户刷新页面，重新建立连接（这是从业务角度考虑）</li>
+<li>使用WebSocket协议自带的心跳机制实现, <a href="https://developer.aliyun.com/article/636357" target="_blank" rel="noopener">具体操作可以参考这篇文章</a></li>
+</ul>
+<h3 id="使用spring-boot-starter-websocket搭建实时消息系统"><a href="#使用spring-boot-starter-websocket搭建实时消息系统" class="headerlink" title="使用spring-boot-starter-websocket搭建实时消息系统"></a>使用spring-boot-starter-websocket搭建实时消息系统</h3><ul>
+<li>当前Demo消息发送分为三个模式：点对点，广播，分组消息发送</li>
+<li>groupId 分组抽象id，业务中可以具体为直播间id，聊天室id等</li>
+<li>uid 用户id</li>
+<li>如果服务器如果是多个节点部署，如何给通知同一个分组下，其他服务器节点给客户端发消息呢？可以使用消息队列的发布订阅供，目前这个案例简单的采用Redis的发布订阅实现。</li>
+</ul>
+<h4 id="引入相关依赖"><a href="#引入相关依赖" class="headerlink" title="引入相关依赖"></a>引入相关依赖</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">&lt;dependency&gt;</span><br><span class="line">    &lt;groupId&gt;redis.clients&lt;/groupId&gt;</span><br><span class="line">    &lt;artifactId&gt;jedis&lt;/artifactId&gt;</span><br><span class="line">    &lt;version&gt;3.0.1&lt;/version&gt;</span><br><span class="line">&lt;/dependency&gt;</span><br><span class="line">&lt;dependency&gt;</span><br><span class="line">    &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;</span><br><span class="line">    &lt;artifactId&gt;spring-boot-starter-websocket&lt;/artifactId&gt;</span><br><span class="line">    &lt;version&gt;1.4.0.RELEASE&lt;/version&gt;</span><br><span class="line">&lt;/dependency&gt;</span><br></pre></td></tr></table></figure>
+
+<h4 id="统一消息封装，对websocket消息的封装"><a href="#统一消息封装，对websocket消息的封装" class="headerlink" title="统一消息封装，对websocket消息的封装"></a>统一消息封装，对websocket消息的封装</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 统一消息封装</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@author</span> Created by xuxiancheng on 2020/9/22</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">@Data</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Message</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> String id; <span class="comment">// 消息唯一标识</span></span><br><span class="line">    <span class="keyword">private</span> String senderUid; <span class="comment">// 发送者id</span></span><br><span class="line">    <span class="keyword">private</span> String receiverUid; <span class="comment">// 接收者用户id</span></span><br><span class="line">    <span class="keyword">private</span> String groupId; <span class="comment">// 分组id（抽象概率，可以理解为直播间id，房间id等）</span></span><br><span class="line">    <span class="keyword">private</span> String username; <span class="comment">// 用户名</span></span><br><span class="line">    <span class="keyword">private</span> String clientId; <span class="comment">// 客户端id</span></span><br><span class="line">    <span class="keyword">private</span> String content; <span class="comment">// 消息内容</span></span><br><span class="line">    <span class="keyword">private</span> Long sendTimeMillis; <span class="comment">// 消息发送时间戳</span></span><br><span class="line">    <span class="keyword">private</span> String serverPushId; <span class="comment">// 发布订阅发布者本机ip</span></span><br><span class="line">    <span class="keyword">private</span> String evtCode; <span class="comment">// 事件的状态码</span></span><br><span class="line">    <span class="keyword">private</span> String evtName; <span class="comment">// 事件名称</span></span><br><span class="line">    <span class="keyword">private</span> String evtType; <span class="comment">// 事件类型</span></span><br><span class="line">    <span class="keyword">private</span> String evtAttrs; <span class="comment">// 事件扩展字段</span></span><br><span class="line">    <span class="keyword">private</span> String otherAttrs; <span class="comment">// 其他扩展字段</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Message <span class="title">convertToMessage</span><span class="params">(String message)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> JSON.parseObject(message, Message.class);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> String <span class="title">toJSONString</span><span class="params">(Message message)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> JSON.toJSONString(message);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="创建socket管理器，其实就是连接池"><a href="#创建socket管理器，其实就是连接池" class="headerlink" title="创建socket管理器，其实就是连接池"></a>创建socket管理器，其实就是连接池</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 常量类</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">LongPollConstants</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">static</span> String CHANNEL_ONE_TO_GROUP = <span class="string">"CHANNEL_ONE_TO_GROUP"</span>;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">static</span> String CHANNEL_ONE_TO_ONE = <span class="string">"CHANNEL_ONE_TO_ONE"</span>;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">static</span> String CHANNEL_ONE_TO_ALL = <span class="string">"CHANNEL_ONE_TO_ALL"</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * socket连接管理器</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@author</span> Created by xuxiancheng on 2020/9/22</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SocketManager</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> <span class="keyword">static</span> Logger LOG = LoggerFactory.getLogger(SocketManager.class);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> <span class="keyword">static</span> ConcurrentHashMap&lt;String, WebSocketSession&gt; sessionManager = <span class="keyword">new</span> ConcurrentHashMap&lt;&gt;();</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">add</span><span class="params">(String groupIdAndUid, WebSocketSession socketSession)</span> </span>&#123;</span><br><span class="line">        LOG.info(<span class="string">"&gt;&gt;&gt;&gt;&gt; SocketManager add session, groupIdAndUid:&#123;&#125;"</span>, groupIdAndUid);</span><br><span class="line">        sessionManager.put(groupIdAndUid, socketSession);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> WebSocketSession <span class="title">get</span><span class="params">(String groupIdAndUid)</span> </span>&#123;</span><br><span class="line">        LOG.info(<span class="string">"&lt;&lt;&lt;&lt;&lt;&lt; SocketManager get session, groupIdAndUid:&#123;&#125;"</span>, groupIdAndUid);</span><br><span class="line">        <span class="keyword">return</span> sessionManager.get(groupIdAndUid);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> List&lt;WebSocketSession&gt; <span class="title">getByGroupId</span><span class="params">(String groupId)</span> </span>&#123;</span><br><span class="line">        LOG.info(<span class="string">"&gt;&gt;&gt;&gt;&gt;&gt; SocketManager getByGroupId start, groupId:&#123;&#125;"</span>, groupId);</span><br><span class="line">        List&lt;WebSocketSession&gt; result = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">        <span class="keyword">for</span>(Map.Entry&lt;String, WebSocketSession&gt; entry : sessionManager.entrySet()) &#123;</span><br><span class="line">            String key = entry.getKey();</span><br><span class="line">            <span class="keyword">if</span> (!ObjectUtils.isEmpty(key) &amp;&amp; key.startsWith(groupId)) &#123;</span><br><span class="line">                WebSocketSession value = entry.getValue();</span><br><span class="line">                result.add(value);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        LOG.info(<span class="string">"&lt;&lt;&lt;&lt;&lt;&lt; SocketManager getByGroupId, result:&#123;&#125;"</span>, result);</span><br><span class="line">        <span class="keyword">return</span> result;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> List&lt;WebSocketSession&gt; <span class="title">getGroupOtherSessions</span><span class="params">(String groupId, String groupIdAndUid)</span> </span>&#123;</span><br><span class="line">        LOG.info(<span class="string">"&gt;&gt;&gt;&gt;&gt;&gt; SocketManager getGroupOtherSessions start, groupId:&#123;&#125;, groupIdAndUid:&#123;&#125;"</span>, groupId, groupIdAndUid);</span><br><span class="line">        List&lt;WebSocketSession&gt; result = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">        <span class="keyword">for</span>(Map.Entry&lt;String, WebSocketSession&gt; entry : sessionManager.entrySet()) &#123;</span><br><span class="line">            String key = entry.getKey();</span><br><span class="line">            <span class="keyword">if</span> (!ObjectUtils.isEmpty(key) &amp;&amp; key.startsWith(groupId) &amp;&amp; !key.equals(groupIdAndUid)) &#123;</span><br><span class="line">                WebSocketSession value = entry.getValue();</span><br><span class="line">                result.add(value);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        LOG.info(<span class="string">"&lt;&lt;&lt;&lt;&lt;&lt; SocketManager getGroupOtherSessions, result:&#123;&#125;"</span>, result);</span><br><span class="line">        <span class="keyword">return</span> result;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Collection&lt;WebSocketSession&gt; <span class="title">getAllSessions</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        LOG.info(<span class="string">"&lt;&lt;&lt;&lt;&lt;&lt; SocketManager getAllSessions start"</span>);</span><br><span class="line">        <span class="keyword">return</span> sessionManager.values();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">remove</span><span class="params">(String groupIdAndUid)</span> </span>&#123;</span><br><span class="line">        LOG.info(<span class="string">"&lt;&lt;&lt;&lt;&lt;&lt; Remove session from SocketManager, sessionKey:&#123;&#125;"</span>, groupIdAndUid);</span><br><span class="line">        sessionManager.remove(groupIdAndUid);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">``` </span><br><span class="line"></span><br><span class="line">#### 创建相关的处理类</span><br><span class="line">```java</span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 使用该类在建立连接后，标识当前连接，如这里使用groupid+uid来标识一个唯一的session，与SocketManager配合使用</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">PrincipalHandshakeHandler</span> <span class="keyword">extends</span> <span class="title">DefaultHandshakeHandler</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> Principal <span class="title">determineUser</span><span class="params">(ServerHttpRequest request, WebSocketHandler wsHandler, Map&lt;String, Object&gt; attributes)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (request <span class="keyword">instanceof</span> ServletServerHttpRequest) &#123;</span><br><span class="line">            ServletServerHttpRequest servletServerHttpRequest = (ServletServerHttpRequest) request;</span><br><span class="line">            HttpServletRequest httpRequest = servletServerHttpRequest.getServletRequest();</span><br><span class="line">            <span class="keyword">final</span> String groupId = httpRequest.getParameter(<span class="string">"groupId"</span>);</span><br><span class="line">            <span class="keyword">final</span> String uid = httpRequest.getParameter(<span class="string">"uid"</span>);</span><br><span class="line">            <span class="keyword">if</span> (ObjectUtils.isEmpty(groupId) || ObjectUtils.isEmpty(uid)) &#123;</span><br><span class="line">                <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">new</span> Principal() &#123;</span><br><span class="line">                <span class="meta">@Override</span></span><br><span class="line">                <span class="function"><span class="keyword">public</span> String <span class="title">getName</span><span class="params">()</span> </span>&#123;</span><br><span class="line">                    <span class="keyword">return</span> groupId + uid;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 向一个分组的其他成员发送消息</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">@Slf</span>4j</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ToGroupSocketHandler</span> <span class="keyword">extends</span> <span class="title">TextWebSocketHandler</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> RedisClient redisClient;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">ToGroupSocketHandler</span><span class="params">(<span class="keyword">final</span> RedisClient redisClient)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.redisClient = redisClient;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 监听并处理其他主机push消息的请求</span></span><br><span class="line">        <span class="keyword">new</span> Thread(<span class="keyword">new</span> Runnable() &#123;</span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">                redisClient.subscribe(<span class="keyword">new</span> RedisToGroupPubSubListener(), CHANNEL_ONE_TO_GROUP);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;, <span class="string">"group-subscribe-thread"</span>).start();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * websocket握手完成后需要处理的事宜</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">afterConnectionEstablished</span><span class="params">(WebSocketSession session)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">        SocketManager.add(session.getPrincipal().getName(), session);</span><br><span class="line">        <span class="keyword">super</span>.afterConnectionEstablished(session);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * websocket收到消息需要处理的入口</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">handleTextMessage</span><span class="params">(WebSocketSession socketSession, TextMessage msg)</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">        log.info(<span class="string">"&gt;&gt;&gt;&gt;&gt;&gt; handleTextMessage start"</span>);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 1、消息内容解析</span></span><br><span class="line">        String payload = msg.getPayload();</span><br><span class="line">        Message message = Message.convertToMessage(payload);</span><br><span class="line">        String groupIdAndUid = message.getGroupId() + message.getSenderUid();</span><br><span class="line">        message.setServerPushId(IpUtils.getLocalIpAndAddress());</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 2、通过socket管理器，定位该分组中其他的socket连接，并发送消息给客户端</span></span><br><span class="line">        List&lt;WebSocketSession&gt; groupOtherSessions = SocketManager.getGroupOtherSessions(message.getGroupId(), groupIdAndUid);</span><br><span class="line">        <span class="keyword">for</span> (WebSocketSession session : groupOtherSessions) &#123;</span><br><span class="line">            <span class="keyword">if</span> (session.isOpen()) &#123;</span><br><span class="line">                session.sendMessage(<span class="keyword">new</span> TextMessage(payload));</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 3、通知其他IP或端口的服务节点，执行步骤2</span></span><br><span class="line">        Long publish = redisClient.publish(CHANNEL_ONE_TO_GROUP, Message.toJSONString(message));</span><br><span class="line">        log.info(<span class="string">"redisClient.publish success, return :&#123;&#125;"</span>, publish);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 4、响应</span></span><br><span class="line">        WebSocketSession session = SocketManager.get(groupIdAndUid);</span><br><span class="line">        <span class="keyword">if</span> (session.isOpen()) &#123;</span><br><span class="line">            session.sendMessage(<span class="keyword">new</span> TextMessage(<span class="string">"SUCCESS"</span>));</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        log.info(<span class="string">"&lt;&lt;&lt;&lt;&lt;&lt; handleTextMessage end"</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * websocket连接断开需要处理的事宜</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">afterConnectionClosed</span><span class="params">(WebSocketSession session, CloseStatus status)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">        SocketManager.remove(session.getPrincipal().getName());</span><br><span class="line">        <span class="keyword">super</span>.afterConnectionClosed(session, status);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="最后的配置类"><a href="#最后的配置类" class="headerlink" title="最后的配置类"></a>最后的配置类</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="meta">@EnableWebSocket</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">WebSocketConfig</span> <span class="keyword">implements</span> <span class="title">WebSocketConfigurer</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    <span class="keyword">private</span> RedisClient redisClient;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">registerWebSocketHandlers</span><span class="params">(WebSocketHandlerRegistry registry)</span> </span>&#123;</span><br><span class="line">        registry</span><br><span class="line">                <span class="comment">// 给对应分组的人发送消息</span></span><br><span class="line">                .addHandler(<span class="keyword">new</span> ToGroupSocketHandler(redisClient), <span class="string">"/v1/smartlife_long_poll/to_group_users"</span>)</span><br><span class="line">                <span class="comment">// 点对点发送消息</span></span><br><span class="line">                .addHandler(<span class="keyword">new</span> ToOneSocketHandler(redisClient), <span class="string">"/v1/smartlife_long_poll/to_one"</span>)</span><br><span class="line">                <span class="comment">// 全部发送</span></span><br><span class="line">                .addHandler(<span class="keyword">new</span> ToAllSocketHandler(redisClient), <span class="string">"/v1/smartlife_long_poll/to_all"</span>)</span><br><span class="line">                <span class="comment">// 添加用户信息</span></span><br><span class="line">                .setHandshakeHandler(<span class="keyword">new</span> PrincipalHandshakeHandler())</span><br><span class="line">                <span class="comment">// 设置不接受跨域访问</span></span><br><span class="line">                .setAllowedOrigins(<span class="string">"*"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="工具类：获取本机ip和端口，用于过滤自身的广播消息"><a href="#工具类：获取本机ip和端口，用于过滤自身的广播消息" class="headerlink" title="工具类：获取本机ip和端口，用于过滤自身的广播消息"></a>工具类：获取本机ip和端口，用于过滤自身的广播消息</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Slf</span>4j</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">IpUtils</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> String <span class="title">getLocalIpAndAddress</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            InetAddress localHost = InetAddress.getLocalHost();</span><br><span class="line">            String hostAddress = localHost.getHostAddress();</span><br><span class="line"></span><br><span class="line">            <span class="comment">// 获取所有注册在jvm中的服务器</span></span><br><span class="line">            MBeanServer beanServer = ManagementFactory.getPlatformMBeanServer();</span><br><span class="line">            Set&lt;ObjectName&gt; objectNames = beanServer.queryNames(<span class="keyword">new</span> ObjectName(<span class="string">"*:type=Connector,*"</span>),</span><br><span class="line">                    Query.match(Query.attr(<span class="string">"protocol"</span>), Query.value(<span class="string">"HTTP/1.1"</span>)));</span><br><span class="line">            String port = objectNames.iterator().next().getKeyProperty(<span class="string">"port"</span>);</span><br><span class="line">            log.info(<span class="string">"&lt;&lt;&lt;&lt;&lt;&lt; getLocalIpAndAddress:&#123;&#125;"</span> , (hostAddress + <span class="string">":"</span> + port));</span><br><span class="line">            <span class="keyword">return</span> hostAddress + <span class="string">":"</span> + port;</span><br><span class="line">        &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">            log.info(<span class="string">"err msg:"</span> + e.getMessage());</span><br><span class="line">            <span class="keyword">return</span> <span class="string">""</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="实现过程中-需要注意哪些坑"><a href="#实现过程中-需要注意哪些坑" class="headerlink" title="实现过程中, 需要注意哪些坑"></a>实现过程中, 需要注意哪些坑</h3><p>1、如果服务端使用了nginx类的反向代理，需要进行额外的配置</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">proxy_set_header Upgrade $http_upgrade;</span><br><span class="line">proxy_set_header Connection &quot;upgrade&quot;;</span><br></pre></td></tr></table></figure>
+
+<p>2、服务器多节点的情况下，通过消息队里（或者redis发布订阅功能）实现对所有的session统一管理。</p>
+<p>3、使用redis的发布订阅功能的时候，redisClient.subscribe会阻塞当前线程，所以需要单独开一个线程进行处理，监听其他节点发送的消息</p>
+
+            <div class="post-copyright">
+    <div class="content">
+        <p>原始链接： <a class="post-url" href="/2020/09/24/深入理解WebSocket协议-轻松搭建一个实时的消息系统/" title="深入理解WebSocket协议 - 轻松搭建一个实时的消息系统">http://xuxiancheng.xyz/2020/09/24/深入理解WebSocket协议-轻松搭建一个实时的消息系统/</a></p>
+        <footer>
+            <a href="http://xuxiancheng.xyz">
+                <img src="/images/logo1.png" alt="xuxiancheng">
+                xuxiancheng
+            </a>
+        </footer>
+    </div>
+</div>
+
+      
+        
+            
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;">赏</a>
+</div>
+
+<div id="reward" class="post-modal reward-lay">
+    <a class="close" href="javascript:;" id="reward-close">×</a>
+    <span class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        请我吃糖~
+        <i class="icon icon-quote-right"></i>
+    </span>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="/images/wechat_code.jpg" alt="打赏二维码">
+        </div>
+        <div class="reward-select">
+            
+            <label class="reward-select-item checked" data-id="wechat" data-wechat="/images/wechat_code.jpg">
+                <img class="reward-select-item-wechat" src="/images/wechat.png" alt="微信">
+            </label>
+            
+            
+            <label class="reward-select-item" data-id="alipay" data-alipay="/images/alipay_code.jpg">
+                <img class="reward-select-item-alipay" src="/images/alipay.png" alt="支付宝">
+            </label>
+            
+        </div>
+    </div>
+</div>
+
+
+        
+    </div>
+    <footer class="article-footer">
+        
+        
+<div class="post-share">
+    <a href="javascript:;" id="share-sub" class="post-share-fab">
+        <i class="fa fa-share-alt"></i>
+    </a>
+    <div class="post-share-list" id="share-list">
+        <ul class="share-icons">
+          <li>
+            <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://xuxiancheng.xyz/2020/09/24/深入理解WebSocket协议-轻松搭建一个实时的消息系统/&title=《深入理解WebSocket协议 - 轻松搭建一个实时的消息系统》 — Allen's Blog&pic=images/muilt_thread_icon.png" data-title="微博">
+              <i class="fa fa-weibo"></i>
+            </a>
+          </li>
+          <li>
+            <a class="weixin share-sns" id="wxFab" href="javascript:;" data-title="微信">
+              <i class="fa fa-weixin"></i>
+            </a>
+          </li>
+          <li>
+            <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://xuxiancheng.xyz/2020/09/24/深入理解WebSocket协议-轻松搭建一个实时的消息系统/&title=《深入理解WebSocket协议 - 轻松搭建一个实时的消息系统》 — Allen's Blog&source=
+近期的项目中，有一个需求是在一个聊天室内，用户可以实现实时的发送消息给其他的用户。之前遇到类似的需求都是前端通过轮询来实现，实时性比较差，且对服务器造成..." data-title="QQ">
+              <i class="fa fa-qq"></i>
+            </a>
+          </li>
+          <li>
+            <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://xuxiancheng.xyz/2020/09/24/深入理解WebSocket协议-轻松搭建一个实时的消息系统/" data-title="Facebook">
+              <i class="fa fa-facebook"></i>
+            </a>
+          </li>
+          <li>
+            <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《深入理解WebSocket协议 - 轻松搭建一个实时的消息系统》 — Allen's Blog&url=http://xuxiancheng.xyz/2020/09/24/深入理解WebSocket协议-轻松搭建一个实时的消息系统/&via=http://xuxiancheng.xyz" data-title="Twitter">
+              <i class="fa fa-twitter"></i>
+            </a>
+          </li>
+          <li>
+            <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://xuxiancheng.xyz/2020/09/24/深入理解WebSocket协议-轻松搭建一个实时的消息系统/" data-title="Google+">
+              <i class="fa fa-google-plus"></i>
+            </a>
+          </li>
+        </ul>
+     </div>
+</div>
+<div class="post-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;" id="wxShare-close">×</a>
+    <p>扫一扫，分享到微信</p>
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=http://xuxiancheng.xyz/2020/09/24/深入理解WebSocket协议-轻松搭建一个实时的消息系统/" alt="微信分享二维码">
+</div>
+
+<div class="mask"></div>
+
+        
+        <ul class="article-footer-menu">
+            
+            
+  <li class="article-footer-tags">
+    <i class="fa fa-tags"></i>
+      
+    <a href="/tags/网络协议/" class="color5">网络协议</a>
+      
+  </li>
+
+        </ul>
+        
+    </footer>
+  </div>
+</article>
+
+
+    <aside class="post-toc-pos post-toc-top" id="post-toc">
+        <nav class="post-toc-wrap">
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#WebSocket协议基本原理"><span class="post-toc-text">WebSocket协议基本原理</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#如何建立连接"><span class="post-toc-text">如何建立连接</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#数据传输"><span class="post-toc-text">数据传输</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#连接保持"><span class="post-toc-text">连接保持</span></a></li></ol></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#使用spring-boot-starter-websocket搭建实时消息系统"><span class="post-toc-text">使用spring-boot-starter-websocket搭建实时消息系统</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#引入相关依赖"><span class="post-toc-text">引入相关依赖</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#统一消息封装，对websocket消息的封装"><span class="post-toc-text">统一消息封装，对websocket消息的封装</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#创建socket管理器，其实就是连接池"><span class="post-toc-text">创建socket管理器，其实就是连接池</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#最后的配置类"><span class="post-toc-text">最后的配置类</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#工具类：获取本机ip和端口，用于过滤自身的广播消息"><span class="post-toc-text">工具类：获取本机ip和端口，用于过滤自身的广播消息</span></a></li></ol></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#实现过程中-需要注意哪些坑"><span class="post-toc-text">实现过程中, 需要注意哪些坑</span></a></li></ol>
+        </nav>
+    </aside>
+    
+
+<nav id="article-nav">
+  
+  
+    <a href="/2019/07/30/谈一谈我对架构设计的理解/" id="article-nav-older" class="article-nav-link-wrap">
+      <span class="article-nav-title">谈一谈我对架构设计的理解</span>
+      <i class="fa fa-hand-o-right" aria-hidden="true"></i>
+    </a>
+  
+</nav>
+
+
+
+    
+</section>
+        
+      </div>
+      <footer id="footer">
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+      <p>
+        Powered by <a href="http://hexo.io/" target="_blank">Hexo</a> @2017-2020 xuxiancheng
+      </p>
+    </div>
+  </div>
+</footer>
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<script src="//cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+<script>
+  var mihoConfig = {
+      root: "http://xuxiancheng.xyz",
+      animate: true,
+      isHome: false,
+      share: true,
+      reward: 1
+  }
+</script>
+<div class="sidebar">
+    <div id="sidebar-search" title="Search">
+        <i class="fa fa-search"></i>
+    </div>
+    <div id="sidebar-category" title="Categories">
+        <i class="fa fa-book"></i>
+    </div>
+    <div id="sidebar-tag" title="Tags">
+        <i class="fa fa-tags"></i>
+    </div>
+    <div id="sidebar-top">
+        <span class="sidebar-top-icon"><i class="fa fa-angle-up"></i></span>
+    </div>
+</div>
+<div class="sidebar-menu-box" id="sidebar-menu-box">
+    <div class="sidebar-menu-box-container">
+        <div id="sidebar-menu-box-categories">
+            <a class="category-link" href="/categories/Java/">Java</a><a class="category-link" href="/categories/计算机基础/">计算机基础</a><a class="category-link" href="/categories/软件工程/">软件工程</a>
+        </div>
+        <div id="sidebar-menu-box-tags">
+            <a href="/tags/java并发编程/" style="font-size: 20px;">java并发编程</a> <a href="/tags/jvm/" style="font-size: 20px;">jvm</a> <a href="/tags/架构设计/" style="font-size: 10px;">架构设计</a> <a href="/tags/算法和数据结构/" style="font-size: 10px;">算法和数据结构</a> <a href="/tags/网络协议/" style="font-size: 10px;">网络协议</a>
+        </div>
+    </div>
+    <a href="javascript:;" class="sidebar-menu-box-close">&times;</a>
+</div>
+<div class="mobile-header-menu-nav" id="mobile-header-menu-nav">
+    <div class="mobile-header-menu-container">
+        <span class="title">Menus</span>
+        <ul class="mobile-header-menu-navbar">
+            
+            <li>
+                <a  href="/">
+                    <i class="fa fa-home"></i><span>Home</span>
+                </a>
+            </li>
+            
+            <li>
+                <a  href="/archives">
+                    <i class="fa fa-archive"></i><span>Archives</span>
+                </a>
+            </li>
+            
+            <li>
+                <a  href="/about">
+                    <i class="fa fa-user"></i><span>About</span>
+                </a>
+            </li>
+            
+        </ul>
+    </div>
+    <div class="mobile-header-tag-container">
+        <span class="title">Tags</span>
+        <div id="mobile-header-container-tags">
+            <a href="/tags/java并发编程/" style="font-size: 20px;">java并发编程</a> <a href="/tags/jvm/" style="font-size: 20px;">jvm</a> <a href="/tags/架构设计/" style="font-size: 10px;">架构设计</a> <a href="/tags/算法和数据结构/" style="font-size: 10px;">算法和数据结构</a> <a href="/tags/网络协议/" style="font-size: 10px;">网络协议</a>
+        </div>
+    </div>
+</div>
+<div class="search-wrap">
+    <span class="search-close">&times;</span>
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+            <i class="icon icon-lg icon-chevron-left"></i>
+        </a>
+        <input class="search-field" placeholder="Search..." id="keywords">
+        <a id="search-submit" href="javascript:;">
+            <i class="fa fa-search"></i>
+        </a>
+    <div class="search-container" id="search-container">
+        <ul class="search-result" id="search-result">
+        </ul>
+    </div>
+</div>
+
+<div id="search-tpl">
+    <li class="search-result-item">
+        <a href="{url}" class="search-item-li">
+            <span class="search-item-li-title" title="{title}">{title}</span>
+        </a>
+    </li>
+</div>
+<script src="/js/search.js"></script>
+<script src="/js/main.js"></script>
+
+
+  <script src="//cdn.bootcss.com/particles.js/2.0.0/particles.min.js"></script>
+  <div id="particles"></div>
+  <script src="/js/particles.js"></script>
+
+
+
+
+
+
+
+  <link rel="stylesheet" href="//cdn.bootcss.com/animate.css/3.5.0/animate.min.css">
+  <script src="//cdn.bootcss.com/scrollReveal.js/3.0.5/scrollreveal.js"></script>
+  <script src="/js/animate.js"></script>
+
+
+  <script src="/js/pop-img.js"></script>
+  <script>
+     $(".article-entry p img").popImg();
+  </script>
+
+  </div>
+</body>
+</html>
