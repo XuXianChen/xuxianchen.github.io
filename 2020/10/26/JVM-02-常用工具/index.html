@@ -19,7 +19,7 @@
 <meta property="og:image" content="https://xuxiancheng.xyz/images/hashtable1.png">
 <meta property="og:image" content="https://xuxiancheng.xyz/images/hashtable2.png">
 <meta property="og:image" content="https://xuxiancheng.xyz/images/hashtable3.png">
-<meta property="og:updated_time" content="2020-10-28T05:30:29.182Z">
+<meta property="og:updated_time" content="2020-10-28T05:33:00.162Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="JVM-02-常用工具">
 <meta name="twitter:description" content="哈希表是一种k-v的数据结构，理论上查询的时间复杂度位O(1)。在大部分的开发语言如Java、Go、C#的集合库都有实现。哈希算法应用也非常广泛，如加密、分布式场景数据分片、生成唯一标识、P2P协议验证数据的完整性等。通常哈希表和哈希算法都是结合在一起使用。">
@@ -152,6 +152,7 @@
             
             <p>哈希表是一种k-v的数据结构，理论上查询的时间复杂度位O(1)。在大部分的开发语言如Java、Go、C#的集合库都有实现。哈希算法应用也非常广泛，如加密、分布式场景数据分片、生成唯一标识、P2P协议验证数据的完整性等。通常哈希表和哈希算法都是结合在一起使用。</p>
 <a id="more"></a>
+<!--more-->
 
 <h3 id="哈希表为啥这么快"><a href="#哈希表为啥这么快" class="headerlink" title="哈希表为啥这么快"></a>哈希表为啥这么快</h3><p>哈希表是建立在数组上的一种数据结构，数组是一种内存空间连续，并且存储相同数据类型的数据结构，所以当我们知道了一个数组的下标，只需要一次计算（首地址 + 下标值*数组类型字节数）就可以得到对应下标的地址。而哈希表是在数组的基础上的一种数据结构，大致的结构如下:<br><img src="https://xuxiancheng.xyz/images/hashtable1.png" alt="hashtable"><br>这里假如我们不考虑多个键(key)通过哈希算法得到值相同的情况下,我们将得到的值和数组进行取模或者与操作，就会得到一个数组的下标。并且我们假设hash(key)得到的下标都不相同。那么当我们存储多个key-value类型的数据时,只需通过一次计算就可以完成查询、插入和删除等操作。但是这里有很多情况都没有考虑，我们下面将一一的进行剖析。</p>
 <h3 id="hash冲突问题"><a href="#hash冲突问题" class="headerlink" title="hash冲突问题"></a>hash冲突问题</h3><h4 id="hash冲突是什么？"><a href="#hash冲突是什么？" class="headerlink" title="hash冲突是什么？"></a>hash冲突是什么？</h4><p>不同的key通过hash算法计算后，会得到相同的值。从理论上来说，不存在没有hash冲突的算法，为什么呢？我们先来分析一下hash算法具备哪些特征：</p>
@@ -181,7 +182,7 @@
 
             <div class="post-copyright">
     <div class="content">
-        <p>最后更新： 2020年10月28日 13:30</p>
+        <p>最后更新： 2020年10月28日 13:33</p>
         <p>原始链接： <a class="post-url" href="/2020/10/26/JVM-02-常用工具/" title="JVM-02-常用工具">http://xuxiancheng.xyz/2020/10/26/JVM-02-常用工具/</a></p>
         <footer>
             <a href="http://xuxiancheng.xyz">
