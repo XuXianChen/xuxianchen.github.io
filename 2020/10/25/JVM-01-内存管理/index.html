@@ -18,7 +18,7 @@
 <meta property="og:locale" content="chinese">
 <meta property="og:image" content="http://xuxiancheng.xyz/images/jvm_gc.png">
 <meta property="og:image" content="http://xuxiancheng.xyz/images/jvm_instance_mark_word.png">
-<meta property="og:updated_time" content="2020-10-28T04:01:47.465Z">
+<meta property="og:updated_time" content="2020-10-28T04:04:20.243Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="JVM-01-内存管理">
 <meta name="twitter:description" content="Java语言的内存管理由JVM自动管理，无需像C++这样由程序员来内存分配和内存回收。理解Java内存管理的原理后，当系统发生OOM等异常时，可以分析和定位问题，并进行合理的调优。">
@@ -141,6 +141,7 @@
 <p>Java语言的内存管理由JVM自动管理，无需像C++这样由程序员来内存分配和内存回收。理解Java内存管理的原理后，当系统发生OOM等异常时，可以分析和定位问题，并进行合理的调优。</p>
 </blockquote>
 <a id="more"></a>
+
 <p>JVM中的垃圾回收器不仅会进行垃圾回收，还会影响内存分配策略。例如通过相关GC参数可以配置新生代、老年代的大小和比例，可以配置对象大小超过一定阈值，直接进入老年代。</p>
 <p><img src="http://xuxiancheng.xyz/images/jvm_gc.png" alt="对象创建和回收的流程"></p>
 <h1 id="1-内存分配"><a href="#1-内存分配" class="headerlink" title="1 内存分配"></a>1 内存分配</h1><h2 id="1-1-Java对象的实现"><a href="#1-1-Java对象的实现" class="headerlink" title="1.1 Java对象的实现"></a>1.1 Java对象的实现</h2><h3 id="1-1-1-对象的创建以及内存分配"><a href="#1-1-1-对象的创建以及内存分配" class="headerlink" title="1.1.1 对象的创建以及内存分配"></a>1.1.1 对象的创建以及内存分配</h3><p>这里的对象指普通的Java对象，不包括Class对象以及数组等特殊情况)的创建过程</p>
