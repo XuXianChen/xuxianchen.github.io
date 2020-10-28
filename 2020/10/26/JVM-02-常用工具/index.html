@@ -8,20 +8,22 @@
   
     <meta name="keywords" content="xuxiancheng,XXC的个人博客">
   
-  <meta name="description" content="Java内存模型(Java Memory Model,简称JMM)屏蔽了不同平台对内存访问的差异，从而让Java语言对内存的操作一致性。通过定义共享变量的访问规则，控制共享内存变量在内存中的读取操作来实现。">
-<meta name="keywords" content="jvm">
+  <meta name="description" content="哈希表是一种k-v的数据结构，理论上查询的时间复杂度位O(1)。在大部分的开发语言如Java、Go、C#的集合库都有实现。哈希算法应用也非常广泛，如加密、分布式场景数据分片、生成唯一标识、P2P协议验证数据的完整性等。通常哈希表和哈希算法都是结合在一起使用。">
+<meta name="keywords" content="算法和数据结构">
 <meta property="og:type" content="article">
 <meta property="og:title" content="JVM-02-常用工具">
 <meta property="og:url" content="http://xuxiancheng.xyz/2020/10/26/JVM-02-常用工具/index.html">
 <meta property="og:site_name" content="XXC的个人博客">
-<meta property="og:description" content="Java内存模型(Java Memory Model,简称JMM)屏蔽了不同平台对内存访问的差异，从而让Java语言对内存的操作一致性。通过定义共享变量的访问规则，控制共享内存变量在内存中的读取操作来实现。">
+<meta property="og:description" content="哈希表是一种k-v的数据结构，理论上查询的时间复杂度位O(1)。在大部分的开发语言如Java、Go、C#的集合库都有实现。哈希算法应用也非常广泛，如加密、分布式场景数据分片、生成唯一标识、P2P协议验证数据的完整性等。通常哈希表和哈希算法都是结合在一起使用。">
 <meta property="og:locale" content="chinese">
-<meta property="og:image" content="http://xuxiancheng.xyz/images/memery_model.png">
-<meta property="og:updated_time" content="2020-10-28T04:34:25.124Z">
+<meta property="og:image" content="https://xuxiancheng.xyz/images/hashtable1.png">
+<meta property="og:image" content="https://xuxiancheng.xyz/images/hashtable2.png">
+<meta property="og:image" content="https://xuxiancheng.xyz/images/hashtable3.png">
+<meta property="og:updated_time" content="2020-10-28T04:37:28.340Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="JVM-02-常用工具">
-<meta name="twitter:description" content="Java内存模型(Java Memory Model,简称JMM)屏蔽了不同平台对内存访问的差异，从而让Java语言对内存的操作一致性。通过定义共享变量的访问规则，控制共享内存变量在内存中的读取操作来实现。">
-<meta name="twitter:image" content="http://xuxiancheng.xyz/images/memery_model.png">
+<meta name="twitter:description" content="哈希表是一种k-v的数据结构，理论上查询的时间复杂度位O(1)。在大部分的开发语言如Java、Go、C#的集合库都有实现。哈希算法应用也非常广泛，如加密、分布式场景数据分片、生成唯一标识、P2P协议验证数据的完整性等。通常哈希表和哈希算法都是结合在一起使用。">
+<meta name="twitter:image" content="https://xuxiancheng.xyz/images/hashtable1.png">
   
   
     <link rel="icon" href="images/logo1.png">
@@ -115,7 +117,7 @@
               <li>
                   <i class="fa fa-book"></i>
                   
-                      <a href="/categories/Java/">Java</a>
+                      <a href="/categories/计算机基础/">计算机基础</a>
                   
               </li>
           
@@ -137,27 +139,35 @@
       
             
             <blockquote>
-<p>Java内存模型(Java Memory Model,简称JMM)屏蔽了不同平台对内存访问的差异，从而让Java语言对内存的操作一致性。通过定义共享变量的访问规则，控制共享内存变量在内存中的读取操作来实现。</p>
+<p>哈希表是一种k-v的数据结构，理论上查询的时间复杂度位O(1)。在大部分的开发语言如Java、Go、C#的集合库都有实现。哈希算法应用也非常广泛，如加密、分布式场景数据分片、生成唯一标识、P2P协议验证数据的完整性等。通常哈希表和哈希算法都是结合在一起使用。</p>
 </blockquote>
 <a id="more"></a>
 
-<h2 id="JMM逻辑模型"><a href="#JMM逻辑模型" class="headerlink" title="JMM逻辑模型"></a>JMM逻辑模型</h2><p><img src="http://xuxiancheng.xyz/images/memery_model.png" alt></p>
+<h3 id="哈希表为啥这么快"><a href="#哈希表为啥这么快" class="headerlink" title="哈希表为啥这么快"></a>哈希表为啥这么快</h3><p>哈希表是建立在数组上的一种数据结构，数组是一种内存空间连续，并且存储相同数据类型的数据结构，所以当我们知道了一个数组的下标，只需要一次计算（首地址 + 下标值*数组类型字节数）就可以得到对应下标的地址。而哈希表是在数组的基础上的一种数据结构，大致的结构如下:<br><img src="https://xuxiancheng.xyz/images/hashtable1.png" alt="hashtable"><br>这里假如我们不考虑多个键(key)通过哈希算法得到值相同的情况下,我们将得到的值和数组进行取模或者与操作，就会得到一个数组的下标。并且我们假设hash(key)得到的下标都不相同。那么当我们存储多个key-value类型的数据时,只需通过一次计算就可以完成查询、插入和删除等操作。但是这里有很多情况都没有考虑，我们下面将一一的进行剖析。</p>
+<h3 id="hash冲突问题"><a href="#hash冲突问题" class="headerlink" title="hash冲突问题"></a>hash冲突问题</h3><h4 id="hash冲突是什么？"><a href="#hash冲突是什么？" class="headerlink" title="hash冲突是什么？"></a>hash冲突是什么？</h4><p>不同的key通过hash算法计算后，会得到相同的值。从理论上来说，不存在没有hash冲突的算法，为什么呢？我们先来分析一下hash算法具备哪些特征：</p>
 <ul>
-<li>工作内存是一个虚拟的概念，其底层是CPU缓存，寄存器等。</li>
-<li>每个线程都有自己的工作内存，并且只能通过工作内存和主内存打交道。</li>
-<li>不同的线程不能获取其他线程工作内存的数据，只能通过主内存进行交互。</li>
+<li>相同的key，每次计算出来的value值不会发生改变</li>
+<li>不能通过value推导出key值</li>
+<li>不同的key计算出来的value不重复(理论上不可能实现), 但是value的长度一样</li>
 </ul>
-<h2 id="内存之间的交互"><a href="#内存之间的交互" class="headerlink" title="内存之间的交互"></a>内存之间的交互</h2><p>关于主内存与工作内存之间具体的交互协议，即一个变量如何从主内存拷贝到工作内存、如何从工作内存同步回主内存这一类的实现细节，JMM定了8种操作来完成。Java虚拟机实现时必须保证下面提及的每一种操作都是原子的、不可再分的（对于double和long类型的变量来说，load、store、read和write操作在某些平台上允许有例外）。如下:</p>
-<ul>
-<li>lock（锁定）：作用于主内存的变量，它把一个变量标识为一条线程独占的状态。</li>
-<li>unlock（解锁）：作用于主内存的变量，它把一个处于锁定状态的变量释放出来，释放后的变量才可以被其他线程锁定。</li>
-<li>read（读取）：作用于主内存的变量，它把一个变量的值从主内存传输到线程的工作内存中，以便随后的load动作使用。</li>
-<li>load（载入）：作用于工作内存的变量，它把read操作从主内存中得到的变量值放入工作内存的变量副本中。</li>
-<li>use（使用）：作用于工作内存的变量，它把工作内存中一个变量的值传递给执行引擎。</li>
-<li>assign（赋值）：作用于工作内存的变量，它把一个从执行引擎接收的值赋给工作内存的变量。</li>
-<li>store（存储）：作用于工作内存的变量，它把工作内存中一个变量的值传送到主内存中，以便随后的write操作使用。</li>
-<li>write（写入）：作用于主内存的变量，它把store操作从工作内存中得到的变量的值放入主内存的变量中。<br>对于java程序员而言，只需要关心lock，unlock，read，write即可，其他了解一下就好。</li>
+<p>第三点可以看到，hash算法希望不同的key推导出来的value长度一样，即便是MD5这样的算法，那么根据数学基本常识，通过MD5算法计算出来的value集合最大为：16^32 = 2^128(常见的MD5算法使用16进制，并且最后计算出的value是32个字符)个不同的字符串，然而我们key集合是无穷大的，所以肯定会出现hash冲突情况。</p>
+<h4 id="如何解决hash冲突？"><a href="#如何解决hash冲突？" class="headerlink" title="如何解决hash冲突？"></a>如何解决hash冲突？</h4><p>hash冲突的解决方法目前有两种，一种是<strong>开放寻址法</strong>，另外一种则是<strong>链表法</strong>。</p>
+<p>开放寻址法就是当发生hash冲突时，使用顺序探测的方式遍历后续节点，如果是插入元素，如果探测到对应的slot为空时，直接将数据进行存储，查询类似，删除操作较为复杂一点，探测到数据是需要删除时，只是将其标记为deleted，并不真正的将其删除。通常顺序的探测效率比较低，可以通过多个hash算法或者跳跃式探测的方式进行优化。<br><img src="https://xuxiancheng.xyz/images/hashtable2.png" alt="开放寻址法"> 如图所示，通过hash算法计算得到下标为3的地址，但是下标为3的slot已经存储数据了，那么我们会去获取下标为4的地址，并且判断该slot有没有存储数据，没有的话就将数据存储到该位置，有就依次进行递归，直到发现空的slot，然后存储。</p>
+<p>链表法就是每个slot存储一个链表的head节点的指针，当发生hash冲突时候，在链表的tail节点加入新的元素即可，查询的时候遍历该链表即可。如下图：<br><img src="https://xuxiancheng.xyz/images/hashtable3.png" alt="链表法"></p>
+<h3 id="一次性扩容性能问题"><a href="#一次性扩容性能问题" class="headerlink" title="一次性扩容性能问题"></a>一次性扩容性能问题</h3><p>当散列表中的元素过多时，而数组的长度是固定的，这个时候就会出现大量的hash冲突的情况，这个时候如果不对数组进行扩容的话，整个散列的性能就会不断的下降，甚至退化为链表。</p>
+<p>这个时候，就需要对数组进行扩容，一般是原来数组的两倍，然而扩容后，同一个数组取模运算或者与运算在基数不同的情况下，得到的结果不一样，所以每次扩容都会出现的大量的数据的搬移，在一些高性能的场景下就会成为性能瓶颈。这个时候我们可以采用渐进式数据迁移，每次新增数据的时候将原散列表的一个数据进行迁移，直到最后全部数据迁移完成，在查询的过程中，先查询新的散列表，如果数据不存在，再查询原来的散列表，其实这就是一种空间换时间的做法，Redis的扩容就是采用渐进式的扩容方式。</p>
+<h3 id="哈希算法常用的应用场景"><a href="#哈希算法常用的应用场景" class="headerlink" title="哈希算法常用的应用场景"></a>哈希算法常用的应用场景</h3><ul>
+<li>安全加密场景，如果有同学对接过微信支付或者支付宝支付，就知道数据传输过程中需要使用MD5生成数字签名sign，微信服务端会对该sign进行校验，校验通过才能进行下一步操作</li>
+<li>散列表，场景的如Java里面的HashMap&lt;&gt;(),Go语言map关键字实现等</li>
+<li>校验数据的完整性。如场景的P2P协议，常规的协议客户端都是从中心服务器获取数据，而P2P协议是一种去中心化的协议，每个客户端下载文件后，那么他自己就会成为一个服务器供别人下载文件。在这样的场景下，肯定会出现安全性问题，因为任何一个人都可以修改文件。在这种情况下，P2P协议需要使用一个种子文件，该文件存储需要下载的文件的分片的hash值，每次下载完的文件分片都需要和该hash进行对比，如果匹配就可以认为该文件没有被破坏，否则就从其他节点下载该片段。</li>
+<li>唯一标识。如何识别图片的唯一性，我们可以对图片序列化后的一部分字节进行hash运算，作为该图片的唯一标识。</li>
+<li>分布式场景，如负载均衡算法，数据分片等。通过对用户的id或者ip进行hash运算并对机器节点数量取模运算，可以让一个用户的请求固定的落到一个服务接点上，这样我们只需要缓存一份数据，而不是每个节点都需要缓存，可以节约内存开销，如session缓存。但是这里同样会遇到一个问题就是数组扩容时，需要进行大量的数据搬运，通过渐进式迁移数据会需要浪费大量的空间，在缓存或者数据分片的场景下显然是不合适的，这个时候我们就会有一致性hash算法解决，每次扩容都只搬运少量的数据。</li>
 </ul>
+<h3 id="一致性hash算法如何理解"><a href="#一致性hash算法如何理解" class="headerlink" title="一致性hash算法如何理解"></a>一致性hash算法如何理解</h3><p>我们先来看看什么是一致性hash算法，根据维基百科定义如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">In computer science, consistent hashing is a special kind of hashing such that when a hash table is resized, only n/m keys need to be remapped on average where n is the number of keys and m is the number of slots.</span><br></pre></td></tr></table></figure>
+
+<p>翻译大概意思就是，一致性hash是一种特殊的hash算法， 当哈希表表进行扩容时，一致性hash算法只需要移动n/m个元素的位置，其中n代表hash表key的数量，m代表数组长度。</p>
+<p>一致性hash主要是用来解决传统的hash算法扩容造成大量数据搬运的情况。</p>
 
             <div class="post-copyright">
     <div class="content">
@@ -218,7 +228,7 @@
     <div class="post-share-list" id="share-list">
         <ul class="share-icons">
           <li>
-            <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://xuxiancheng.xyz/2020/10/26/JVM-02-常用工具/&title=《JVM-02-常用工具》 — XXC的个人博客&pic=images/muilt_thread_icon.png" data-title="微博">
+            <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://xuxiancheng.xyz/2020/10/26/JVM-02-常用工具/&title=《JVM-02-常用工具》 — XXC的个人博客&pic=images/hashIcon.png" data-title="微博">
               <i class="fa fa-weibo"></i>
             </a>
           </li>
@@ -229,7 +239,7 @@
           </li>
           <li>
             <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://xuxiancheng.xyz/2020/10/26/JVM-02-常用工具/&title=《JVM-02-常用工具》 — XXC的个人博客&source=
-Java内存模型(Java Memory Model,简称JMM)屏蔽了不同平台对内存访问的差异，从而让Java语言对内存的操作一致性。通过定义共享变量..." data-title="QQ">
+哈希表是一种k-v的数据结构，理论上查询的时间复杂度位O(1)。在大部分的开发语言如Java、Go、C#的集合库都有实现。哈希算法应用也非常广泛，如加密..." data-title="QQ">
               <i class="fa fa-qq"></i>
             </a>
           </li>
@@ -266,7 +276,7 @@ Java内存模型(Java Memory Model,简称JMM)屏蔽了不同平台对内存访�
   <li class="article-footer-tags">
     <i class="fa fa-tags"></i>
       
-    <a href="/tags/jvm/" class="color4">jvm</a>
+    <a href="/tags/算法和数据结构/" class="color3">算法和数据结构</a>
       
   </li>
 
@@ -279,7 +289,7 @@ Java内存模型(Java Memory Model,简称JMM)屏蔽了不同平台对内存访�
 
     <aside class="post-toc-pos post-toc-top" id="post-toc">
         <nav class="post-toc-wrap">
-            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#JMM逻辑模型"><span class="post-toc-text">JMM逻辑模型</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#内存之间的交互"><span class="post-toc-text">内存之间的交互</span></a></li></ol>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#哈希表为啥这么快"><span class="post-toc-text">哈希表为啥这么快</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#hash冲突问题"><span class="post-toc-text">hash冲突问题</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#hash冲突是什么？"><span class="post-toc-text">hash冲突是什么？</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#如何解决hash冲突？"><span class="post-toc-text">如何解决hash冲突？</span></a></li></ol></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#一次性扩容性能问题"><span class="post-toc-text">一次性扩容性能问题</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#哈希算法常用的应用场景"><span class="post-toc-text">哈希算法常用的应用场景</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#一致性hash算法如何理解"><span class="post-toc-text">一致性hash算法如何理解</span></a></li></ol>
         </nav>
     </aside>
     
@@ -338,10 +348,10 @@ Java内存模型(Java Memory Model,简称JMM)屏蔽了不同平台对内存访�
 <div class="sidebar-menu-box" id="sidebar-menu-box">
     <div class="sidebar-menu-box-container">
         <div id="sidebar-menu-box-categories">
-            <a class="category-link" href="/categories/Java/">Java</a>
+            <a class="category-link" href="/categories/计算机基础/">计算机基础</a>
         </div>
         <div id="sidebar-menu-box-tags">
-            <a href="/tags/jvm/" style="font-size: 10px;">jvm</a>
+            <a href="/tags/算法和数据结构/" style="font-size: 10px;">算法和数据结构</a>
         </div>
     </div>
     <a href="javascript:;" class="sidebar-menu-box-close">&times;</a>
@@ -374,7 +384,7 @@ Java内存模型(Java Memory Model,简称JMM)屏蔽了不同平台对内存访�
     <div class="mobile-header-tag-container">
         <span class="title">Tags</span>
         <div id="mobile-header-container-tags">
-            <a href="/tags/jvm/" style="font-size: 10px;">jvm</a>
+            <a href="/tags/算法和数据结构/" style="font-size: 10px;">算法和数据结构</a>
         </div>
     </div>
 </div>
