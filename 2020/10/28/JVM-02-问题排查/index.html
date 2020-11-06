@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="utf-8">
+  
+  <title>JVM-02-问题排查 | XXC的个人博客</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  
+    <meta name="keywords" content="xuxiancheng,XXC的个人博客">
+  
+  <meta name="description" content="系统出现问题后，通常根据经验和理论知识大致定位问题类型，然后获取相关数据（应用日志、GC日志、监控日志、系统日志等），加上相关工具对数据进行分析。基本上就可以定位问题，最终针对问题采用临时和最终的解决方案。">
+<meta name="keywords" content="jvm">
+<meta property="og:type" content="article">
+<meta property="og:title" content="JVM-02-问题排查">
+<meta property="og:url" content="http://xuxiancheng.xyz/2020/10/28/JVM-02-问题排查/index.html">
+<meta property="og:site_name" content="XXC的个人博客">
+<meta property="og:description" content="系统出现问题后，通常根据经验和理论知识大致定位问题类型，然后获取相关数据（应用日志、GC日志、监控日志、系统日志等），加上相关工具对数据进行分析。基本上就可以定位问题，最终针对问题采用临时和最终的解决方案。">
+<meta property="og:locale" content="chinese">
+<meta property="og:image" content="http://xuxiancheng.xyz/images/jvisualvm-01.png">
+<meta property="og:image" content="http://xuxiancheng.xyz/images/jvisualvm-02.png">
+<meta property="og:image" content="http://xuxiancheng.xyz/images/jvisualvm-03.png">
+<meta property="og:image" content="http://xuxiancheng.xyz/images/jvisualvm-04.png">
+<meta property="og:image" content="http://xuxiancheng.xyz/images/jvisualvm-05.png">
+<meta property="og:updated_time" content="2020-11-06T06:51:03.374Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="JVM-02-问题排查">
+<meta name="twitter:description" content="系统出现问题后，通常根据经验和理论知识大致定位问题类型，然后获取相关数据（应用日志、GC日志、监控日志、系统日志等），加上相关工具对数据进行分析。基本上就可以定位问题，最终针对问题采用临时和最终的解决方案。">
+<meta name="twitter:image" content="http://xuxiancheng.xyz/images/jvisualvm-01.png">
+  
+  
+    <link rel="icon" href="images/logo1.png">
+  
+  <link href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="/css/style.css">
+  <script src="/js/pace.min.js"></script>
+  
+
+  
+  
+
+</head>
+</html>
+<body>
+  <div id="container">
+      <header id="header">
+    <div id="banner"></div>
+    <div id="header-outer">
+        <div id="header-menu" class="header-menu-pos animated">
+            <div class="header-menu-container">
+                <a href="/" class="left">
+                    <span class="site-title">XXC的个人博客</span>
+                </a>
+                <nav id="header-menu-nav" class="right">
+                    
+                    <a  href="/">
+                        <i class="fa fa-home"></i>
+                        <span>Home</span>
+                    </a>
+                    
+                    <a  href="/archives">
+                        <i class="fa fa-archive"></i>
+                        <span>Archives</span>
+                    </a>
+                    
+                    <a  href="/about">
+                        <i class="fa fa-user"></i>
+                        <span>About</span>
+                    </a>
+                    
+                </nav>
+                <a class="mobile-header-menu-button">
+                    <i class="fa fa-bars"></i>
+                </a>
+            </div>
+        </div>
+        <div id="header-row">
+            <div id="logo">
+                <a href="/">
+                    <img src="/images/logo1.png" alt="logo">
+                </a>
+            </div>
+            <div class="header-info">
+                <div id="header-title">
+                    
+                    <h2>
+                        XXC的个人博客
+                    </h2>
+                    
+                </div>
+                <div id="header-description">
+                    
+                    <h3>
+                        一个专注于 服务端 技术的博客网站
+                    </h3>
+                    
+                </div>
+            </div>
+            <nav class="header-nav">
+                <div class="social">
+                    
+                </div>
+            </nav>
+        </div>
+    </div>
+</header>
+      <div class="outer">
+        <section id="main" class="body-wrap"><article id="post-JVM-02-问题排查" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 class="post-title" itemprop="name">
+      JVM-02-问题排查
+    </h1>
+    <div class="post-title-bar">
+      <ul>
+          
+              <li>
+                  <i class="fa fa-book"></i>
+                  
+                      <a href="/categories/Java进阶/">Java进阶</a>
+                  
+              </li>
+          
+        <li>
+          <i class="fa fa-calendar"></i>  2020-10-28
+        </li>
+        <li>
+          <i class="fa fa-eye"></i>
+          <span id="busuanzi_value_page_pv"></span>
+        </li>
+      </ul>
+    </div>
+  
+
+          
+      </header>
+    
+    <div class="article-entry post-content" itemprop="articleBody">
+      
+            
+            <blockquote>
+<p>系统出现问题后，通常根据经验和理论知识大致定位问题类型，然后获取相关数据（应用日志、GC日志、监控日志、系统日志等），加上相关工具对数据进行分析。基本上就可以定位问题，最终针对问题采用临时和最终的解决方案。</p>
+</blockquote>
+<a id="more"></a>
+<!--more-->
+
+<h1 id="1-JDK工具篇"><a href="#1-JDK工具篇" class="headerlink" title="1 JDK工具篇"></a>1 JDK工具篇</h1><p>JDK内置了大量的工具供我们排查问题，包括命令行和可视化的工具</p>
+<h2 id="1-1-命令行工具"><a href="#1-1-命令行工具" class="headerlink" title="1.1 命令行工具"></a>1.1 命令行工具</h2><h3 id="1-1-1-JPS"><a href="#1-1-1-JPS" class="headerlink" title="1.1.1 JPS"></a>1.1.1 JPS</h3><p>jps用来查看java相关的进程，类似于操作系统的ps命令 </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">1、jps帮组文档</span><br><span class="line">控制台输入: jps -help</span><br><span class="line">usage: jps [-help]</span><br><span class="line">       jps [-q] [-mlvV] [&lt;hostid&gt;]</span><br><span class="line"></span><br><span class="line">Definitions:</span><br><span class="line">    &lt;hostid&gt;:      &lt;hostname&gt;[:&lt;port&gt;]</span><br><span class="line"></span><br><span class="line">2、参数说明：</span><br><span class="line">-q : 忽略输出的类名、Jar名以及传递给main方法的参数,只输出pid</span><br><span class="line">-m : 输出虚拟机进程启动时传递给主类main()方法的参数</span><br><span class="line">-l : 输出主类完整的包名和类名,如果进程执行的是jar包,输出jar包路径</span><br><span class="line">-v : 输出虚拟机进程启动时jvm参数</span><br><span class="line"></span><br><span class="line">3、演示:</span><br><span class="line">控制台输入: jps -l</span><br><span class="line">58135 org.jetbrains.jps.cmdline.Launcher</span><br><span class="line">15532 </span><br><span class="line">61693 sun.tools.jps.Jps</span><br><span class="line">57421 </span><br><span class="line">57885 org.jetbrains.jps.cmdline.Launcher</span><br></pre></td></tr></table></figure>
+
+<h3 id="1-1-2-jinfo"><a href="#1-1-2-jinfo" class="headerlink" title="1.1.2 jinfo"></a>1.1.2 jinfo</h3><p>jinfo获取java进程相关的配置信息</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line">1、查看jinfo的帮组文档:</span><br><span class="line"></span><br><span class="line">控制台输入: jinfo -help</span><br><span class="line"></span><br><span class="line">Usage:</span><br><span class="line">    jinfo [option] &lt;pid&gt;</span><br><span class="line">        (to connect to running process)</span><br><span class="line">    jinfo [option] &lt;executable &lt;core&gt;</span><br><span class="line">        (to connect to a core file)</span><br><span class="line">    jinfo [option] [server_id@]&lt;remote server IP or hostname&gt;</span><br><span class="line">        (to connect to remote debug server)</span><br><span class="line"></span><br><span class="line">where &lt;option&gt; is one of:</span><br><span class="line">    -flag &lt;name&gt;         to print the value of the named VM flag</span><br><span class="line">    -flag [+|-]&lt;name&gt;    to enable or disable the named VM flag</span><br><span class="line">    -flag &lt;name&gt;=&lt;value&gt; to set the named VM flag to the given value</span><br><span class="line">    -flags               to print VM flags</span><br><span class="line">    -sysprops            to print Java system properties</span><br><span class="line">    &lt;no option&gt;          to print both of the above</span><br><span class="line">    -h | -help           to print this help message</span><br><span class="line"></span><br><span class="line">2、演示</span><br><span class="line"></span><br><span class="line">控制台输入: jinfo -flags 27</span><br><span class="line"></span><br><span class="line">Attaching to process ID 27, please wait...</span><br><span class="line">Debugger attached successfully.</span><br><span class="line">Server compiler detected.</span><br><span class="line">JVM version is 24.65-b04</span><br><span class="line"></span><br><span class="line">-Dvtag=common -Dskywalking.agent.application_code=app_smartlife_sing -DskyWalkingAgentConfigKey=skywalking-agent </span><br><span class="line">-javaagent:/usr/local/lizhi/lz_common_skywalking_agentjar/lz_common_skywalking_agentjar_idx0/apache-skywalking-apm-incubating/agent/skywalking-agent.jar</span><br><span class="line"> -XX:MaxDirectMemorySize=256M -Dorg.apache.skywalking.apm.dependencies.io.netty.maxDirectMemory=0 -Dcom.sun.management.jmxremote </span><br><span class="line">-Dcom.sun.management.jmxremote.ssl=false -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.port=22001 </span><br><span class="line">-Dconfig.sysname=AppLive -Dconf.key=app_smartlife_sing -Dconf.env=test -Djava.net.preferIPv4Stack=true -Dapp.name=app_smartlife_sing </span><br><span class="line">-Xloggc:gc.log -XX:+PrintReferenceGC -XX:+ParallelRefProcEnabled -Xmx256M -Xms256M -Xss256k -XX:PermSize=128M -XX:MaxPermSize=128M </span><br><span class="line">-Dlocal.ip=addr:172.18.3.77 -Dproject.path=/usr/local/lizhi/app_smartlife_sing -XX:+PrintGCDateStamps -XX:+PrintGCDetails -XX:+UseG1GC </span><br><span class="line">-XX:+UnlockExperimentalVMOptions -XX:G1LogLevel=finest -XX:InitiatingHeapOccupancyPercent=25 -XX:MaxGCPauseMillis=200 -XX:G1HeapRegionSize=4m </span><br><span class="line">-XX:+PrintFlagsFinal -XX:ParallelGCThreads=12 -XX:ConcGCThreads=4 -Xdebug -Xrunjdwp:server=y,transport=dt_socket,address=5014,suspend=n</span><br></pre></td></tr></table></figure>
+
+<h3 id="1-1-3-jstat"><a href="#1-1-3-jstat" class="headerlink" title="1.1.3 jstat"></a>1.1.3 jstat</h3><p>jstat(jvm statistics monitoring tool)用于监控jvm中的各种状态信息，包括内存、gc等。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><span class="line">1、控制台输入: jstat -help</span><br><span class="line"></span><br><span class="line">Usage: jstat -help|-options</span><br><span class="line">       jstat -&lt;option&gt; [-t] [-h&lt;lines&gt;] &lt;vmid&gt; [&lt;interval&gt; [&lt;count&gt;]]</span><br><span class="line"></span><br><span class="line">Definitions:</span><br><span class="line">  &lt;option&gt;      An option reported by the -options option</span><br><span class="line">  &lt;vmid&gt;        Virtual Machine Identifier. A vmid takes the following form:</span><br><span class="line">                     &lt;lvmid&gt;[@&lt;hostname&gt;[:&lt;port&gt;]]</span><br><span class="line">                Where &lt;lvmid&gt; is the local vm identifier for the target</span><br><span class="line">                Java virtual machine, typically a process id; &lt;hostname&gt; is</span><br><span class="line">                the name of the host running the target Java virtual machine;</span><br><span class="line">                and &lt;port&gt; is the port number for the rmiregistry on the</span><br><span class="line">                target host. See the jvmstat documentation for a more complete</span><br><span class="line">                description of the Virtual Machine Identifier.</span><br><span class="line">  &lt;lines&gt;       Number of samples between header lines.</span><br><span class="line">  &lt;interval&gt;    Sampling interval. The following forms are allowed:</span><br><span class="line">                    &lt;n&gt;[&quot;ms&quot;|&quot;s&quot;]</span><br><span class="line">                Where &lt;n&gt; is an integer and the suffix specifies the units as </span><br><span class="line">                milliseconds(&quot;ms&quot;) or seconds(&quot;s&quot;). The default units are &quot;ms&quot;.</span><br><span class="line">  &lt;count&gt;       Number of samples to take before terminating.</span><br><span class="line">  -J&lt;flag&gt;      Pass &lt;flag&gt; directly to the runtime system.</span><br><span class="line"></span><br><span class="line">控制台输入： jstat -options，查看选项</span><br><span class="line">-class</span><br><span class="line">-compiler</span><br><span class="line">-gc</span><br><span class="line">-gccapacity</span><br><span class="line">-gccause</span><br><span class="line">-gcmetacapacity</span><br><span class="line">-gcnew</span><br><span class="line">-gcnewcapacity</span><br><span class="line">-gcold</span><br><span class="line">-gcoldcapacity</span><br><span class="line">-gcutil</span><br><span class="line">-printcompilation</span><br><span class="line"></span><br><span class="line">2、演示（1秒钟输出一次GC，持续输出10次）</span><br><span class="line">控制台输入：jstat -gcutil pid 1000 10</span><br><span class="line">  S0     S1     E      O      M     CCS    YGC     YGCT    FGC    FGCT     GCT   </span><br><span class="line"> 61.25   0.00  62.11  54.95  89.73  82.29    406    2.280    23    5.169    7.449</span><br><span class="line"> 61.25   0.00  62.26  54.95  89.73  82.29    406    2.280    23    5.169    7.449</span><br><span class="line"> 61.25   0.00  62.43  54.95  89.73  82.29    406    2.280    23    5.169    7.449</span><br><span class="line"> 61.25   0.00  62.58  54.95  89.73  82.29    406    2.280    23    5.169    7.449</span><br><span class="line"> 61.25   0.00  64.46  54.95  89.73  82.29    406    2.280    23    5.169    7.449</span><br><span class="line"> 61.25   0.00  64.56  54.95  89.73  82.29    406    2.280    23    5.169    7.449</span><br><span class="line"> 61.25   0.00  64.70  54.95  89.73  82.29    406    2.280    23    5.169    7.449</span><br><span class="line"> 61.25   0.00  64.82  54.95  89.73  82.29    406    2.280    23    5.169    7.449</span><br><span class="line"> 61.25   0.00  64.96  54.95  89.73  82.29    406    2.280    23    5.169    7.449</span><br><span class="line"> 61.25   0.00  65.10  54.95  89.73  82.29    406    2.280    23    5.169    7.449</span><br></pre></td></tr></table></figure>
+
+<h3 id="1-1-4-jstack"><a href="#1-1-4-jstack" class="headerlink" title="1.1.4 jstack"></a>1.1.4 jstack</h3><p>jstack(Stack Trace for Java)是jdk提供一个用于查看JVM当前时刻的线程堆栈信息的命令，主要用来分析线程长时间停顿的原因。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br></pre></td><td class="code"><pre><span class="line">1、jstack的帮组文档：</span><br><span class="line">Usage:</span><br><span class="line">    jstack [-l] &lt;pid&gt;</span><br><span class="line">        (to connect to running process)</span><br><span class="line">    jstack -F [-m] [-l] &lt;pid&gt;</span><br><span class="line">        (to connect to a hung process)</span><br><span class="line">    jstack [-m] [-l] &lt;executable&gt; &lt;core&gt;</span><br><span class="line">        (to connect to a core file)</span><br><span class="line">    jstack [-m] [-l] [server_id@]&lt;remote server IP or hostname&gt;</span><br><span class="line">        (to connect to a remote debug server)</span><br><span class="line"></span><br><span class="line">Options:</span><br><span class="line">    -F  to force a thread dump. Use when jstack &lt;pid&gt; does not respond (process is hung)</span><br><span class="line">    -m  to print both java and native frames (mixed mode)</span><br><span class="line">    -l  long listing. Prints additional information about locks</span><br><span class="line">    -h or -help to print this help message</span><br><span class="line"></span><br><span class="line">2、演示</span><br><span class="line"></span><br><span class="line">输入：jstack -l 64405</span><br><span class="line"></span><br><span class="line">由于线程堆栈文件较多，这里只截取部分内容，如下：</span><br><span class="line"></span><br><span class="line">Full thread dump OpenJDK 64-Bit Server VM (11.0.6+8-b765.40 mixed mode):</span><br><span class="line">Threads class SMR info:</span><br><span class="line">_java_thread_list=0x00007f82cf4d1280, length=17, elements=&#123;</span><br><span class="line">0x00007f82d1809000, 0x00007f82cf83b800, 0x00007f82cf83c800, 0x00007f82cf845000,</span><br><span class="line">0x00007f82cf85e800, 0x00007f82cf861800, 0x00007f82cf862800, 0x00007f82d1936000,</span><br><span class="line">0x00007f82cf8a1800, 0x00007f82d0841000, 0x00007f82cf873800, 0x00007f82d1080000,</span><br><span class="line">0x00007f82d0846000, 0x00007f82d0a43800, 0x00007f82d1a01800, 0x00007f82d1938800,</span><br><span class="line">0x00007f82cfa95800</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">&quot;main&quot; #1 prio=5 os_prio=31 cpu=617.94ms elapsed=5412.81s tid=0x00007f82d1809000 nid=0x1703 in Object.wait()  [0x0000700008ec6000]</span><br><span class="line">   java.lang.Thread.State: TIMED_WAITING (on object monitor)</span><br><span class="line">        at java.lang.Object.wait(java.base@11.0.6/Native Method)</span><br><span class="line">        - waiting on &lt;no object reference available&gt;</span><br><span class="line">        at com.intellij.execution.rmi.RemoteServer.start(RemoteServer.java:91)</span><br><span class="line">        - waiting to re-lock in wait() &lt;0x00000007d0171bc8&gt; (a java.lang.Object)</span><br><span class="line">        at org.jetbrains.idea.maven.server.RemoteMavenServer36.main(RemoteMavenServer36.java:23)</span><br><span class="line"></span><br><span class="line">   Locked ownable synchronizers:</span><br><span class="line">        - None</span><br><span class="line"></span><br><span class="line">&quot;Reference Handler&quot; #2 daemon prio=10 os_prio=31 cpu=0.80ms elapsed=5412.77s tid=0x00007f82cf83b800 nid=0x4a03 waiting on condition  [0x00007000095db000]</span><br><span class="line">   java.lang.Thread.State: RUNNABLE</span><br><span class="line">        at java.lang.ref.Reference.waitForReferencePendingList(java.base@11.0.6/Native Method)</span><br><span class="line">        at java.lang.ref.Reference.processPendingReferences(java.base@11.0.6/Reference.java:241)</span><br><span class="line">        at java.lang.ref.Reference$ReferenceHandler.run(java.base@11.0.6/Reference.java:213)</span><br><span class="line"></span><br><span class="line">   Locked ownable synchronizers:</span><br><span class="line">        - None</span><br><span class="line"></span><br><span class="line">&quot;Finalizer&quot; #3 daemon prio=8 os_prio=31 cpu=0.27ms elapsed=5412.77s tid=0x00007f82cf83c800 nid=0x4703 in Object.wait()  [0x00007000096de000]</span><br><span class="line">   java.lang.Thread.State: WAITING (on object monitor)</span><br><span class="line">        at java.lang.Object.wait(java.base@11.0.6/Native Method)</span><br><span class="line">        - waiting on &lt;0x00000007d0176590&gt; (a java.lang.ref.ReferenceQueue$Lock)</span><br><span class="line">        at java.lang.ref.ReferenceQueue.remove(java.base@11.0.6/ReferenceQueue.java:155)</span><br><span class="line">        - waiting to re-lock in wait() &lt;0x00000007d0176590&gt; (a java.lang.ref.ReferenceQueue$Lock)</span><br><span class="line">        at java.lang.ref.ReferenceQueue.remove(java.base@11.0.6/ReferenceQueue.java:176)</span><br><span class="line">        at java.lang.ref.Finalizer$FinalizerThread.run(java.base@11.0.6/Finalizer.java:170)</span><br><span class="line"></span><br><span class="line">   Locked ownable synchronizers:</span><br><span class="line">        - None</span><br></pre></td></tr></table></figure>
+
+<h3 id="1-1-5-jmap"><a href="#1-1-5-jmap" class="headerlink" title="1.1.5 jmap"></a>1.1.5 jmap</h3><p>jmap（java memory map），主要用来生成堆转快照。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line">1、 查看帮组文档：</span><br><span class="line"></span><br><span class="line">Usage:</span><br><span class="line">    jmap [option] &lt;pid&gt;</span><br><span class="line">        (to connect to running process)</span><br><span class="line">    jmap [option] &lt;executable &lt;core&gt;</span><br><span class="line">        (to connect to a core file)</span><br><span class="line">    jmap [option] [server_id@]&lt;remote server IP or hostname&gt;</span><br><span class="line">        (to connect to remote debug server)</span><br><span class="line"></span><br><span class="line">where &lt;option&gt; is one of:</span><br><span class="line">    &lt;none&gt;               to print same info as Solaris pmap</span><br><span class="line">    -heap                to print java heap summary</span><br><span class="line">    -histo[:live]        to print histogram of java object heap; if the &quot;live&quot;</span><br><span class="line">                         suboption is specified, only count live objects</span><br><span class="line">    -clstats             to print class loader statistics</span><br><span class="line">    -finalizerinfo       to print information on objects awaiting finalization</span><br><span class="line">    -dump:&lt;dump-options&gt; to dump java heap in hprof binary format</span><br><span class="line">                         dump-options:</span><br><span class="line">                           live         dump only live objects; if not specified,</span><br><span class="line">                                        all objects in the heap are dumped.</span><br><span class="line">                           format=b     binary format</span><br><span class="line">                           file=&lt;file&gt;  dump heap to &lt;file&gt;</span><br><span class="line">                         Example: jmap -dump:live,format=b,file=heap.bin &lt;pid&gt;</span><br><span class="line">    -F                   force. Use with -dump:&lt;dump-options&gt; &lt;pid&gt; or -histo</span><br><span class="line">                         to force a heap dump or histogram when &lt;pid&gt; does not</span><br><span class="line">                         respond. The &quot;live&quot; suboption is not supported</span><br><span class="line">                         in this mode.</span><br><span class="line">    -h | -help           to print this help message</span><br><span class="line">    -J&lt;flag&gt;             to pass &lt;flag&gt; directly to the runtime system</span><br><span class="line">参数说明</span><br><span class="line"></span><br><span class="line">-heap : 显示Java堆详细信息,如使用哪种回收机,参数配置,分代状况等.只在Linux/Solaris平台下有效</span><br><span class="line">-histo : 显示堆中对象统计信息, 包括类、示例梳理、合计容量</span><br><span class="line">-finalizerinfo : 打印等待终结的对象信息</span><br><span class="line">-dump : 以hprof二进制格式转储Java堆到指定filename的文件中,live子选项是可选的, 如果指定了live子选项,堆中只有活动的对象会被转储.想要浏览heap dump,你可以使用jhat(Java堆分析工具)读取生成的文件.</span><br><span class="line">-F : 强制模式.如果指定的pid没有响应,请使用jmap -dump或jmap -histo选项.</span><br><span class="line">-J&lt;flag&gt; : 指定传递给运行jmap的JVM的参数.</span><br><span class="line"></span><br><span class="line">jmap -heap pid 堆内存详细信息</span><br><span class="line">jmap -histo pid 输出对象中的对象统计</span><br><span class="line">jmap -dump:format=b,file=heapDump pid JVM会将整个heap的信息dump写入到一个文件,heap如果比较大的话,就会导致这个过程比较耗时,并且执行的过程中为了保证dump的信息是可靠的,所以会暂停应用.</span><br></pre></td></tr></table></figure>
+
+<h3 id="1-1-6-CPU-内存使用率过高排查流程"><a href="#1-1-6-CPU-内存使用率过高排查流程" class="headerlink" title="1.1.6 CPU/内存使用率过高排查流程"></a>1.1.6 CPU/内存使用率过高排查流程</h3><ul>
+<li>top命令，定位到占用cpu、内存最高的进程</li>
+<li>top Hp pid 定位进程中CPU、内存等使用较高的线程</li>
+<li>printf “%x\n” tid 将线程号(十进制)转换后的16进制</li>
+<li>jstack -l pid 输出堆栈信息后，定位到对应的线程，查看堆栈信息</li>
+<li>然后通过堆栈信息，定位到具体的代码，然后排查问题</li>
+</ul>
+<h2 id="1-2-可视化工具"><a href="#1-2-可视化工具" class="headerlink" title="1.2 可视化工具"></a>1.2 可视化工具</h2><h3 id="1-2-1-jvisualvm"><a href="#1-2-1-jvisualvm" class="headerlink" title="1.2.1 jvisualvm"></a>1.2.1 jvisualvm</h3><p>jvisualvm是java自带的一个可视化工具，集成了jmap、jstack、jstat、jinfo、jps等工具。即便是jmap、jstack、jstat、jinfo、jps这些工具也是对java tools相关的类的简单封装。</p>
+<p>1、使用jvisualvm可以查看本地所有的java进程，以及该进程相关配置信息，如下图:</p>
+<p><img src="http://xuxiancheng.xyz/images/jvisualvm-01.png" alt></p>
+<p>2、使用jvisualvm进行监控（CPU、内存、类、线程）</p>
+<p><img src="http://xuxiancheng.xyz/images/jvisualvm-02.png" alt></p>
+<p>3、使用jvisualvm对进程中所有线程进行监控</p>
+<p><img src="http://xuxiancheng.xyz/images/jvisualvm-03.png" alt></p>
+<p>4、使用抽样器观察CPU、内存使用情况等随时间如何变化</p>
+<p><img src="http://xuxiancheng.xyz/images/jvisualvm-04.png" alt></p>
+<p>5、使用jvisualvm观察GC的回收情况</p>
+<p><img src="http://xuxiancheng.xyz/images/jvisualvm-05.png" alt></p>
+
+            <div class="post-copyright">
+    <div class="content">
+        <p>原始链接： <a class="post-url" href="/2020/10/28/JVM-02-问题排查/" title="JVM-02-问题排查">http://xuxiancheng.xyz/2020/10/28/JVM-02-问题排查/</a></p>
+        <footer>
+            <a href="http://xuxiancheng.xyz">
+                <img src="/images/logo1.png" alt="xuxiancheng">
+                xuxiancheng
+            </a>
+        </footer>
+    </div>
+</div>
+
+      
+        
+            
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;">赏</a>
+</div>
+
+<div id="reward" class="post-modal reward-lay">
+    <a class="close" href="javascript:;" id="reward-close">×</a>
+    <span class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        请我吃糖~
+        <i class="icon icon-quote-right"></i>
+    </span>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="/images/wechat_code.jpg" alt="打赏二维码">
+        </div>
+        <div class="reward-select">
+            
+            <label class="reward-select-item checked" data-id="wechat" data-wechat="/images/wechat_code.jpg">
+                <img class="reward-select-item-wechat" src="/images/wechat.png" alt="微信">
+            </label>
+            
+            
+            <label class="reward-select-item" data-id="alipay" data-alipay="/images/alipay_code.jpg">
+                <img class="reward-select-item-alipay" src="/images/alipay.png" alt="支付宝">
+            </label>
+            
+        </div>
+    </div>
+</div>
+
+
+        
+    </div>
+    <footer class="article-footer">
+        
+        
+<div class="post-share">
+    <a href="javascript:;" id="share-sub" class="post-share-fab">
+        <i class="fa fa-share-alt"></i>
+    </a>
+    <div class="post-share-list" id="share-list">
+        <ul class="share-icons">
+          <li>
+            <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://xuxiancheng.xyz/2020/10/28/JVM-02-问题排查/&title=《JVM-02-问题排查》 — XXC的个人博客&pic=images/jvm_icon.png" data-title="微博">
+              <i class="fa fa-weibo"></i>
+            </a>
+          </li>
+          <li>
+            <a class="weixin share-sns" id="wxFab" href="javascript:;" data-title="微信">
+              <i class="fa fa-weixin"></i>
+            </a>
+          </li>
+          <li>
+            <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://xuxiancheng.xyz/2020/10/28/JVM-02-问题排查/&title=《JVM-02-问题排查》 — XXC的个人博客&source=
+系统出现问题后，通常根据经验和理论知识大致定位问题类型，然后获取相关数据（应用日志、GC日志、监控日志、系统日志等），加上相关工具对数据进行分析。基本上..." data-title="QQ">
+              <i class="fa fa-qq"></i>
+            </a>
+          </li>
+          <li>
+            <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://xuxiancheng.xyz/2020/10/28/JVM-02-问题排查/" data-title="Facebook">
+              <i class="fa fa-facebook"></i>
+            </a>
+          </li>
+          <li>
+            <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《JVM-02-问题排查》 — XXC的个人博客&url=http://xuxiancheng.xyz/2020/10/28/JVM-02-问题排查/&via=http://xuxiancheng.xyz" data-title="Twitter">
+              <i class="fa fa-twitter"></i>
+            </a>
+          </li>
+          <li>
+            <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://xuxiancheng.xyz/2020/10/28/JVM-02-问题排查/" data-title="Google+">
+              <i class="fa fa-google-plus"></i>
+            </a>
+          </li>
+        </ul>
+     </div>
+</div>
+<div class="post-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;" id="wxShare-close">×</a>
+    <p>扫一扫，分享到微信</p>
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=http://xuxiancheng.xyz/2020/10/28/JVM-02-问题排查/" alt="微信分享二维码">
+</div>
+
+<div class="mask"></div>
+
+        
+        <ul class="article-footer-menu">
+            
+            
+  <li class="article-footer-tags">
+    <i class="fa fa-tags"></i>
+      
+    <a href="/tags/jvm/" class="color4">jvm</a>
+      
+  </li>
+
+        </ul>
+        
+    </footer>
+  </div>
+</article>
+
+
+    <aside class="post-toc-pos post-toc-top" id="post-toc">
+        <nav class="post-toc-wrap">
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#1-JDK工具篇"><span class="post-toc-text">1 JDK工具篇</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#1-1-命令行工具"><span class="post-toc-text">1.1 命令行工具</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#1-1-1-JPS"><span class="post-toc-text">1.1.1 JPS</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#1-1-2-jinfo"><span class="post-toc-text">1.1.2 jinfo</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#1-1-3-jstat"><span class="post-toc-text">1.1.3 jstat</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#1-1-4-jstack"><span class="post-toc-text">1.1.4 jstack</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#1-1-5-jmap"><span class="post-toc-text">1.1.5 jmap</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#1-1-6-CPU-内存使用率过高排查流程"><span class="post-toc-text">1.1.6 CPU/内存使用率过高排查流程</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#1-2-可视化工具"><span class="post-toc-text">1.2 可视化工具</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#1-2-1-jvisualvm"><span class="post-toc-text">1.2.1 jvisualvm</span></a></li></ol></li></ol></li></ol>
+        </nav>
+    </aside>
+    
+
+<nav id="article-nav">
+  
+  
+    <a href="/2020/10/25/JVM-01-内存管理/" id="article-nav-older" class="article-nav-link-wrap">
+      <span class="article-nav-title">JVM-01-内存管理</span>
+      <i class="fa fa-hand-o-right" aria-hidden="true"></i>
+    </a>
+  
+</nav>
+
+
+
+    
+</section>
+        
+      </div>
+      <footer id="footer">
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+      <p>
+        Powered by <a href="http://hexo.io/" target="_blank">Hexo</a> @2019-2020 xuxiancheng
+      </p>
+    </div>
+  </div>
+</footer>
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<script src="//cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+<script>
+  var mihoConfig = {
+      root: "http://xuxiancheng.xyz",
+      animate: true,
+      isHome: false,
+      share: true,
+      reward: 1
+  }
+</script>
+<div class="sidebar">
+    <div id="sidebar-search" title="Search">
+        <i class="fa fa-search"></i>
+    </div>
+    <div id="sidebar-category" title="Categories">
+        <i class="fa fa-book"></i>
+    </div>
+    <div id="sidebar-tag" title="Tags">
+        <i class="fa fa-tags"></i>
+    </div>
+    <div id="sidebar-top">
+        <span class="sidebar-top-icon"><i class="fa fa-angle-up"></i></span>
+    </div>
+</div>
+<div class="sidebar-menu-box" id="sidebar-menu-box">
+    <div class="sidebar-menu-box-container">
+        <div id="sidebar-menu-box-categories">
+            <a class="category-link" href="/categories/Java进阶/">Java进阶</a>
+        </div>
+        <div id="sidebar-menu-box-tags">
+            <a href="/tags/jvm/" style="font-size: 10px;">jvm</a>
+        </div>
+    </div>
+    <a href="javascript:;" class="sidebar-menu-box-close">&times;</a>
+</div>
+<div class="mobile-header-menu-nav" id="mobile-header-menu-nav">
+    <div class="mobile-header-menu-container">
+        <span class="title">Menus</span>
+        <ul class="mobile-header-menu-navbar">
+            
+            <li>
+                <a  href="/">
+                    <i class="fa fa-home"></i><span>Home</span>
+                </a>
+            </li>
+            
+            <li>
+                <a  href="/archives">
+                    <i class="fa fa-archive"></i><span>Archives</span>
+                </a>
+            </li>
+            
+            <li>
+                <a  href="/about">
+                    <i class="fa fa-user"></i><span>About</span>
+                </a>
+            </li>
+            
+        </ul>
+    </div>
+    <div class="mobile-header-tag-container">
+        <span class="title">Tags</span>
+        <div id="mobile-header-container-tags">
+            <a href="/tags/jvm/" style="font-size: 10px;">jvm</a>
+        </div>
+    </div>
+</div>
+<div class="search-wrap">
+    <span class="search-close">&times;</span>
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+            <i class="icon icon-lg icon-chevron-left"></i>
+        </a>
+        <input class="search-field" placeholder="Search..." id="keywords">
+        <a id="search-submit" href="javascript:;">
+            <i class="fa fa-search"></i>
+        </a>
+    <div class="search-container" id="search-container">
+        <ul class="search-result" id="search-result">
+        </ul>
+    </div>
+</div>
+
+<div id="search-tpl">
+    <li class="search-result-item">
+        <a href="{url}" class="search-item-li">
+            <span class="search-item-li-title" title="{title}">{title}</span>
+        </a>
+    </li>
+</div>
+<script src="/js/search.js"></script>
+<script src="/js/main.js"></script>
+
+
+  <script src="//cdn.bootcss.com/particles.js/2.0.0/particles.min.js"></script>
+  <div id="particles"></div>
+  <script src="/js/particles.js"></script>
+
+
+
+
+
+
+
+  <link rel="stylesheet" href="//cdn.bootcss.com/animate.css/3.5.0/animate.min.css">
+  <script src="//cdn.bootcss.com/scrollReveal.js/3.0.5/scrollreveal.js"></script>
+  <script src="/js/animate.js"></script>
+
+
+  <script src="/js/pop-img.js"></script>
+  <script>
+     $(".article-entry p img").popImg();
+  </script>
+
+  </div>
+</body>
+</html>
