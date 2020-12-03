@@ -16,7 +16,7 @@
 <meta property="og:site_name" content="Allen.Xu Blog">
 <meta property="og:description" content="设计模式实现非常灵活，理解设计模式的核心思想、应用场景尤为重要，具体如何实现没有必要生搬硬套。">
 <meta property="og:locale" content="chinese">
-<meta property="og:updated_time" content="2020-12-03T09:53:26.567Z">
+<meta property="og:updated_time" content="2020-12-03T10:04:21.770Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="常见的设计模式核心思想">
 <meta name="twitter:description" content="设计模式实现非常灵活，理解设计模式的核心思想、应用场景尤为重要，具体如何实现没有必要生搬硬套。">
@@ -185,7 +185,7 @@
 <li>装饰器模式侧重于功能的增强。</li>
 <li>这三种设计模式统一称为Wrapper模式。<h3 id="8-2-装饰模式的实现"><a href="#8-2-装饰模式的实现" class="headerlink" title="8.2 装饰模式的实现"></a>8.2 装饰模式的实现</h3></li>
 <li>继承 + 组合</li>
-<li>支持多次包装<h3 id="8-3-装饰器模式的使用场景？"><a href="#8-3-装饰器模式的使用场景？" class="headerlink" title="8.3 装饰器模式的使用场景？"></a>8.3 装饰器模式的使用场景？</h3>对原有的类进行功能增强，同时避免类的膨胀，JDK NIO的使用，如果单纯的针对每种场景使用一个类来实现，那么类的数量将会非常的大。<h2 id="9-门面模式"><a href="#9-门面模式" class="headerlink" title="9 门面模式"></a>9 门面模式</h2></li>
+<li>支持多次包装<h3 id="8-3-装饰器模式的使用场景？"><a href="#8-3-装饰器模式的使用场景？" class="headerlink" title="8.3 装饰器模式的使用场景？"></a>8.3 装饰器模式的使用场景？</h3>对原有的类进行功能增强，同时避免类的膨胀，JDK BIO的使用，如果单纯的针对每种场景使用一个类来实现，那么类的数量将会非常的大。<h2 id="9-门面模式"><a href="#9-门面模式" class="headerlink" title="9 门面模式"></a>9 门面模式</h2></li>
 <li>和适配器模式很像，但使用场景和思想有所区别。通常，为了代码的复用性，我们会将接口粒度设计的较细，但是这种设计使用的时候非常麻烦，有些场景可能需要组合很多个接口才能完成对应的功能。如果接口粒度设计过大，代码就会难以复用。门面模式在粒度较小的接口基础上对这些接口进行封装和组合，暴露粒度较为大的接口实现。</li>
 <li>门面模式不仅用于代码层面，在一些架构设计方面亦有应用，比如在api gateway层，将底层不同服务的接口进行编排，提供一个业务层的功能实现。<h2 id="10-观察者模式"><a href="#10-观察者模式" class="headerlink" title="10 观察者模式"></a>10 观察者模式</h2><h3 id="10-1-观察者模式解析"><a href="#10-1-观察者模式解析" class="headerlink" title="10.1 观察者模式解析"></a>10.1 观察者模式解析</h3></li>
 <li>进程内，还是跨进程实现，进程内部使用Guava的EventBus非常简单，跨进程使用MQ</li>
@@ -337,6 +337,11 @@
     </a>
   
   
+    <a href="/2018/04/25/Java多线程系列04 - Java并发编程实战/" id="article-nav-older" class="article-nav-link-wrap">
+      <span class="article-nav-title">Java多线程系列04 - Java并发编程实战</span>
+      <i class="fa fa-hand-o-right" aria-hidden="true"></i>
+    </a>
+  
 </nav>
 
 
@@ -393,10 +398,10 @@
 <div class="sidebar-menu-box" id="sidebar-menu-box">
     <div class="sidebar-menu-box-container">
         <div id="sidebar-menu-box-categories">
-            <a class="category-link" href="/categories/Java进阶/">Java进阶</a><a class="category-link" href="/categories/设计模式/">设计模式</a>
+            <a class="category-link" href="/categories/Java/">Java</a><a class="category-link" href="/categories/Java进阶/">Java进阶</a><a class="category-link" href="/categories/设计模式/">设计模式</a>
         </div>
         <div id="sidebar-menu-box-tags">
-            <a href="/tags/jvm/" style="font-size: 20px;">jvm</a> <a href="/tags/设计模式/" style="font-size: 10px;">设计模式</a>
+            <a href="/tags/java并发编程/" style="font-size: 20px;">java并发编程</a> <a href="/tags/jvm/" style="font-size: 15px;">jvm</a> <a href="/tags/设计模式/" style="font-size: 10px;">设计模式</a>
         </div>
     </div>
     <a href="javascript:;" class="sidebar-menu-box-close">&times;</a>
@@ -429,7 +434,7 @@
     <div class="mobile-header-tag-container">
         <span class="title">Tags</span>
         <div id="mobile-header-container-tags">
-            <a href="/tags/jvm/" style="font-size: 20px;">jvm</a> <a href="/tags/设计模式/" style="font-size: 10px;">设计模式</a>
+            <a href="/tags/java并发编程/" style="font-size: 20px;">java并发编程</a> <a href="/tags/jvm/" style="font-size: 15px;">jvm</a> <a href="/tags/设计模式/" style="font-size: 10px;">设计模式</a>
         </div>
     </div>
 </div>
