@@ -12,7 +12,7 @@
 <meta name="keywords" content="java并发编程">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Java多线程系列02 - 如何解决可见性、原子性、有序性问题">
-<meta property="og:url" content="http://xuxiancheng.xyz/2018/04/20/Java多线程系列02 - 如何解决可见性、原子性、有序性问题/index.html">
+<meta property="og:url" content="http://xuxiancheng.xyz/2019/07/20/Java多线程系列02 - 如何解决可见性、原子性、有序性问题/index.html">
 <meta property="og:site_name" content="Allen.Xu Blog">
 <meta property="og:description" content="从上一篇文章，我们可以知道并发编程中，需要解决三个核心问题就是可见性、原子性、有序性问题。java提供的关键字volatile可以认为是一个轻量级的锁，可以解决有序性和可见性问题，synchronized关键字来实现互斥锁的功能，可以解决有序性、可见性和原子性问题。">
 <meta property="og:locale" content="chinese">
@@ -21,7 +21,7 @@
 <meta property="og:image" content="http://xuxiancheng.xyz/images/lock_model_3.png">
 <meta property="og:image" content="https://p9-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/7f6cdd8f181e423e90717c0e529649ab~tplv-k3u1fbpfcp-zoom-1.image">
 <meta property="og:image" content="http://xuxiancheng.xyz/images/lock_model_4.png">
-<meta property="og:updated_time" content="2020-09-18T06:17:58.427Z">
+<meta property="og:updated_time" content="2020-12-03T10:15:19.271Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Java多线程系列02 - 如何解决可见性、原子性、有序性问题">
 <meta name="twitter:description" content="从上一篇文章，我们可以知道并发编程中，需要解决三个核心问题就是可见性、原子性、有序性问题。java提供的关键字volatile可以认为是一个轻量级的锁，可以解决有序性和可见性问题，synchronized关键字来实现互斥锁的功能，可以解决有序性、可见性和原子性问题。">
@@ -124,7 +124,7 @@
               </li>
           
         <li>
-          <i class="fa fa-calendar"></i>  2018-04-20
+          <i class="fa fa-calendar"></i>  2019-07-20
         </li>
         <li>
           <i class="fa fa-eye"></i>
@@ -157,7 +157,7 @@
 <li>写会内存的操作会使得其他CPU里缓存了该内存地址的数据失效。</li>
 </ul>
 <p>通过这两条指令就能保证缓存一致性，即数据的可见性。</p>
-<h2 id="volatile如何保证有序性？"><a href="#volatile如何保证有序性？" class="headerlink" title="volatile如何保证有序性？"></a>volatile如何保证有序性？</h2><p>先来看一个经典的double check导致空指针的案例，如下：</p>
+<h2 id="volatile如何保证有序性？"><a href="#volatile如何保证有序性？" class="headerlink" title="volatile如何保证有序性？"></a>volatile如何保证有序性？</h2><p>先来看一个经典的double check导致空指针（高版本的JDK已经修复了这个问题）的案例，如下：</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Singleton</span></span>&#123;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">private</span> Object instance;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">public</span> Object <span class="title">getInstance</span><span class="params">()</span> </span>&#123;</span><br><span class="line">      <span class="keyword">if</span>(instance == <span class="keyword">null</span>) &#123;</span><br><span class="line">          <span class="keyword">synchronized</span>(Singleton.class) &#123;</span><br><span class="line">          	<span class="keyword">if</span>(instance == <span class="keyword">null</span>) &#123;</span><br><span class="line">            	<span class="comment">// 指令1：在内存开辟一块内存空间，用于存储该对象</span></span><br><span class="line">                <span class="comment">// 指令2：对象初始化</span></span><br><span class="line">                <span class="comment">// 指令3：将初始化的对象地址赋值给intance引用</span></span><br><span class="line">            	instance = <span class="keyword">new</span> Object();</span><br><span class="line">            &#125;</span><br><span class="line">          &#125;</span><br><span class="line">      &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <p>如上图，正常情况下，我们认为指令1-&gt;指令2-&gt;指令3会顺序的执行，但是编译器可能会对指令进行重排序，变成指令1-&gt;指令3-&gt;指令2执行，单线程这个是没有问题的，但是多线程情况下，线程1执行了指令1-&gt;指令3，线程2恰好刚进入函数，获取到了一个没有初始化的对象，然后使用该对象的时候可能就会报空指针一样。解决方案非常的简单，加一个volatile关键字修饰即可，如下：</p>
@@ -231,7 +231,7 @@
 
             <div class="post-copyright">
     <div class="content">
-        <p>原始链接： <a class="post-url" href="/2018/04/20/Java多线程系列02 - 如何解决可见性、原子性、有序性问题/" title="Java多线程系列02 - 如何解决可见性、原子性、有序性问题">http://xuxiancheng.xyz/2018/04/20/Java多线程系列02 - 如何解决可见性、原子性、有序性问题/</a></p>
+        <p>原始链接： <a class="post-url" href="/2019/07/20/Java多线程系列02 - 如何解决可见性、原子性、有序性问题/" title="Java多线程系列02 - 如何解决可见性、原子性、有序性问题">http://xuxiancheng.xyz/2019/07/20/Java多线程系列02 - 如何解决可见性、原子性、有序性问题/</a></p>
         <footer>
             <a href="http://xuxiancheng.xyz">
                 <img src="/images/logo1.png" alt="xuxiancheng">
@@ -288,7 +288,7 @@
     <div class="post-share-list" id="share-list">
         <ul class="share-icons">
           <li>
-            <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://xuxiancheng.xyz/2018/04/20/Java多线程系列02 - 如何解决可见性、原子性、有序性问题/&title=《Java多线程系列02 - 如何解决可见性、原子性、有序性问题》 — Allen.Xu Blog&pic=images/muilt_thread_icon.png" data-title="微博">
+            <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://xuxiancheng.xyz/2019/07/20/Java多线程系列02 - 如何解决可见性、原子性、有序性问题/&title=《Java多线程系列02 - 如何解决可见性、原子性、有序性问题》 — Allen.Xu Blog&pic=images/muilt_thread_icon.png" data-title="微博">
               <i class="fa fa-weibo"></i>
             </a>
           </li>
@@ -298,23 +298,23 @@
             </a>
           </li>
           <li>
-            <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://xuxiancheng.xyz/2018/04/20/Java多线程系列02 - 如何解决可见性、原子性、有序性问题/&title=《Java多线程系列02 - 如何解决可见性、原子性、有序性问题》 — Allen.Xu Blog&source=
+            <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://xuxiancheng.xyz/2019/07/20/Java多线程系列02 - 如何解决可见性、原子性、有序性问题/&title=《Java多线程系列02 - 如何解决可见性、原子性、有序性问题》 — Allen.Xu Blog&source=
 从上一篇文章，我们可以知道并发编程中，需要解决三个核心问题就是可见性、原子性、有序性问题。java提供的关键字volatile可以认为是一个轻量级的锁，..." data-title="QQ">
               <i class="fa fa-qq"></i>
             </a>
           </li>
           <li>
-            <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://xuxiancheng.xyz/2018/04/20/Java多线程系列02 - 如何解决可见性、原子性、有序性问题/" data-title="Facebook">
+            <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://xuxiancheng.xyz/2019/07/20/Java多线程系列02 - 如何解决可见性、原子性、有序性问题/" data-title="Facebook">
               <i class="fa fa-facebook"></i>
             </a>
           </li>
           <li>
-            <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《Java多线程系列02 - 如何解决可见性、原子性、有序性问题》 — Allen.Xu Blog&url=http://xuxiancheng.xyz/2018/04/20/Java多线程系列02 - 如何解决可见性、原子性、有序性问题/&via=http://xuxiancheng.xyz" data-title="Twitter">
+            <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《Java多线程系列02 - 如何解决可见性、原子性、有序性问题》 — Allen.Xu Blog&url=http://xuxiancheng.xyz/2019/07/20/Java多线程系列02 - 如何解决可见性、原子性、有序性问题/&via=http://xuxiancheng.xyz" data-title="Twitter">
               <i class="fa fa-twitter"></i>
             </a>
           </li>
           <li>
-            <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://xuxiancheng.xyz/2018/04/20/Java多线程系列02 - 如何解决可见性、原子性、有序性问题/" data-title="Google+">
+            <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://xuxiancheng.xyz/2019/07/20/Java多线程系列02 - 如何解决可见性、原子性、有序性问题/" data-title="Google+">
               <i class="fa fa-google-plus"></i>
             </a>
           </li>
@@ -324,7 +324,7 @@
 <div class="post-modal wx-share" id="wxShare">
     <a class="close" href="javascript:;" id="wxShare-close">×</a>
     <p>扫一扫，分享到微信</p>
-    <img src="//api.qrserver.com/v1/create-qr-code/?data=http://xuxiancheng.xyz/2018/04/20/Java多线程系列02 - 如何解决可见性、原子性、有序性问题/" alt="微信分享二维码">
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=http://xuxiancheng.xyz/2019/07/20/Java多线程系列02 - 如何解决可见性、原子性、有序性问题/" alt="微信分享二维码">
 </div>
 
 <div class="mask"></div>
@@ -356,7 +356,7 @@
 
 <nav id="article-nav">
   
-    <a href="/2018/04/23/Java多线程系列03 - Java内存模型剖析/" id="article-nav-newer" class="article-nav-link-wrap">
+    <a href="/2019/07/23/Java多线程系列03 - Java内存模型剖析/" id="article-nav-newer" class="article-nav-link-wrap">
 
       <span class="article-nav-title">
         <i class="fa fa-hand-o-left" aria-hidden="true"></i>
@@ -367,7 +367,7 @@
     </a>
   
   
-    <a href="/2018/04/18/Java多线程系列01 - 并发编程总览/" id="article-nav-older" class="article-nav-link-wrap">
+    <a href="/2019/07/18/Java多线程系列01 - 并发编程总览/" id="article-nav-older" class="article-nav-link-wrap">
       <span class="article-nav-title">Java多线程系列01 - 并发编程总览</span>
       <i class="fa fa-hand-o-right" aria-hidden="true"></i>
     </a>
