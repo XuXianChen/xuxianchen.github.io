@@ -99,69 +99,6 @@
       <div class="outer">
         <section id="main" class="body-wrap">
   
-    <article id="post-分库分表实战" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/10/29/分库分表实战/"  >分库分表实战</a>
-    </h1>
-  
-
-          
-              <span class="header-cate">
-                <i class="fa fa-map-marker"></i>
-                  
-                  <a href="/categories/数据库/">数据库</a>
-                  
-              </span>
-          
-      </header>
-    
-    <div class="article-entry " itemprop="articleBody">
-      
-        <div class="article-img">
-            <a href="/2020/10/29/分库分表实战/" >
-                
-                <img src="http://xuxiancheng.xyz/images/fenku.png" alt="分库分表实战" title="分库分表实战">
-                
-            </a>
-        </div>
-        <div class="article-feed">
-            <p>
-                背景
-随着业务的发展，业务数据不断累积，数据库出现性能瓶颈。通常，单表数据行达到5000W就需要考虑分表。通过分库分表，可以提高数据库的读写性能、降低数据库容量压力、降低大范围丢失数据的风险。但同时也需要面临成本增加、分布式事务、数据库相关操作变得复杂（join、count、order by、range query）等问题。因此综合考虑是否需要分库分表，以及如何优雅的设计...
-            </p>
-        </div>
-      
-        
-    </div>
-    <footer class="article-footer">
-        
-        <ul class="article-footer-menu">
-            
-                <li><i class="fa fa-calendar"></i>2020-10-29</li>
-            
-            
-  <li class="article-footer-tags">
-    <i class="fa fa-tags"></i>
-      
-    <a href="/tags/数据库/" class="color4">数据库</a>
-      
-  </li>
-
-        </ul>
-        
-            <a href="/2020/10/29/分库分表实战/#more" class="article-more-link" >查看更多</a>
-        
-    </footer>
-  </div>
-</article>
-
-
-  
     <article id="post-JVM-02-问题排查" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -283,6 +220,72 @@
         </ul>
         
             <a href="/2020/10/25/JVM-01-内存管理/#more" class="article-more-link" >查看更多</a>
+        
+    </footer>
+  </div>
+</article>
+
+
+  
+    <article id="post-分库分表实战" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/10/03/分库分表实战/"  >从数据库主从复制到分库分表</a>
+    </h1>
+  
+
+          
+              <span class="header-cate">
+                <i class="fa fa-map-marker"></i>
+                  
+                  <a href="/categories/数据库/">数据库</a>
+                  
+              </span>
+          
+      </header>
+    
+    <div class="article-entry " itemprop="articleBody">
+      
+        <div class="article-img">
+            <a href="/2020/10/03/分库分表实战/" >
+                
+                <img src="http://xuxiancheng.xyz/images/fenku.png" alt="从数据库主从复制到分库分表" title="从数据库主从复制到分库分表">
+                
+            </a>
+        </div>
+        <div class="article-feed">
+            <p>
+                背景
+业务飞速发展导致数据规模急速膨胀，单机的数据库已经无法满足互联网业务的发展。
+传统的将数据集中存储单一数据结节的方案，在容量、性能、可用性和可维护性方面已经难以满足互联网海量数据的场景。
+从容量方面考虑，单机数据库容量有限，难以扩容。
+从性能方面来说，由于关系型数据库大多数采用B+树类型索引，在数据量超过一定的阈值后，索引的深度增加导致对磁盘的随机IO次数增加，进而...
+            </p>
+        </div>
+      
+        
+    </div>
+    <footer class="article-footer">
+        
+        <ul class="article-footer-menu">
+            
+                <li><i class="fa fa-calendar"></i>2020-10-03</li>
+            
+            
+  <li class="article-footer-tags">
+    <i class="fa fa-tags"></i>
+      
+    <a href="/tags/数据库/" class="color4">数据库</a>
+      
+  </li>
+
+        </ul>
+        
+            <a href="/2020/10/03/分库分表实战/#more" class="article-more-link" >查看更多</a>
         
     </footer>
   </div>
