@@ -3,7 +3,7 @@
 <head><meta name="generator" content="Hexo 3.9.0">
   <meta charset="utf-8">
   
-  <title>从数据库主从复制到分库分表 | Allen.Xu Blog</title>
+  <title>关系型数据库架构的演进-从单机到分库分表 | Allen.Xu Blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   
     <meta name="keywords" content="xuxiancheng,XXC的个人博客">
@@ -11,16 +11,20 @@
   <meta name="description" content="背景 业务飞速发展导致数据规模急速膨胀，单机的数据库已经无法满足互联网业务的发展。 传统的将数据集中存储单一数据结节的方案，在容量、性能、可用性和可维护性方面已经难以满足互联网海量数据的场景。 从容量方面考虑，单机数据库容量有限，难以扩容。 从性能方面来说，由于关系型数据库大多数采用B+树类型索引，在数据量超过一定的阈值后，索引的深度增加导致对磁盘的随机IO次数增加，进而导致性能问题。 从可用性方">
 <meta name="keywords" content="数据库">
 <meta property="og:type" content="article">
-<meta property="og:title" content="从数据库主从复制到分库分表">
+<meta property="og:title" content="关系型数据库架构的演进-从单机到分库分表">
 <meta property="og:url" content="http://xuxiancheng.xyz/2020/10/03/分库分表实战/index.html">
 <meta property="og:site_name" content="Allen.Xu Blog">
 <meta property="og:description" content="背景 业务飞速发展导致数据规模急速膨胀，单机的数据库已经无法满足互联网业务的发展。 传统的将数据集中存储单一数据结节的方案，在容量、性能、可用性和可维护性方面已经难以满足互联网海量数据的场景。 从容量方面考虑，单机数据库容量有限，难以扩容。 从性能方面来说，由于关系型数据库大多数采用B+树类型索引，在数据量超过一定的阈值后，索引的深度增加导致对磁盘的随机IO次数增加，进而导致性能问题。 从可用性方">
 <meta property="og:locale" content="chinese">
 <meta property="og:image" content="http://xuxiancheng.xyz/images/sjk_yj.png">
+<meta property="og:image" content="http://xuxiancheng.xyz/images/mysql_m_s.png">
+<meta property="og:image" content="http://xuxiancheng.xyz/images/mysql_rept1.png">
+<meta property="og:image" content="http://xuxiancheng.xyz/images/mysql_rept2.png">
+<meta property="og:image" content="http://xuxiancheng.xyz/images/mysql_rept3.png">
 <meta property="og:image" content="http://xuxiancheng.xyz/images/micro.png">
-<meta property="og:updated_time" content="2021-01-20T10:12:48.245Z">
+<meta property="og:updated_time" content="2021-01-21T01:22:39.174Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="从数据库主从复制到分库分表">
+<meta name="twitter:title" content="关系型数据库架构的演进-从单机到分库分表">
 <meta name="twitter:description" content="背景 业务飞速发展导致数据规模急速膨胀，单机的数据库已经无法满足互联网业务的发展。 传统的将数据集中存储单一数据结节的方案，在容量、性能、可用性和可维护性方面已经难以满足互联网海量数据的场景。 从容量方面考虑，单机数据库容量有限，难以扩容。 从性能方面来说，由于关系型数据库大多数采用B+树类型索引，在数据量超过一定的阈值后，索引的深度增加导致对磁盘的随机IO次数增加，进而导致性能问题。 从可用性方">
 <meta name="twitter:image" content="http://xuxiancheng.xyz/images/sjk_yj.png">
   
@@ -108,7 +112,7 @@
         
   
     <h1 class="post-title" itemprop="name">
-      从数据库主从复制到分库分表
+      关系型数据库架构的演进-从单机到分库分表
     </h1>
     <div class="post-title-bar">
       <ul>
@@ -146,12 +150,29 @@
 <p>从运维角度来看，当数据都集中在一个节点上时，数据备份和恢复的时间成本也随之数据量上升变得不可控。同时数据丢失导致影响的范围也会被放大。</p>
 </blockquote>
 <p><img src="http://xuxiancheng.xyz/images/sjk_yj.png" alt="单机数据库演进"></p>
-<h3 id="主从复制"><a href="#主从复制" class="headerlink" title="主从复制"></a>主从复制</h3><p>单机数据库存在的几个问题</p>
-<ul>
-<li>容量有限。</li>
-<li>读写压力，QPS过大，特别是分析类需求影响到业务事务。</li>
-<li>可用性不足，宕机问题。</li>
+<h3 id="主从复制"><a href="#主从复制" class="headerlink" title="主从复制"></a>主从复制</h3><ul>
+<li>主库将事务操作（除了查询以外的操作）记录到binlog</li>
+<li>从库通过relay log同步数据，实现数据的同步</li>
 </ul>
+<p><img src="http://xuxiancheng.xyz/images/mysql_m_s.png" alt="mysql主从复制架构图"></p>
+<p>binlog日志格式</p>
+<ul>
+<li>row 记录数据库操作详细记录，包括上线文信息等，文件较大。</li>
+<li>statement 记录事务相关的SQL文件。</li>
+<li>mixed 混合的文件</li>
+</ul>
+<h4 id="异步复制"><a href="#异步复制" class="headerlink" title="异步复制"></a>异步复制</h4><blockquote>
+<p>2000年，MySQL3.23.15版本引入复制功能，采用异步复制的方式，当网络或者机器故障，会导致数据不一致。</p>
+</blockquote>
+<p><img src="http://xuxiancheng.xyz/images/mysql_rept1.png" alt="异步复制"></p>
+<h4 id="半同步复制"><a href="#半同步复制" class="headerlink" title="半同步复制"></a>半同步复制</h4><blockquote>
+<p>2010年, MySQL 5.5版本引入半同步复制</p>
+</blockquote>
+<p><img src="http://xuxiancheng.xyz/images/mysql_rept2.png" alt="异步复制"></p>
+<h4 id="组复制：基于paxos协议实现组内复制，保证数据一致性"><a href="#组复制：基于paxos协议实现组内复制，保证数据一致性" class="headerlink" title="组复制：基于paxos协议实现组内复制，保证数据一致性"></a>组复制：基于paxos协议实现组内复制，保证数据一致性</h4><blockquote>
+<p>2016年，MysQL在5.7.17中引入InnoDB Group Replication</p>
+</blockquote>
+<p><img src="http://xuxiancheng.xyz/images/mysql_rept3.png" alt="异步复制"></p>
 <h3 id="数据库高可用"><a href="#数据库高可用" class="headerlink" title="数据库高可用"></a>数据库高可用</h3><h3 id="分库"><a href="#分库" class="headerlink" title="分库"></a>分库</h3><h4 id="垂直分库"><a href="#垂直分库" class="headerlink" title="垂直分库"></a>垂直分库</h4><p>垂直分库是指将数据库进行纵向切分，通常按照业务的维度进行划分。</p>
 <p>如典型的微服务的架构，将系统按照业务维度垂直拆分，划分成多个服务。如一个电商网站可以拆分成：订单、商品、会员、支付等服务。</p>
 <p><img src="http://xuxiancheng.xyz/images/micro.png" alt="微服务架构"></p>
@@ -191,7 +212,7 @@
 <h3 id="使用sharding-jdbc分库分表"><a href="#使用sharding-jdbc分库分表" class="headerlink" title="使用sharding-jdbc分库分表"></a>使用sharding-jdbc分库分表</h3><h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3>
             <div class="post-copyright">
     <div class="content">
-        <p>原始链接： <a class="post-url" href="/2020/10/03/分库分表实战/" title="从数据库主从复制到分库分表">http://xuxiancheng.xyz/2020/10/03/分库分表实战/</a></p>
+        <p>原始链接： <a class="post-url" href="/2020/10/03/分库分表实战/" title="关系型数据库架构的演进-从单机到分库分表">http://xuxiancheng.xyz/2020/10/03/分库分表实战/</a></p>
         <footer>
             <a href="http://xuxiancheng.xyz">
                 <img src="/images/logo1.png" alt="xuxiancheng">
@@ -248,7 +269,7 @@
     <div class="post-share-list" id="share-list">
         <ul class="share-icons">
           <li>
-            <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://xuxiancheng.xyz/2020/10/03/分库分表实战/&title=《从数据库主从复制到分库分表》 — Allen.Xu Blog&pic=images/fenku.png" data-title="微博">
+            <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://xuxiancheng.xyz/2020/10/03/分库分表实战/&title=《关系型数据库架构的演进-从单机到分库分表》 — Allen.Xu Blog&pic=images/fenku.png" data-title="微博">
               <i class="fa fa-weibo"></i>
             </a>
           </li>
@@ -258,7 +279,7 @@
             </a>
           </li>
           <li>
-            <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://xuxiancheng.xyz/2020/10/03/分库分表实战/&title=《从数据库主从复制到分库分表》 — Allen.Xu Blog&source=记录个人学习笔记、总结、生活等等" data-title="QQ">
+            <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://xuxiancheng.xyz/2020/10/03/分库分表实战/&title=《关系型数据库架构的演进-从单机到分库分表》 — Allen.Xu Blog&source=记录个人学习笔记、总结、生活等等" data-title="QQ">
               <i class="fa fa-qq"></i>
             </a>
           </li>
@@ -268,7 +289,7 @@
             </a>
           </li>
           <li>
-            <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《从数据库主从复制到分库分表》 — Allen.Xu Blog&url=http://xuxiancheng.xyz/2020/10/03/分库分表实战/&via=http://xuxiancheng.xyz" data-title="Twitter">
+            <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《关系型数据库架构的演进-从单机到分库分表》 — Allen.Xu Blog&url=http://xuxiancheng.xyz/2020/10/03/分库分表实战/&via=http://xuxiancheng.xyz" data-title="Twitter">
               <i class="fa fa-twitter"></i>
             </a>
           </li>
@@ -308,7 +329,7 @@
 
     <aside class="post-toc-pos post-toc-top" id="post-toc">
         <nav class="post-toc-wrap">
-            <ol class="post-toc"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#背景"><span class="post-toc-text">背景</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#主从复制"><span class="post-toc-text">主从复制</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#数据库高可用"><span class="post-toc-text">数据库高可用</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#分库"><span class="post-toc-text">分库</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#垂直分库"><span class="post-toc-text">垂直分库</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#水平分库"><span class="post-toc-text">水平分库</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#分库带来的问题"><span class="post-toc-text">分库带来的问题</span></a></li></ol></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#分表"><span class="post-toc-text">分表</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#垂直分表"><span class="post-toc-text">垂直分表</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#水平分表"><span class="post-toc-text">水平分表</span></a></li></ol></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#分库分表解决方案"><span class="post-toc-text">分库分表解决方案</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#使用sharding-jdbc分库分表"><span class="post-toc-text">使用sharding-jdbc分库分表</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#总结"><span class="post-toc-text">总结</span></a></li></ol>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#背景"><span class="post-toc-text">背景</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#主从复制"><span class="post-toc-text">主从复制</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#异步复制"><span class="post-toc-text">异步复制</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#半同步复制"><span class="post-toc-text">半同步复制</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#组复制：基于paxos协议实现组内复制，保证数据一致性"><span class="post-toc-text">组复制：基于paxos协议实现组内复制，保证数据一致性</span></a></li></ol></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#数据库高可用"><span class="post-toc-text">数据库高可用</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#分库"><span class="post-toc-text">分库</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#垂直分库"><span class="post-toc-text">垂直分库</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#水平分库"><span class="post-toc-text">水平分库</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#分库带来的问题"><span class="post-toc-text">分库带来的问题</span></a></li></ol></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#分表"><span class="post-toc-text">分表</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#垂直分表"><span class="post-toc-text">垂直分表</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#水平分表"><span class="post-toc-text">水平分表</span></a></li></ol></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#分库分表解决方案"><span class="post-toc-text">分库分表解决方案</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#使用sharding-jdbc分库分表"><span class="post-toc-text">使用sharding-jdbc分库分表</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#总结"><span class="post-toc-text">总结</span></a></li></ol>
         </nav>
     </aside>
     
