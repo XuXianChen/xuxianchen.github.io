@@ -12,7 +12,7 @@
 <meta name="keywords" content="数据库">
 <meta property="og:type" content="article">
 <meta property="og:title" content="关系型数据库架构的演进-从单机到分库分表">
-<meta property="og:url" content="http://xuxiancheng.xyz/2020/10/03/分库分表实战/index.html">
+<meta property="og:url" content="http://xuxiancheng.xyz/2020/10/03/database_architecture/index.html">
 <meta property="og:site_name" content="Allen.Xu Blog">
 <meta property="og:description" content="背景 业务飞速发展导致数据规模急速膨胀，单机的数据库已经无法满足互联网业务的发展。 传统的将数据集中存储单一数据结节的方案，在容量、性能、可用性和可维护性方面已经难以满足互联网海量数据的场景。 从容量方面考虑，单机数据库容量有限，难以扩容。 从性能方面来说，由于关系型数据库大多数采用B+树类型索引，在数据量超过一定的阈值后，索引的深度增加导致对磁盘的随机IO次数增加，进而导致性能问题。 从可用性方">
 <meta property="og:locale" content="chinese">
@@ -109,7 +109,7 @@
     </div>
 </header>
       <div class="outer">
-        <section id="main" class="body-wrap"><article id="post-分库分表实战" class="article article-type-post" itemscope itemprop="blogPost">
+        <section id="main" class="body-wrap"><article id="post-database_architecture" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
@@ -329,7 +329,7 @@
 
             <div class="post-copyright">
     <div class="content">
-        <p>原始链接： <a class="post-url" href="/2020/10/03/分库分表实战/" title="关系型数据库架构的演进-从单机到分库分表">http://xuxiancheng.xyz/2020/10/03/分库分表实战/</a></p>
+        <p>原始链接： <a class="post-url" href="/2020/10/03/database_architecture/" title="关系型数据库架构的演进-从单机到分库分表">http://xuxiancheng.xyz/2020/10/03/database_architecture/</a></p>
         <footer>
             <a href="http://xuxiancheng.xyz">
                 <img src="/images/logo1.png" alt="xuxiancheng">
@@ -386,7 +386,7 @@
     <div class="post-share-list" id="share-list">
         <ul class="share-icons">
           <li>
-            <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://xuxiancheng.xyz/2020/10/03/分库分表实战/&title=《关系型数据库架构的演进-从单机到分库分表》 — Allen.Xu Blog&pic=images/fenku.png" data-title="微博">
+            <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://xuxiancheng.xyz/2020/10/03/database_architecture/&title=《关系型数据库架构的演进-从单机到分库分表》 — Allen.Xu Blog&pic=images/fenku.png" data-title="微博">
               <i class="fa fa-weibo"></i>
             </a>
           </li>
@@ -396,22 +396,22 @@
             </a>
           </li>
           <li>
-            <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://xuxiancheng.xyz/2020/10/03/分库分表实战/&title=《关系型数据库架构的演进-从单机到分库分表》 — Allen.Xu Blog&source=记录个人学习笔记、总结、生活等等" data-title="QQ">
+            <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://xuxiancheng.xyz/2020/10/03/database_architecture/&title=《关系型数据库架构的演进-从单机到分库分表》 — Allen.Xu Blog&source=记录个人学习笔记、总结、生活等等" data-title="QQ">
               <i class="fa fa-qq"></i>
             </a>
           </li>
           <li>
-            <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://xuxiancheng.xyz/2020/10/03/分库分表实战/" data-title="Facebook">
+            <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://xuxiancheng.xyz/2020/10/03/database_architecture/" data-title="Facebook">
               <i class="fa fa-facebook"></i>
             </a>
           </li>
           <li>
-            <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《关系型数据库架构的演进-从单机到分库分表》 — Allen.Xu Blog&url=http://xuxiancheng.xyz/2020/10/03/分库分表实战/&via=http://xuxiancheng.xyz" data-title="Twitter">
+            <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《关系型数据库架构的演进-从单机到分库分表》 — Allen.Xu Blog&url=http://xuxiancheng.xyz/2020/10/03/database_architecture/&via=http://xuxiancheng.xyz" data-title="Twitter">
               <i class="fa fa-twitter"></i>
             </a>
           </li>
           <li>
-            <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://xuxiancheng.xyz/2020/10/03/分库分表实战/" data-title="Google+">
+            <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://xuxiancheng.xyz/2020/10/03/database_architecture/" data-title="Google+">
               <i class="fa fa-google-plus"></i>
             </a>
           </li>
@@ -421,7 +421,7 @@
 <div class="post-modal wx-share" id="wxShare">
     <a class="close" href="javascript:;" id="wxShare-close">×</a>
     <p>扫一扫，分享到微信</p>
-    <img src="//api.qrserver.com/v1/create-qr-code/?data=http://xuxiancheng.xyz/2020/10/03/分库分表实战/" alt="微信分享二维码">
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=http://xuxiancheng.xyz/2020/10/03/database_architecture/" alt="微信分享二维码">
 </div>
 
 <div class="mask"></div>
