@@ -8,13 +8,13 @@
   
     <meta name="keywords" content="xuxiancheng,XXC的个人博客">
   
-  <meta name="description" content="前言 通过对数据的垂直拆分或水平拆分后，我们解决了数据库容量、性能等问题，但是将会面临数据迁移和数据一致性的问题。 在数据迁移方面，需要考虑如何快速迁移、平滑迁移、不停机的迁移等。待数据迁移完毕后，还需要校验数据的完整性。 数据一致性方面，要根据的业务来判断是否要必要引入分布式事务，如果需要引入分布式事务，需要斟酌是采用XA，还是基于BASE的柔性事务。">
+  <meta name="description" content="前言 通过对数据的垂直拆分或水平拆分后，我们解决了数据库容量、性能等问题，但是将会面临数据迁移和数据一致性的问题。 在数据迁移方面，需要考虑如何快速迁移、平滑迁移、不停机的迁移等。待数据迁移完毕后，还需要校验数据的完整性。 数据一致性方面，要根据的业务来判断是否要必要引入分布式事务，如果需要引入分布式事务，需要斟酌是采用XA，还是基于BASE的柔性事务。  数据迁移数据迁移是很容易出故障的一个环节">
 <meta name="keywords" content="数据库">
 <meta property="og:type" content="article">
 <meta property="og:title" content="数据库拆分后如何保证数据一致性？">
 <meta property="og:url" content="http://xuxiancheng.xyz/2020/10/07/db-consistent/index.html">
 <meta property="og:site_name" content="Allen.Xu Blog">
-<meta property="og:description" content="前言 通过对数据的垂直拆分或水平拆分后，我们解决了数据库容量、性能等问题，但是将会面临数据迁移和数据一致性的问题。 在数据迁移方面，需要考虑如何快速迁移、平滑迁移、不停机的迁移等。待数据迁移完毕后，还需要校验数据的完整性。 数据一致性方面，要根据的业务来判断是否要必要引入分布式事务，如果需要引入分布式事务，需要斟酌是采用XA，还是基于BASE的柔性事务。">
+<meta property="og:description" content="前言 通过对数据的垂直拆分或水平拆分后，我们解决了数据库容量、性能等问题，但是将会面临数据迁移和数据一致性的问题。 在数据迁移方面，需要考虑如何快速迁移、平滑迁移、不停机的迁移等。待数据迁移完毕后，还需要校验数据的完整性。 数据一致性方面，要根据的业务来判断是否要必要引入分布式事务，如果需要引入分布式事务，需要斟酌是采用XA，还是基于BASE的柔性事务。  数据迁移数据迁移是很容易出故障的一个环节">
 <meta property="og:locale" content="chinese">
 <meta property="og:image" content="http://xuxiancheng.xyz/images/trans_xa.png">
 <meta property="og:image" content="http://xuxiancheng.xyz/images/mysql_xa.png">
@@ -23,10 +23,10 @@
 <meta property="og:image" content="http://xuxiancheng.xyz/images/tcc_model.png">
 <meta property="og:image" content="http://xuxiancheng.xyz/images/at.png">
 <meta property="og:image" content="http://xuxiancheng.xyz/images/seata_at.png">
-<meta property="og:updated_time" content="2021-01-24T13:13:30.142Z">
+<meta property="og:updated_time" content="2021-01-24T13:16:37.594Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="数据库拆分后如何保证数据一致性？">
-<meta name="twitter:description" content="前言 通过对数据的垂直拆分或水平拆分后，我们解决了数据库容量、性能等问题，但是将会面临数据迁移和数据一致性的问题。 在数据迁移方面，需要考虑如何快速迁移、平滑迁移、不停机的迁移等。待数据迁移完毕后，还需要校验数据的完整性。 数据一致性方面，要根据的业务来判断是否要必要引入分布式事务，如果需要引入分布式事务，需要斟酌是采用XA，还是基于BASE的柔性事务。">
+<meta name="twitter:description" content="前言 通过对数据的垂直拆分或水平拆分后，我们解决了数据库容量、性能等问题，但是将会面临数据迁移和数据一致性的问题。 在数据迁移方面，需要考虑如何快速迁移、平滑迁移、不停机的迁移等。待数据迁移完毕后，还需要校验数据的完整性。 数据一致性方面，要根据的业务来判断是否要必要引入分布式事务，如果需要引入分布式事务，需要斟酌是采用XA，还是基于BASE的柔性事务。  数据迁移数据迁移是很容易出故障的一个环节">
 <meta name="twitter:image" content="http://xuxiancheng.xyz/images/trans_xa.png">
   
   
@@ -147,8 +147,6 @@
 <p>在数据迁移方面，需要考虑如何快速迁移、平滑迁移、不停机的迁移等。待数据迁移完毕后，还需要校验数据的完整性。</p>
 <p>数据一致性方面，要根据的业务来判断是否要必要引入分布式事务，如果需要引入分布式事务，需要斟酌是采用XA，还是基于BASE的柔性事务。</p>
 </blockquote>
-<a id="more"></a>
-
 <h3 id="数据迁移"><a href="#数据迁移" class="headerlink" title="数据迁移"></a>数据迁移</h3><p>数据迁移是很容易出故障的一个环节，需要考虑怎么更加平滑的迁移旧数据到新的数据库和系统，以及达到数据准确、快速迁移、减少停机、对业务的影响小等，特别是异构的数据结构情况下，难度更大。</p>
 <h4 id="全量"><a href="#全量" class="headerlink" title="全量"></a>全量</h4><p>全量迁移的过程如下：</p>
 <ul>
@@ -353,9 +351,7 @@
             </a>
           </li>
           <li>
-            <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://xuxiancheng.xyz/2020/10/07/db-consistent/&title=《数据库拆分后如何保证数据一致性？》 — Allen.Xu Blog&source=前言
-通过对数据的垂直拆分或水平拆分后，我们解决了数据库容量、性能等问题，但是将会面临数据迁移和数据一致性的问题。
-在数据迁移方面，需要考虑如何快速迁移、..." data-title="QQ">
+            <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://xuxiancheng.xyz/2020/10/07/db-consistent/&title=《数据库拆分后如何保证数据一致性？》 — Allen.Xu Blog&source=记录个人学习笔记、总结、生活等等" data-title="QQ">
               <i class="fa fa-qq"></i>
             </a>
           </li>
