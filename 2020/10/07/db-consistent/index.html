@@ -16,10 +16,17 @@
 <meta property="og:site_name" content="Allen.Xu Blog">
 <meta property="og:description" content="前言 通过对数据的垂直拆分或水平拆分后，我们解决了数据库容量、性能等问题，但是将会面临数据迁移和数据一致性的问题。 在数据迁移方面，需要考虑如何快速迁移、平滑迁移、不停机的迁移等。待数据迁移完毕后，还需要校验数据的完整性。 数据一致性方面，要根据的业务来判断是否要必要引入分布式事务，如果需要引入分布式事务，需要斟酌是采用XA，还是基于BASE的柔性事务。">
 <meta property="og:locale" content="chinese">
-<meta property="og:updated_time" content="2021-01-24T09:54:49.250Z">
+<meta property="og:image" content="http://xuxiancheng.xyz/images/trans_xa.png">
+<meta property="og:image" content="http://xuxiancheng.xyz/images/mysql_xa.png">
+<meta property="og:image" content="http://xuxiancheng.xyz/images/liucheng_xa.png">
+<meta property="og:image" content="http://xuxiancheng.xyz/images/trans_ana.png">
+<meta property="og:image" content="http://xuxiancheng.xyz/images/tcc_model.png">
+<meta property="og:image" content="http://xuxiancheng.xyz/images/at_model.png">
+<meta property="og:updated_time" content="2021-01-24T12:58:34.287Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="数据库拆分后如何保证数据一致性？">
 <meta name="twitter:description" content="前言 通过对数据的垂直拆分或水平拆分后，我们解决了数据库容量、性能等问题，但是将会面临数据迁移和数据一致性的问题。 在数据迁移方面，需要考虑如何快速迁移、平滑迁移、不停机的迁移等。待数据迁移完毕后，还需要校验数据的完整性。 数据一致性方面，要根据的业务来判断是否要必要引入分布式事务，如果需要引入分布式事务，需要斟酌是采用XA，还是基于BASE的柔性事务。">
+<meta name="twitter:image" content="http://xuxiancheng.xyz/images/trans_xa.png">
   
   
     <link rel="icon" href="images/logo1.png">
@@ -134,14 +141,14 @@
     <div class="article-entry post-content" itemprop="articleBody">
       
             
-            <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><blockquote>
+            <h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><blockquote>
 <p>通过对数据的垂直拆分或水平拆分后，我们解决了数据库容量、性能等问题，但是将会面临数据迁移和数据一致性的问题。</p>
 <p>在数据迁移方面，需要考虑如何快速迁移、平滑迁移、不停机的迁移等。待数据迁移完毕后，还需要校验数据的完整性。</p>
 <p>数据一致性方面，要根据的业务来判断是否要必要引入分布式事务，如果需要引入分布式事务，需要斟酌是采用XA，还是基于BASE的柔性事务。</p>
 </blockquote>
 <a id="more"></a>
 
-<h2 id="数据迁移"><a href="#数据迁移" class="headerlink" title="数据迁移"></a>数据迁移</h2><p>数据迁移是很容易出故障的一个环节，需要考虑怎么更加平滑的迁移旧数据到新的数据库和系统，以及达到数据准确、快速迁移、减少停机、对业务的影响小等，特别是异构的数据结构情况下，难度更大。</p>
+<h3 id="数据迁移"><a href="#数据迁移" class="headerlink" title="数据迁移"></a>数据迁移</h3><p>数据迁移是很容易出故障的一个环节，需要考虑怎么更加平滑的迁移旧数据到新的数据库和系统，以及达到数据准确、快速迁移、减少停机、对业务的影响小等，特别是异构的数据结构情况下，难度更大。</p>
 <h4 id="全量"><a href="#全量" class="headerlink" title="全量"></a>全量</h4><p>全量迁移的过程如下：</p>
 <ul>
 <li><p>业务系统停机。</p>
@@ -173,7 +180,101 @@
 <h4 id="binlog-全量-增量"><a href="#binlog-全量-增量" class="headerlink" title="binlog+全量+增量"></a>binlog+全量+增量</h4><p>binlog+全量+增量是通过从数据库的主库或者从库解析和重新构造数据，实现复制。</p>
 <p>通常情况下都需要中间件等工具的支持，一般需要中间件等工具的支持。可以实现多线程、断点续传、全量和增量数据的同步，还可以实现自动扩容和缩容。</p>
 <p>常见的工具有：Canal、ShardingSphere-scaling等</p>
-<h2 id="分布式事务"><a href="#分布式事务" class="headerlink" title="分布式事务"></a>分布式事务</h2><h4 id="XA事务"><a href="#XA事务" class="headerlink" title="XA事务"></a>XA事务</h4><h4 id="柔性事务"><a href="#柔性事务" class="headerlink" title="柔性事务"></a>柔性事务</h4><h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2>
+<h3 id="分布式事务"><a href="#分布式事务" class="headerlink" title="分布式事务"></a>分布式事务</h3><h4 id="XA分布式事务"><a href="#XA分布式事务" class="headerlink" title="XA分布式事务"></a>XA分布式事务</h4><p>XA分布式事务，是数据库本身支持的协议，具备强一致性。</p>
+<p><img src="http://xuxiancheng.xyz/images/trans_xa.png" alt="xa分布式事务"></p>
+<p>XA分布式事务的组件：</p>
+<ul>
+<li><p>应用程序(Application Program, 简称AP): 用于定义事务边界，即事务的开始和结束，并且在事务边界内对资源进行操作。</p>
+</li>
+<li><p>资源管理器(Resource Manager, 简称RM): 如数据库、文件系统，并且提供访问资源的方式。</p>
+</li>
+<li><p>事务管理器(Transaction Manager, 简称TM): 负责分配事务唯一标识，监控事务的执行进度，并且负责事务的提交、回滚等。</p>
+</li>
+</ul>
+<p>XA接口:</p>
+<ul>
+<li><p>xa_start 负责开启或者恢复一个事务分支</p>
+</li>
+<li><p>xa_end 负责取消当前线程与事务分支的关联</p>
+</li>
+<li><p>xa_prepare 询问RM是否准备好提交事务分支</p>
+</li>
+<li><p>xa_commit 通知RM提交事务分支</p>
+</li>
+<li><p>xa_rollback 通知RM回滚事务分支</p>
+</li>
+<li><p>xa_recover 需要恢复的XA事务</p>
+</li>
+</ul>
+<p>MySQL从5.0.3开始支持InnoDB引擎的XA分布式事务。</p>
+<p><img src="http://xuxiancheng.xyz/images/mysql_xa.png" alt="MySQL对XA事务的支持"></p>
+<p>完整的XA事务处理流程如下:</p>
+<p><img src="http://xuxiancheng.xyz/images/liucheng_xa.png" alt="XA完整流程"></p>
+<p>主流的XA框架有：Atomikos、Narayana、Seata</p>
+<p>XA分布式事务存在的问题：</p>
+<ul>
+<li><p>同步阻塞：全局事务包含了多个独立的事务分支，这一组事务分支要么都不成功，要不都失败，各个分支的ACID特性共同构成了全局事务的ACID特性。<br>如果对读操作很敏感，需要将数据库的隔离级别设置为SERIALIZABLE，性能特别的差。</p>
+</li>
+<li><p>单点故障：TM存在单点故障，需要考虑TM高可用性。</p>
+</li>
+<li><p>数据不一致：极端情况下，会出现事务失败问题，需要监控和人工处理。即二阶段commit请求后，发送网络故障，只有一部分RM收到请求，其他节点没有收到Commit请求的情况。</p>
+</li>
+</ul>
+<h4 id="柔性事务"><a href="#柔性事务" class="headerlink" title="柔性事务"></a>柔性事务</h4><p>BASE的核心在于，保证系统基本可用的前提下，通过利用柔性状态(支付操作后不是支付成功，而是支付中状态)，实现数据的最终一致性，如下：</p>
+<ul>
+<li><p>基本可用(Basically available)，分布式事务参与方不一定同时在线。</p>
+</li>
+<li><p>柔性状态(Soft state), 允许系统状态更新有一定的延迟，出现一些中间状态，这个延迟对客户来说不一定能够察觉。</p>
+</li>
+<li><p>最终一致性(Eventually consistent)，通常是通过消息传递的方式保证系统的最终一致性。</p>
+</li>
+</ul>
+<p>柔性事务核心理念是通过业务逻辑将互斥锁操作从RM层上升到业务层，通过放宽对强一致性的要求，来换取系统吞吐量的提升。</p>
+<p><img src="http://xuxiancheng.xyz/images/trans_ana.png" alt="事务比较"></p>
+<p>BASE柔性事务常见模式</p>
+<ul>
+<li><p>TCC: 通过手动补偿处理</p>
+</li>
+<li><p>AT: 通过自动补偿处理</p>
+</li>
+</ul>
+<p><strong>TCC介绍</strong></p>
+<p>TCC模式即将每个服务业务操作分成两个阶段，第一个阶段检查并预留相关资源，第二个阶段根据所有服务业务的try状态来操作，如果都成功，则进行Confirm操作，如果任意一个Try发送错误，则全部Cancel。</p>
+<ul>
+<li><p>Try：准备操作，完成所有的业务检查，预留业务资源。</p>
+</li>
+<li><p>Confirm：真正执行的业务逻辑，不做任意的业务检查，只使用Try阶段预留的业务资源。因此Try操作成功，Confirm必须能成功。同时，Confirm操作必须保证冥等性，保证一笔分布式事务能切只能成功一次。</p>
+</li>
+<li><p>Cancel：释放Try阶段预留的业务资源，同样Cancel操作也必须满足冥等性。</p>
+</li>
+</ul>
+<p><img src="http://xuxiancheng.xyz/images/tcc_model.png" alt="tcc_model"></p>
+<p>TCC模型实际是通过业务分解来实现分布式事务，对业务有较强的侵入性。</p>
+<p>TCC模型需要注意的地方: </p>
+<ul>
+<li><p>允许空回滚，即try没有完成资源预留，允许短路操作。</p>
+</li>
+<li><p>防悬挂控制，即需要保证，cancel必须在try之后才执行。</p>
+</li>
+<li><p>冥等性设计，即需要保证confirm和cancel需要保证冥等性，防止网络因素导致数据混乱。</p>
+</li>
+</ul>
+<p><strong>AT</strong></p>
+<p>AT模式就是两阶段提交，自动生成反向SQL，当发生异常的时候，通过反向SQL回滚数据。</p>
+<p><img src="http://xuxiancheng.xyz/images/at_model.png" alt="at_model"></p>
+<p><strong>柔性事务下的事务特性</strong></p>
+<ul>
+<li><p>原子性：正常情况下保证</p>
+</li>
+<li><p>一致性：某个时间点，数据存在不一致，但是最终是一致的。</p>
+</li>
+<li><p>隔离性：某个时间点，A能读到B事务未提交的结果，即会脏读现象。</p>
+</li>
+<li><p>持久性：和本地事务一样，只要commit则数据就会被持久化。</p>
+</li>
+</ul>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>分布式事务主要目的是解决数据一致性问题，XA强一致，但是吞吐量太低，不利于高并发场景。柔性事务不保证强一致性，但是通过补偿实现最终一致性，常见的补偿有重试补偿、调度补偿、人工补偿等。</p>
+
             <div class="post-copyright">
     <div class="content">
         <p>原始链接： <a class="post-url" href="/2020/10/07/db-consistent/" title="数据库拆分后如何保证数据一致性？">http://xuxiancheng.xyz/2020/10/07/db-consistent/</a></p>
@@ -295,7 +396,7 @@
 
     <aside class="post-toc-pos post-toc-top" id="post-toc">
         <nav class="post-toc-wrap">
-            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#前言"><span class="post-toc-text">前言</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#数据迁移"><span class="post-toc-text">数据迁移</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#全量"><span class="post-toc-text">全量</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#全量-增量"><span class="post-toc-text">全量+增量</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#binlog-全量-增量"><span class="post-toc-text">binlog+全量+增量</span></a></li></ol></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#分布式事务"><span class="post-toc-text">分布式事务</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#XA事务"><span class="post-toc-text">XA事务</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#柔性事务"><span class="post-toc-text">柔性事务</span></a></li></ol></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#总结"><span class="post-toc-text">总结</span></a></li></ol>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#前言"><span class="post-toc-text">前言</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#数据迁移"><span class="post-toc-text">数据迁移</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#全量"><span class="post-toc-text">全量</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#全量-增量"><span class="post-toc-text">全量+增量</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#binlog-全量-增量"><span class="post-toc-text">binlog+全量+增量</span></a></li></ol></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#分布式事务"><span class="post-toc-text">分布式事务</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#XA分布式事务"><span class="post-toc-text">XA分布式事务</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#柔性事务"><span class="post-toc-text">柔性事务</span></a></li></ol></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#总结"><span class="post-toc-text">总结</span></a></li></ol>
         </nav>
     </aside>
     
