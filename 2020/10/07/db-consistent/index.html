@@ -21,8 +21,9 @@
 <meta property="og:image" content="http://xuxiancheng.xyz/images/liucheng_xa.png">
 <meta property="og:image" content="http://xuxiancheng.xyz/images/trans_ana.png">
 <meta property="og:image" content="http://xuxiancheng.xyz/images/tcc_model.png">
-<meta property="og:image" content="http://xuxiancheng.xyz/images/at_model.png">
-<meta property="og:updated_time" content="2021-01-24T12:58:34.287Z">
+<meta property="og:image" content="http://xuxiancheng.xyz/images/at.png">
+<meta property="og:image" content="http://xuxiancheng.xyz/images/seata_at.png">
+<meta property="og:updated_time" content="2021-01-24T13:13:30.142Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="数据库拆分后如何保证数据一致性？">
 <meta name="twitter:description" content="前言 通过对数据的垂直拆分或水平拆分后，我们解决了数据库容量、性能等问题，但是将会面临数据迁移和数据一致性的问题。 在数据迁移方面，需要考虑如何快速迁移、平滑迁移、不停机的迁移等。待数据迁移完毕后，还需要校验数据的完整性。 数据一致性方面，要根据的业务来判断是否要必要引入分布式事务，如果需要引入分布式事务，需要斟酌是采用XA，还是基于BASE的柔性事务。">
@@ -261,7 +262,15 @@
 </ul>
 <p><strong>AT</strong></p>
 <p>AT模式就是两阶段提交，自动生成反向SQL，当发生异常的时候，通过反向SQL回滚数据。</p>
-<p><img src="http://xuxiancheng.xyz/images/at_model.png" alt="at_model"></p>
+<p><img src="http://xuxiancheng.xyz/images/at.png" alt="at_model"></p>
+<p>Seata框架对AT的支持如下:</p>
+<p><img src="http://xuxiancheng.xyz/images/seata_at.png" alt="seata_at"></p>
+<ul>
+<li><p>第一阶段，业务数据和回滚日志记录在同一个本地事务中提交，释放本地锁和连接资源。</p>
+</li>
+<li><p>第二阶段，提交异步化，非常快速的完成，回滚的话通过一阶段的回滚日志进行反向补偿。</p>
+</li>
+</ul>
 <p><strong>柔性事务下的事务特性</strong></p>
 <ul>
 <li><p>原子性：正常情况下保证</p>
