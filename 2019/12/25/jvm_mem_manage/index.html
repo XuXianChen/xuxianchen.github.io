@@ -3,17 +3,17 @@
 <head><meta name="generator" content="Hexo 3.9.0">
   <meta charset="utf-8">
   
-  <title>JVM是如何对内存进行管理的？ | Allen.Xu Blog</title>
+  <title>JVM是如何对内存进行管理的？ | Thread.Xu Blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   
-    <meta name="keywords" content="xuxiancheng,XXC的个人博客">
+    <meta name="keywords" content="xuxiancheng,Thread.Xu Blog">
   
   <meta name="description" content="Java语言的内存管理由JVM自动管理，无需像C++这样由程序员来内存分配和内存回收。理解Java内存管理的原理后，当系统发生OOM等异常时，可以分析和定位问题，并进行合理的调优。">
 <meta name="keywords" content="jvm">
 <meta property="og:type" content="article">
 <meta property="og:title" content="JVM是如何对内存进行管理的？">
 <meta property="og:url" content="http://xuxiancheng.xyz/2019/12/25/jvm_mem_manage/index.html">
-<meta property="og:site_name" content="Allen.Xu Blog">
+<meta property="og:site_name" content="Thread.Xu Blog">
 <meta property="og:description" content="Java语言的内存管理由JVM自动管理，无需像C++这样由程序员来内存分配和内存回收。理解Java内存管理的原理后，当系统发生OOM等异常时，可以分析和定位问题，并进行合理的调优。">
 <meta property="og:locale" content="chinese">
 <meta property="og:image" content="http://xuxiancheng.xyz/images/jvm_gc.png">
@@ -45,7 +45,7 @@
         <div id="header-menu" class="header-menu-pos animated">
             <div class="header-menu-container">
                 <a href="/" class="left">
-                    <span class="site-title">XXC的个人博客</span>
+                    <span class="site-title">Thread.Xu Blog</span>
                 </a>
                 <nav id="header-menu-nav" class="right">
                     
@@ -80,14 +80,14 @@
                 <div id="header-title">
                     
                     <h2>
-                        XXC的个人博客
+                        Thread.Xu Blog
                     </h2>
                     
                 </div>
                 <div id="header-description">
                     
                     <h3>
-                        一个专注于 服务端 技术的博客网站
+                        太阳每天都是新的...
                     </h3>
                     
                 </div>
@@ -304,7 +304,7 @@
     <div class="post-share-list" id="share-list">
         <ul class="share-icons">
           <li>
-            <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://xuxiancheng.xyz/2019/12/25/jvm_mem_manage/&title=《JVM是如何对内存进行管理的？》 — Allen.Xu Blog&pic=images/jvm_mem_mange.png" data-title="微博">
+            <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://xuxiancheng.xyz/2019/12/25/jvm_mem_manage/&title=《JVM是如何对内存进行管理的？》 — Thread.Xu Blog&pic=images/jvm_mem_mange.png" data-title="微博">
               <i class="fa fa-weibo"></i>
             </a>
           </li>
@@ -314,7 +314,7 @@
             </a>
           </li>
           <li>
-            <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://xuxiancheng.xyz/2019/12/25/jvm_mem_manage/&title=《JVM是如何对内存进行管理的？》 — Allen.Xu Blog&source=
+            <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://xuxiancheng.xyz/2019/12/25/jvm_mem_manage/&title=《JVM是如何对内存进行管理的？》 — Thread.Xu Blog&source=
 Java语言的内存管理由JVM自动管理，无需像C++这样由程序员来内存分配和内存回收。理解Java内存管理的原理后，当系统发生OOM等异常时，可以分析和..." data-title="QQ">
               <i class="fa fa-qq"></i>
             </a>
@@ -325,7 +325,7 @@ Java语言的内存管理由JVM自动管理，无需像C++这样由程序员来�
             </a>
           </li>
           <li>
-            <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《JVM是如何对内存进行管理的？》 — Allen.Xu Blog&url=http://xuxiancheng.xyz/2019/12/25/jvm_mem_manage/&via=http://xuxiancheng.xyz" data-title="Twitter">
+            <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《JVM是如何对内存进行管理的？》 — Thread.Xu Blog&url=http://xuxiancheng.xyz/2019/12/25/jvm_mem_manage/&via=http://xuxiancheng.xyz" data-title="Twitter">
               <i class="fa fa-twitter"></i>
             </a>
           </li>
