@@ -3,23 +3,23 @@
 <head><meta name="generator" content="Hexo 3.9.0">
   <meta charset="utf-8">
   
-  <title>Allen.Xu Blog</title>
+  <title>数据库拆分后如何保证数据一致性？ | Allen.Xu Blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   
     <meta name="keywords" content="xuxiancheng,XXC的个人博客">
   
-  <meta name="description" content="关于我从事 服务端 开发，主要开发语言 java，熟悉 spring生态, dubbo, mybatis 等主流框架；有一定的代码洁癖。 对H5、android等技能有所了解。 热爱新技术、热爱新事物。 关于工作城市：广州公司：荔枝FM 关于学习提倡终身学习，正在往终身学习者前进… 关于座右铭 The Harder You Work, The Luckier You Will Be  关于爱好热爱">
-<meta name="keywords" content="后端, JAVA, java, Spring, 设计模式, mybatis, mysql, Mysql, oracle, springcloud, springboot">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Allen.Xu Blog">
-<meta property="og:url" content="http://xuxiancheng.xyz/about/index.html">
+  <meta name="description" content="前言 通过对数据的垂直拆分或水平拆分后，我们解决了数据库容量、性能等问题，但是将会面临数据迁移和数据一致性的问题。 在数据迁移方面，需要考虑如何快速迁移、平滑迁移、不停机的迁移等。待数据迁移完毕后，还需要校验数据的完整性。 数据一致性方面，要根据的业务来判断是否要必要引入分布式事务，如果需要引入分布式事务，需要斟酌是采用XA，还是基于BASE的柔性事务。">
+<meta name="keywords" content="数据库">
+<meta property="og:type" content="article">
+<meta property="og:title" content="数据库拆分后如何保证数据一致性？">
+<meta property="og:url" content="http://xuxiancheng.xyz/2020/10/07/db-consistent/index.html">
 <meta property="og:site_name" content="Allen.Xu Blog">
-<meta property="og:description" content="关于我从事 服务端 开发，主要开发语言 java，熟悉 spring生态, dubbo, mybatis 等主流框架；有一定的代码洁癖。 对H5、android等技能有所了解。 热爱新技术、热爱新事物。 关于工作城市：广州公司：荔枝FM 关于学习提倡终身学习，正在往终身学习者前进… 关于座右铭 The Harder You Work, The Luckier You Will Be  关于爱好热爱">
+<meta property="og:description" content="前言 通过对数据的垂直拆分或水平拆分后，我们解决了数据库容量、性能等问题，但是将会面临数据迁移和数据一致性的问题。 在数据迁移方面，需要考虑如何快速迁移、平滑迁移、不停机的迁移等。待数据迁移完毕后，还需要校验数据的完整性。 数据一致性方面，要根据的业务来判断是否要必要引入分布式事务，如果需要引入分布式事务，需要斟酌是采用XA，还是基于BASE的柔性事务。">
 <meta property="og:locale" content="chinese">
-<meta property="og:updated_time" content="2020-09-18T01:19:50.757Z">
+<meta property="og:updated_time" content="2021-01-24T09:54:49.250Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Allen.Xu Blog">
-<meta name="twitter:description" content="关于我从事 服务端 开发，主要开发语言 java，熟悉 spring生态, dubbo, mybatis 等主流框架；有一定的代码洁癖。 对H5、android等技能有所了解。 热爱新技术、热爱新事物。 关于工作城市：广州公司：荔枝FM 关于学习提倡终身学习，正在往终身学习者前进… 关于座右铭 The Harder You Work, The Luckier You Will Be  关于爱好热爱">
+<meta name="twitter:title" content="数据库拆分后如何保证数据一致性？">
+<meta name="twitter:description" content="前言 通过对数据的垂直拆分或水平拆分后，我们解决了数据库容量、性能等问题，但是将会面临数据迁移和数据一致性的问题。 在数据迁移方面，需要考虑如何快速迁移、平滑迁移、不停机的迁移等。待数据迁移完毕后，还需要校验数据的完整性。 数据一致性方面，要根据的业务来判断是否要必要引入分布式事务，如果需要引入分布式事务，需要斟酌是采用XA，还是基于BASE的柔性事务。">
   
   
     <link rel="icon" href="images/logo1.png">
@@ -98,26 +98,85 @@
     </div>
 </header>
       <div class="outer">
-        <section id="main" class="body-wrap"><article id="page-" class="article article-type-page" itemscope itemprop="blogPost">
+        <section id="main" class="body-wrap"><article id="post-db-consistent" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-inner">
     
-    <div class="article-entry " itemprop="articleBody">
+      <header class="article-header">
+        
+  
+    <h1 class="post-title" itemprop="name">
+      数据库拆分后如何保证数据一致性？
+    </h1>
+    <div class="post-title-bar">
+      <ul>
+          
+              <li>
+                  <i class="fa fa-book"></i>
+                  
+                      <a href="/categories/数据库/">数据库</a>
+                  
+              </li>
+          
+        <li>
+          <i class="fa fa-calendar"></i>  2020-10-07
+        </li>
+        <li>
+          <i class="fa fa-eye"></i>
+          <span id="busuanzi_value_page_pv"></span>
+        </li>
+      </ul>
+    </div>
+  
+
+          
+      </header>
+    
+    <div class="article-entry post-content" itemprop="articleBody">
       
             
-            <h3 id="关于我"><a href="#关于我" class="headerlink" title="关于我"></a>关于我</h3><p>从事 服务端 开发，主要开发语言 <code>java</code>，熟悉 <code>spring生态</code>, <code>dubbo</code>, <code>mybatis</code> 等主流框架；有一定的代码洁癖。</p>
-<p>对<code>H5</code>、<code>android</code>等技能有所了解。</p>
-<p>热爱<code>新技术</code>、热爱<code>新事物</code>。</p>
-<h3 id="关于工作"><a href="#关于工作" class="headerlink" title="关于工作"></a>关于工作</h3><p>城市：<code>广州</code><br>公司：荔枝FM</p>
-<h3 id="关于学习"><a href="#关于学习" class="headerlink" title="关于学习"></a>关于学习</h3><p>提倡终身学习，正在往终身学习者前进…</p>
-<h3 id="关于座右铭"><a href="#关于座右铭" class="headerlink" title="关于座右铭"></a>关于座右铭</h3><blockquote>
-<p>The Harder You Work, The Luckier You Will Be</p>
+            <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><blockquote>
+<p>通过对数据的垂直拆分或水平拆分后，我们解决了数据库容量、性能等问题，但是将会面临数据迁移和数据一致性的问题。</p>
+<p>在数据迁移方面，需要考虑如何快速迁移、平滑迁移、不停机的迁移等。待数据迁移完毕后，还需要校验数据的完整性。</p>
+<p>数据一致性方面，要根据的业务来判断是否要必要引入分布式事务，如果需要引入分布式事务，需要斟酌是采用XA，还是基于BASE的柔性事务。</p>
 </blockquote>
-<h3 id="关于爱好"><a href="#关于爱好" class="headerlink" title="关于爱好"></a>关于爱好</h3><p>热爱<code>运动</code>，尤其喜爱<code>足/篮/乒乓球</code>、<code>游泳</code>、阅读<code>、</code>电影<code>、</code>旅行`等。</p>
-<h3 id="联系我"><a href="#联系我" class="headerlink" title="联系我"></a>联系我</h3><p>博客: <a href="http://xuxiancheng.xyz">http://xuxiancheng.xyz</a><br>GitHub: <a href="https://github.com/XuXianChen" target="_blank" rel="noopener">https://github.com/XuXianChen</a><br>邮箱: <a href="mailto:xiancena@126.com" target="_blank" rel="noopener">xiancena@126.com</a><br>微信: liangzai_00007</p>
+<a id="more"></a>
 
+<h2 id="数据迁移"><a href="#数据迁移" class="headerlink" title="数据迁移"></a>数据迁移</h2><p>数据迁移是很容易出故障的一个环节，需要考虑怎么更加平滑的迁移旧数据到新的数据库和系统，以及达到数据准确、快速迁移、减少停机、对业务的影响小等，特别是异构的数据结构情况下，难度更大。</p>
+<h4 id="全量"><a href="#全量" class="headerlink" title="全量"></a>全量</h4><p>全量迁移的过程如下：</p>
+<ul>
+<li><p>业务系统停机。</p>
+</li>
+<li><p>数据库迁移，校验数据一致性。</p>
+</li>
+<li><p>然后业务系统升级，接入新的数据库。</p>
+</li>
+</ul>
+<p>缺点：</p>
+<ul>
+<li><p>需要业务系统停机</p>
+</li>
+<li><p>迁移时间较长，对业务影响较大。如果是异构数据的话，需要使用程序来处理，迁移时间更长。</p>
+</li>
+</ul>
+<h4 id="全量-增量"><a href="#全量-增量" class="headerlink" title="全量+增量"></a>全量+增量</h4><p>全量+增量迁移的方式，需要依赖数据本身的创建时间，步骤如下：</p>
+<ul>
+<li><p>先同步数据到最近的某个时间戳（创建时间）。</p>
+</li>
+<li><p>然后发布系统升级维护的通知。</p>
+</li>
+<li><p>然后同步最近一段时间变化的数据。</p>
+</li>
+<li><p>最后升级系统，接入新的数据库。</p>
+</li>
+</ul>
+<p>全量+增量的同步相比全量同步的方式，大大的减少了系统停机的时间，对业务影响较小。</p>
+<h4 id="binlog-全量-增量"><a href="#binlog-全量-增量" class="headerlink" title="binlog+全量+增量"></a>binlog+全量+增量</h4><p>binlog+全量+增量是通过从数据库的主库或者从库解析和重新构造数据，实现复制。</p>
+<p>通常情况下都需要中间件等工具的支持，一般需要中间件等工具的支持。可以实现多线程、断点续传、全量和增量数据的同步，还可以实现自动扩容和缩容。</p>
+<p>常见的工具有：Canal、ShardingSphere-scaling等</p>
+<h2 id="分布式事务"><a href="#分布式事务" class="headerlink" title="分布式事务"></a>分布式事务</h2><h4 id="XA事务"><a href="#XA事务" class="headerlink" title="XA事务"></a>XA事务</h4><h4 id="柔性事务"><a href="#柔性事务" class="headerlink" title="柔性事务"></a>柔性事务</h4><h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2>
             <div class="post-copyright">
     <div class="content">
-        <p>原始链接： <a class="post-url" href="/about/index.html" title="">http://xuxiancheng.xyz/about/index.html</a></p>
+        <p>原始链接： <a class="post-url" href="/2020/10/07/db-consistent/" title="数据库拆分后如何保证数据一致性？">http://xuxiancheng.xyz/2020/10/07/db-consistent/</a></p>
         <footer>
             <a href="http://xuxiancheng.xyz">
                 <img src="/images/logo1.png" alt="xuxiancheng">
@@ -174,7 +233,7 @@
     <div class="post-share-list" id="share-list">
         <ul class="share-icons">
           <li>
-            <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://xuxiancheng.xyz/about/&title=Allen.Xu Blog&pic=http://xuxiancheng.xyzimages/logo1.png" data-title="微博">
+            <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://xuxiancheng.xyz/2020/10/07/db-consistent/&title=《数据库拆分后如何保证数据一致性？》 — Allen.Xu Blog&pic=images/fenku.png" data-title="微博">
               <i class="fa fa-weibo"></i>
             </a>
           </li>
@@ -184,22 +243,24 @@
             </a>
           </li>
           <li>
-            <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://xuxiancheng.xyz/about/&title=Allen.Xu Blog&source=记录个人学习笔记、总结、生活等等" data-title="QQ">
+            <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://xuxiancheng.xyz/2020/10/07/db-consistent/&title=《数据库拆分后如何保证数据一致性？》 — Allen.Xu Blog&source=前言
+通过对数据的垂直拆分或水平拆分后，我们解决了数据库容量、性能等问题，但是将会面临数据迁移和数据一致性的问题。
+在数据迁移方面，需要考虑如何快速迁移、..." data-title="QQ">
               <i class="fa fa-qq"></i>
             </a>
           </li>
           <li>
-            <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://xuxiancheng.xyz/about/" data-title="Facebook">
+            <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://xuxiancheng.xyz/2020/10/07/db-consistent/" data-title="Facebook">
               <i class="fa fa-facebook"></i>
             </a>
           </li>
           <li>
-            <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=Allen.Xu Blog&url=http://xuxiancheng.xyz/about/&via=http://xuxiancheng.xyz" data-title="Twitter">
+            <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《数据库拆分后如何保证数据一致性？》 — Allen.Xu Blog&url=http://xuxiancheng.xyz/2020/10/07/db-consistent/&via=http://xuxiancheng.xyz" data-title="Twitter">
               <i class="fa fa-twitter"></i>
             </a>
           </li>
           <li>
-            <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://xuxiancheng.xyz/about/" data-title="Google+">
+            <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://xuxiancheng.xyz/2020/10/07/db-consistent/" data-title="Google+">
               <i class="fa fa-google-plus"></i>
             </a>
           </li>
@@ -209,7 +270,7 @@
 <div class="post-modal wx-share" id="wxShare">
     <a class="close" href="javascript:;" id="wxShare-close">×</a>
     <p>扫一扫，分享到微信</p>
-    <img src="//api.qrserver.com/v1/create-qr-code/?data=http://xuxiancheng.xyz/about/" alt="微信分享二维码">
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=http://xuxiancheng.xyz/2020/10/07/db-consistent/" alt="微信分享二维码">
 </div>
 
 <div class="mask"></div>
@@ -218,6 +279,13 @@
         <ul class="article-footer-menu">
             
             
+  <li class="article-footer-tags">
+    <i class="fa fa-tags"></i>
+      
+    <a href="/tags/数据库/" class="color4">数据库</a>
+      
+  </li>
+
         </ul>
         
     </footer>
@@ -227,10 +295,20 @@
 
     <aside class="post-toc-pos post-toc-top" id="post-toc">
         <nav class="post-toc-wrap">
-            <ol class="post-toc"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#关于我"><span class="post-toc-text">关于我</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#关于工作"><span class="post-toc-text">关于工作</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#关于学习"><span class="post-toc-text">关于学习</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#关于座右铭"><span class="post-toc-text">关于座右铭</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#关于爱好"><span class="post-toc-text">关于爱好</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#联系我"><span class="post-toc-text">联系我</span></a></li></ol>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#前言"><span class="post-toc-text">前言</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#数据迁移"><span class="post-toc-text">数据迁移</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#全量"><span class="post-toc-text">全量</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#全量-增量"><span class="post-toc-text">全量+增量</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#binlog-全量-增量"><span class="post-toc-text">binlog+全量+增量</span></a></li></ol></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#分布式事务"><span class="post-toc-text">分布式事务</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#XA事务"><span class="post-toc-text">XA事务</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#柔性事务"><span class="post-toc-text">柔性事务</span></a></li></ol></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#总结"><span class="post-toc-text">总结</span></a></li></ol>
         </nav>
     </aside>
     
+
+<nav id="article-nav">
+  
+  
+    <a href="/2020/10/03/database_architecture/" id="article-nav-older" class="article-nav-link-wrap">
+      <span class="article-nav-title">关系型数据库架构的演进-从单机到分库分表</span>
+      <i class="fa fa-hand-o-right" aria-hidden="true"></i>
+    </a>
+  
+</nav>
 
 
 

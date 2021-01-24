@@ -26,7 +26,7 @@
 <meta property="og:image" content="http://xuxiancheng.xyz/images/mysql_cluster.png">
 <meta property="og:image" content="http://xuxiancheng.xyz/images/micro.png">
 <meta property="og:image" content="http://xuxiancheng.xyz/images/cut_table.png">
-<meta property="og:updated_time" content="2021-01-22T17:08:10.481Z">
+<meta property="og:updated_time" content="2021-01-24T08:59:46.770Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="关系型数据库架构的演进-从单机到分库分表">
 <meta name="twitter:description" content="背景 业务飞速发展导致数据规模急速膨胀，单机的数据库已经无法满足互联网业务的发展。 传统的将数据集中存储单一数据结节的方案，在容量、性能、可用性和可维护性方面已经难以满足互联网海量数据的场景。 从容量方面考虑，单机数据库容量有限，难以扩容。 从性能方面来说，由于关系型数据库大多数采用B+树类型索引，在数据量超过一定的阈值后，索引的深度增加导致对磁盘的随机IO次数增加，进而导致性能问题。 从可用性方">
@@ -145,7 +145,7 @@
     <div class="article-entry post-content" itemprop="articleBody">
       
             
-            <h3 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h3><blockquote>
+            <h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><blockquote>
 <p>业务飞速发展导致数据规模急速膨胀，单机的数据库已经无法满足互联网业务的发展。</p>
 <p>传统的将数据集中存储单一数据结节的方案，在容量、性能、可用性和可维护性方面已经难以满足互联网海量数据的场景。</p>
 <p>从容量方面考虑，单机数据库容量有限，难以扩容。</p>
@@ -154,7 +154,7 @@
 <p>从运维角度来看，当数据都集中在一个节点上时，数据备份和恢复的时间成本也随之数据量上升变得不可控。同时数据丢失导致影响的范围也会被放大。</p>
 </blockquote>
 <p><img src="http://xuxiancheng.xyz/images/sjk_yj.png" alt="单机数据库演进"></p>
-<h3 id="主从复制"><a href="#主从复制" class="headerlink" title="主从复制"></a>主从复制</h3><ul>
+<h2 id="主从复制"><a href="#主从复制" class="headerlink" title="主从复制"></a>主从复制</h2><ul>
 <li><p>主库将事务操作（除了查询以外的操作）记录到binlog</p>
 </li>
 <li><p>从库通过relay log同步数据，实现数据的同步</p>
@@ -205,7 +205,7 @@
 </ul>
 </li>
 </ul>
-<h3 id="数据库高可用"><a href="#数据库高可用" class="headerlink" title="数据库高可用"></a>数据库高可用</h3><h4 id="什么是高可用？"><a href="#什么是高可用？" class="headerlink" title="什么是高可用？"></a>什么是高可用？</h4><p>高可用意味着，更少的服务不可用的时间，一般用SLA(服务级别协议)衡量。</p>
+<h2 id="数据库高可用"><a href="#数据库高可用" class="headerlink" title="数据库高可用"></a>数据库高可用</h2><h4 id="什么是高可用？"><a href="#什么是高可用？" class="headerlink" title="什么是高可用？"></a>什么是高可用？</h4><p>高可用意味着，更少的服务不可用的时间，一般用SLA(服务级别协议)衡量。</p>
 <p>1年 = 365天 = 8760小时</p>
 <p>99 = 8760 * 1% = 8760 * 0.01 = 87.6小时</p>
 <p>99.9 = 8760 * 0.1% = 8760 * 0.001 = 8.76小时</p>
@@ -282,7 +282,7 @@
 </ul>
 <p><img src="http://xuxiancheng.xyz/images/mysql_cluster.png" alt="MySQL InnoDb Cluster"></p>
 <h4 id="Orchestrator"><a href="#Orchestrator" class="headerlink" title="Orchestrator"></a>Orchestrator</h4><p>一款MySQL高可用和复制拓扑管理工具，支持复制拓扑结构的调整，自动故障迁移和手动切换的功能等，直接拖拽UI，就可以实现主从切换。</p>
-<h3 id="分库分表"><a href="#分库分表" class="headerlink" title="分库分表"></a>分库分表</h3><p>分库分表通常是指垂直分库和水平分表，对于垂直分表其实就是将宽表拆分成小表，没有太多的技术挑战，这里侧重讲讲垂直分库和水平分表。</p>
+<h2 id="分库分表"><a href="#分库分表" class="headerlink" title="分库分表"></a>分库分表</h2><p>分库分表通常是指垂直分库和水平分表，对于垂直分表其实就是将宽表拆分成小表，没有太多的技术挑战，这里侧重讲讲垂直分库和水平分表。</p>
 <h4 id="垂直分库"><a href="#垂直分库" class="headerlink" title="垂直分库"></a>垂直分库</h4><p>垂直分库是指将数据库进行纵向切分，通常按照业务的维度进行划分。</p>
 <p>如典型的微服务的架构，将系统按照业务维度垂直拆分，划分成多个服务。如一个电商网站可以拆分成：订单、商品、会员、支付等服务。</p>
 <p><img src="http://xuxiancheng.xyz/images/micro.png" alt="微服务架构"></p>
@@ -324,7 +324,8 @@
 <li><p>数据库中间件，数据库中间件实现了对应数据库的SQL标准，路由规则配置在数据库中间件，业务代码操作数据库中间件和直接操作数据库没有任何区别。</p>
 </li>
 </ul>
-<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>从单节点数据库到主从复制，再到数据库高可用，再到分库分表，很好的解决了数据的性能、容量、高可用、运维性等问题，但是会带来新的挑战，开发者需要根据业务体量选择合适的方案，如针对全局搜索类业务，数据库就没有办法解决了，需要考虑采用成熟的搜索引擎技术。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>从单节点数据库到主从复制，再到数据库高可用，再到分库分表，很好的解决了数据的性能、容量、高可用、运维性等问题，但是会带来分布式事务、复杂SQL难以操作、SQL路由等问题。</p>
+<p>架构设计应该遵循：”简单性”、”合适性”、”演化性”的原则，符合当前的业务发展，所以系统设计没有必要一上来就考虑分库分表，而应该是数据量达到一定的量，出现性能瓶颈的时候再对系统进行改造和优化。</p>
 <p><a href="https://www.cnblogs.com/iyoume2008/p/9487605.html" target="_blank" rel="noopener">基于sharing-jdbc实现数据库读写分离</a><br><a href="https://www.cnblogs.com/dalaoyang/p/10345388.html" target="_blank" rel="noopener">基于sharing-jdbc实现数据库分库分表</a><br><a href="https://tech.meituan.com/2017/06/29/database-availability-architecture.html" target="_blank" rel="noopener">美团数据库高可用解决方案</a><br><a href="https://zhuanlan.zhihu.com/p/25960208" target="_blank" rel="noopener">五大常见的MySQL高可用方案</a></p>
 
             <div class="post-copyright">
@@ -446,12 +447,22 @@
 
     <aside class="post-toc-pos post-toc-top" id="post-toc">
         <nav class="post-toc-wrap">
-            <ol class="post-toc"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#背景"><span class="post-toc-text">背景</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#主从复制"><span class="post-toc-text">主从复制</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#异步复制"><span class="post-toc-text">异步复制</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#半同步复制"><span class="post-toc-text">半同步复制</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#组复制"><span class="post-toc-text">组复制</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#主从复制的问题"><span class="post-toc-text">主从复制的问题</span></a></li></ol></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#数据库高可用"><span class="post-toc-text">数据库高可用</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#什么是高可用？"><span class="post-toc-text">什么是高可用？</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#为什么要做高可用？"><span class="post-toc-text">为什么要做高可用？</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#手动切换"><span class="post-toc-text">手动切换</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#MHA"><span class="post-toc-text">MHA</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#MGR"><span class="post-toc-text">MGR</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#Orchestrator"><span class="post-toc-text">Orchestrator</span></a></li></ol></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#分库分表"><span class="post-toc-text">分库分表</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#垂直分库"><span class="post-toc-text">垂直分库</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#水平分表"><span class="post-toc-text">水平分表</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#分库分表解决方案"><span class="post-toc-text">分库分表解决方案</span></a></li></ol></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#总结"><span class="post-toc-text">总结</span></a></li></ol>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#背景"><span class="post-toc-text">背景</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#主从复制"><span class="post-toc-text">主从复制</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#异步复制"><span class="post-toc-text">异步复制</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#半同步复制"><span class="post-toc-text">半同步复制</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#组复制"><span class="post-toc-text">组复制</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#主从复制的问题"><span class="post-toc-text">主从复制的问题</span></a></li></ol></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#数据库高可用"><span class="post-toc-text">数据库高可用</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#什么是高可用？"><span class="post-toc-text">什么是高可用？</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#为什么要做高可用？"><span class="post-toc-text">为什么要做高可用？</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#手动切换"><span class="post-toc-text">手动切换</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#MHA"><span class="post-toc-text">MHA</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#MGR"><span class="post-toc-text">MGR</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#Orchestrator"><span class="post-toc-text">Orchestrator</span></a></li></ol></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#分库分表"><span class="post-toc-text">分库分表</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#垂直分库"><span class="post-toc-text">垂直分库</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#水平分表"><span class="post-toc-text">水平分表</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#分库分表解决方案"><span class="post-toc-text">分库分表解决方案</span></a></li></ol></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#总结"><span class="post-toc-text">总结</span></a></li></ol>
         </nav>
     </aside>
     
 
 <nav id="article-nav">
+  
+    <a href="/2020/10/07/db-consistent/" id="article-nav-newer" class="article-nav-link-wrap">
+
+      <span class="article-nav-title">
+        <i class="fa fa-hand-o-left" aria-hidden="true"></i>
+        
+          数据库拆分后如何保证数据一致性？
+        
+      </span>
+    </a>
   
   
     <a href="/2019/12/28/JVM-02-问题排查/" id="article-nav-older" class="article-nav-link-wrap">
@@ -518,7 +529,7 @@
             <a class="category-link" href="/categories/Java/">Java</a><a class="category-link" href="/categories/Java进阶/">Java进阶</a><a class="category-link" href="/categories/数据库/">数据库</a>
         </div>
         <div id="sidebar-menu-box-tags">
-            <a href="/tags/java并发编程/" style="font-size: 20px;">java并发编程</a> <a href="/tags/jvm/" style="font-size: 15px;">jvm</a> <a href="/tags/数据库/" style="font-size: 10px;">数据库</a>
+            <a href="/tags/java并发编程/" style="font-size: 20px;">java并发编程</a> <a href="/tags/jvm/" style="font-size: 10px;">jvm</a> <a href="/tags/数据库/" style="font-size: 10px;">数据库</a>
         </div>
     </div>
     <a href="javascript:;" class="sidebar-menu-box-close">&times;</a>
@@ -551,7 +562,7 @@
     <div class="mobile-header-tag-container">
         <span class="title">Tags</span>
         <div id="mobile-header-container-tags">
-            <a href="/tags/java并发编程/" style="font-size: 20px;">java并发编程</a> <a href="/tags/jvm/" style="font-size: 15px;">jvm</a> <a href="/tags/数据库/" style="font-size: 10px;">数据库</a>
+            <a href="/tags/java并发编程/" style="font-size: 20px;">java并发编程</a> <a href="/tags/jvm/" style="font-size: 10px;">jvm</a> <a href="/tags/数据库/" style="font-size: 10px;">数据库</a>
         </div>
     </div>
 </div>
